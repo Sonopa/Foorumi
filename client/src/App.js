@@ -1,39 +1,13 @@
+/// ---------------------------------
+/// Foorumi Sovellus: Frontend
+/// App.js Ohjelmarunko
+/// Paul Kallio 16.4.2020
+/// Opiframe FullStack 2020-1 Espoo
+/// ---------------------------------
 import React, {Component} from 'react'
-import {Segment, Grid, Statistic, Feed, Icon} from 'semantic-ui-react'
-
+import {Segment, Grid, Statistic} from 'semantic-ui-react'
+import Keskustelu from './components/Keskustelu.js'
 import './App.css';
-
-class Keskustelu extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Keskustelut</h1>
-        <Feed>
-          <Feed.Label>
-            <Icon name='universal access' />
-          </Feed.Label>
-          <Feed.Content>
-            <Feed.Summary>
-              <Feed.User>Sami Kaarto</Feed.User> Epäilen laskelmia
-              <Feed.Date>1 tunti sitten</Feed.Date>
-            </Feed.Summary>
-            <Feed.Extra text>
-              Olemme pitkään vaimon kanssa keskutellut pururadan kustannusarviosta,
-              ja meidän mielestä laskelmat on pahasti alikanttiin.
-            </Feed.Extra>
-            <Feed.Meta>
-              <Feed.Like>
-                <Icon name='like' />4 puolesta
-              </Feed.Like>
-            </Feed.Meta>
-          </Feed.Content>
-          <Feed>
-          </Feed>
-        </Feed>
-      </div>
-    )
-  }
-}
 
 const TilastoItem = (props) => {
   return (
@@ -45,15 +19,21 @@ const TilastoItem = (props) => {
 }
 
 class App extends Component  {
-  render () {
-    let ehdotukset = [ "Kierrätys on tärkeää",
-                  "Kaupungille on saatava katuvalot",
-                  "Lisää kuntopolkuja",
-                  "Moottoritien päällysteet uusittava",
-                  "Ylopistopaikat on tuplattava"];
 
-    const ehdotusSegmentit = ehdotukset.map(ehdotus => {
-      return (<Segment>{ehdotus}</Segment>)
+  constructor(props) {
+    super(props)
+    this.state = {
+      list:  [ "Kierrätys on tärkeää",
+                    "Kaupungille on saatava katuvalot",
+                    "Lisää kuntopolkuja",
+                    "Moottoritien päällysteet uusittava",
+                    "Ylopistopaikat on tuplattava"]
+    }
+  }
+
+  render () {
+    const ehdotusSegmentit = this.state.list.map(ehdotus => {
+      return (<Segment key={ehdotus}>{ehdotus}</Segment>)
     })
 
     return (
