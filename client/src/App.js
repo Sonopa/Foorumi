@@ -1,35 +1,35 @@
 import React, {Component} from 'react'
-import {Segment, Grid, Statistic} from 'semantic-ui-react'
+import {Segment, Grid, Statistic, Feed, Icon} from 'semantic-ui-react'
 
 import './App.css';
 
-class Car {
-  constructor(brand) {
-    this.brand = brand
-  }
-
-  present () {
-    return `My car is ${this.brand}.`
-  }
-}
-
-class Model extends Car {
-  constructor(brand, model) {
-    super(brand)
-    this.model = model
-  }
-
-  show() {
-    return `${this.present()} It's model is ${this.model}.`
-  }
-}
-
-class Garage extends Component {
+class Keskustelu extends Component {
   render() {
     return (
       <div>
-        <h1>{this.props.brand.show()}
-        </h1>
+        <h1>Keskustelut</h1>
+        <Feed>
+          <Feed.Label>
+            <Icon name='universal access' />
+          </Feed.Label>
+          <Feed.Content>
+            <Feed.Summary>
+              <Feed.User>Sami Kaarto</Feed.User> Epäilen laskelmia
+              <Feed.Date>1 tunti sitten</Feed.Date>
+            </Feed.Summary>
+            <Feed.Extra text>
+              Olemme pitkään vaimon kanssa keskutellut pururadan kustannusarviosta,
+              ja meidän mielestä laskelmat on pahasti alikanttiin.
+            </Feed.Extra>
+            <Feed.Meta>
+              <Feed.Like>
+                <Icon name='like' />4 puolesta
+              </Feed.Like>
+            </Feed.Meta>
+          </Feed.Content>
+          <Feed>
+          </Feed>
+        </Feed>
       </div>
     )
   }
@@ -46,34 +46,27 @@ const TilastoItem = (props) => {
 
 class App extends Component  {
   render () {
-    let myCar = [];
-    myCar[0] = new Model('Fiat', 'Ducato')
-    myCar[1] = new Model('Fiat', 'Spider')
-    myCar[2] = new Model('Fiat', 'Toro')
-    myCar[3] = new Model('Fiat', 'Mobi')
-    myCar[4] = new Model('Fiat', 'Argo')
-    myCar[5] = new Model('Fiat', 'Cronos')
+    let ehdotukset = [ "Kierrätys on tärkeää",
+                  "Kaupungille on saatava katuvalot",
+                  "Lisää kuntopolkuja",
+                  "Moottoritien päällysteet uusittava",
+                  "Ylopistopaikat on tuplattava"];
 
-    const carSegments = myCar.slice(1).map(car => {
-      return (<Segment>{car.show()}</Segment>)
+    const ehdotusSegmentit = ehdotukset.map(ehdotus => {
+      return (<Segment>{ehdotus}</Segment>)
     })
 
     return (
       <>
         <Segment raised>
-          <h1>Hello I'm Paul! {myCar[0].show()}</h1>
+          <h1>FOORUMI Mielipidesivusto</h1>
         </Segment>
         <Grid columns={2} divided>
           <Grid.Row>
             <Grid.Column>
               <Segment.Group>
-                {carSegments}
+                {ehdotusSegmentit}
               </Segment.Group>
-              <Segment>
-                <Garage brand={new Model('Fiat', 'Panda')} />
-              </Segment>
-            </Grid.Column>
-            <Grid.Column>
               <Segment stacked>
                 <h2>Äänestystulos</h2>
               </Segment>
@@ -82,6 +75,11 @@ class App extends Component  {
                 <TilastoItem arvo="25" otsikko="Vastaan"/>
                 <TilastoItem arvo="10" otsikko="Tyhjiä"/>
               </Statistic.Group>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment>
+                <Keskustelu />
+              </Segment>
             </Grid.Column>
           </Grid.Row>
         </Grid>
