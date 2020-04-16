@@ -6,6 +6,7 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Grid, Statistic} from 'semantic-ui-react'
+import {Logger} from 'react-logger-lib'
 import Keskustelu from './components/Keskustelu.js'
 import './App.css';
 
@@ -23,12 +24,12 @@ class App extends Component  {
   constructor(props) {
     super(props)
     this.state = {
-      list:  [ "Kierrätys on tärkeää",
-                    "Kaupungille on saatava katuvalot",
-                    "Lisää kuntopolkuja",
-                    "Moottoritien päällysteet uusittava",
-                    "Ylopistopaikat on tuplattava"]
+      list:  this.props.aiheet
     }
+  }
+
+  componentDidMount() {
+    Logger.of('App.TilastoItem.props').warn('props', this.props.keskustelut)
   }
 
   render () {
@@ -58,7 +59,7 @@ class App extends Component  {
             </Grid.Column>
             <Grid.Column>
               <Segment>
-                <Keskustelu />
+                <Keskustelu keskustelut={this.props.keskustelut}/>
               </Segment>
             </Grid.Column>
           </Grid.Row>

@@ -5,6 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
+import {Logger} from 'react-logger-lib'
 import KeskusteluRivi from './KeskusteluRivi.js'
 
 class Keskustelu extends Component {
@@ -12,25 +13,14 @@ class Keskustelu extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      list:  [{ id:"1",
-                nimi:"Sami Kaarto",
-                otsikko: "Epäilen laskelmia",
-                aika:"5 tuntia sitten",
-                kommentti:"Olemme pitkään vaimon kanssa keskutellut pururadan kustannusarviosta, ja meidän mielestä laskelmat on pahasti alikanttiin.",
-                like:"4 puolesta"},
-                {id:"2",
-                nimi:"Siiri Peltonen",
-                otsikko: "Pururadan puolesta",
-                aika:"1 tunti sitten",
-                kommentti:"Pururata on toki kallis, mutta tarpeellinen.",
-                like:"4 puolesta"}
-        ]
-      }
+      list: this.props.keskustelut
+    }
   }
 
   render() {
 
     const keskusteluRivit = this.state.list.map(keskustelu => {
+      Logger.of('Keskustelu.render.keskustelu').warn('keskustelu', keskustelu)
       return (<KeskusteluRivi key={keskustelu.id}
                               nimi={keskustelu.nimi}
                               otsikko={keskustelu.otsikko}
