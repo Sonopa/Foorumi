@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Segment, Grid, Statistic} from 'semantic-ui-react'
+import {Segment, Grid, Statistic, Menu} from 'semantic-ui-react'
 import {Logger} from 'react-logger-lib'
 import Keskustelu from './components/Keskustelu.js'
 import './App.css';
@@ -19,6 +19,24 @@ const TilastoItem = (props) => {
   )
 }
 
+class Valikko extends Component {
+
+  state = {}
+  handleItemClick = (e, {name}) => this.setState({activeItem: name})
+
+  render () {
+    const {activeItem} = this.state
+    return (
+      <Menu>
+        <Menu.Item name='foorumi' active={activeItem==='foorumi'} onClick={this.handleItemClick}>Foorumi</Menu.Item>
+        <Menu.Item name='vaali' active={activeItem==='vaali'} onClick={this.handleItemClick}>Äänestys</Menu.Item>
+        <Menu.Item name='users' active={activeItem==='users'} onClick={this.handleItemClick}>Käyttäjät</Menu.Item>
+        <Menu.Item position="right" name='login' active={activeItem==='login'} onClick={this.handleItemClick}>Sisäänkirjaus</Menu.Item>
+      </Menu>
+    )
+  }
+}
+
 class App extends Component  {
 
   constructor(props) {
@@ -30,7 +48,7 @@ class App extends Component  {
 
   static getDerivedStateFromProps(props, state) {
     Logger.of('App.getDerivedStateFromProps.props').warn('props', props)
-    Logger.of('App.getDerivedStateFromProps.props').warn('state', state)
+    Logger.of('App.getDerivedStateFromProps.props').info('state', state)
     return {aiheet: props.aiheet}
   }
 
@@ -49,6 +67,7 @@ class App extends Component  {
         <Segment raised>
           <h1>FOORUMI Mielipidesivusto</h1>
         </Segment>
+        <Valikko />
         <Grid columns={2} divided>
           <Grid.Row>
             <Grid.Column>
