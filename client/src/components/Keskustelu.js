@@ -13,14 +13,18 @@ class Keskustelu extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      list: this.props.keskustelut
+      keskustelut: []
     }
   }
 
-  render() {
+  static getDerivedStateFromProps(props, state) {
+      Logger.of('Keskustelu.getDerivedStateFromProps.keskustelu').warn('props', props)
+      Logger.of('Keskustelu.getDerivedStateFromProps.keskustelu').warn('state', state)
+      return {keskustelut: props.keskustelut}
+  }
 
-    const keskusteluRivit = this.state.list.map(keskustelu => {
-      Logger.of('Keskustelu.render.keskustelu').warn('keskustelu', keskustelu)
+  render() {
+    const keskusteluRivit = this.state.keskustelut.map(keskustelu => {
       return (<KeskusteluRivi key={keskustelu.id}
                               nimi={keskustelu.nimi}
                               otsikko={keskustelu.otsikko}

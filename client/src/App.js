@@ -24,17 +24,24 @@ class App extends Component  {
   constructor(props) {
     super(props)
     this.state = {
-      list:  this.props.aiheet
+      aiheet:  []
     }
   }
 
+  static getDerivedStateFromProps(props, state) {
+    Logger.of('App.getDerivedStateFromProps.props').warn('props', props)
+    Logger.of('App.getDerivedStateFromProps.props').warn('state', state)
+    return {aiheet: props.aiheet}
+  }
+
   componentDidMount() {
-    Logger.of('App.TilastoItem.props').warn('props', this.props.keskustelut)
   }
 
   render () {
-    const ehdotusSegmentit = this.state.list.map(ehdotus => {
-      return (<Segment key={ehdotus}>{ehdotus}</Segment>)
+
+    Logger.of('App.render.props').warn('state', this.state)
+    const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
+      return (<Segment key={ehdotus.id}>{ehdotus.aihe}</Segment>)
     })
 
     return (
