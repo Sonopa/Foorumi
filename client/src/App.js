@@ -9,6 +9,7 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import {Segment, Grid, Statistic, Menu} from 'semantic-ui-react'
 import {Logger} from 'react-logger-lib'
 import Keskustelu from './components/Keskustelu.js'
+import foorumiData from './services/foorumi.js'
 import './App.css';
 
 const Login = () => {
@@ -103,16 +104,21 @@ class App extends Component  {
   static getDerivedStateFromProps(props, state) {
     Logger.of('App.getDerivedStateFromProps.props').info('props', props)
     Logger.of('App.getDerivedStateFromProps.props').info('state', state)
-    return {aiheet: props.aiheet}
+    // return {aiheet: props.aiheet}
   }
 
   componentDidMount() {
+    foorumiData.getAll()
+      .then(responseData => {
+        Logger.of('App.componentDidMount').warn('responseData', responseData)
+        this.setState({aiheet: responseData})
+      })
   }
 
   render () {
 
   const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
-    return (<Segment key={ehdotus.id}>{ehdotus.aihe}</Segment>)
+    return (<Segment key={ehdotus.id}>{ehdotus.title}</Segment>)
   })
 
     Logger.of('App.render.props').info('state', this.state)
@@ -123,7 +129,8 @@ class App extends Component  {
         </Segment>
         <Router>
           <Valikko />
-          <Route exact path='/'/>
+          <Route exact
+          ath='/'/>
           <Route path='/foorumi'
             render={() => {
             return (
