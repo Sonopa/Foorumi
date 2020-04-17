@@ -18,8 +18,8 @@ class Keskustelu extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-      Logger.of('Keskustelu.getDerivedStateFromProps.keskustelu').warn('props', props)
-      Logger.of('Keskustelu.getDerivedStateFromProps.keskustelu').warn('state', state)
+      Logger.of('Keskustelu.getDerivedStateFromProps.keskustelu').info('props', props)
+      Logger.of('Keskustelu.getDerivedStateFromProps.keskustelu').info('state', state)
       return {keskustelut: props.keskustelut}
   }
 
