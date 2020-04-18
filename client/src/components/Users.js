@@ -5,16 +5,31 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Segment} from 'semantic-ui-react'
+import {Segment, Grid, Menu, Form, Button} from 'semantic-ui-react'
 import {Logger} from 'react-logger-lib'
 import usersData from '../services/users'
 
-const KeskusteluRivi = (props) => {
+const UserRivi = (props) => {
   return (
-    <Segment>
-      {props.tunnus} {props.nimi} {props.email}
-    </Segment>
+    <Menu.Item
+      name={props.id}
+      active={props.activeUser===props.id}
+      onClick={props.handleUser}
+      >
+      {props.tunnus}
+    </Menu.Item>
   )
+}
+
+const User = (props) => {
+    return (
+      <Form>
+        <Form.Input label='Tunnus' name='tunnus' type='input' value={props.user.tunnus}/>
+        <Form.Input label='Nimi' name='nimi' type='input' value={props.user.nimi} />
+        <Form.Input label='Sähköposti' name='email' type='input' value={props.user.email} />
+        <Button primary>Päivitä</Button>
+      </Form>
+    )
 }
 
 class Users extends Component {
@@ -24,8 +39,9 @@ class Users extends Component {
     this.state = {
       users: [{id:"1",tunnus:"tuiti",nimi:"Tuula Pitkänen",email:"tp@.hukka.org"},
               {id:"2",tunnus:"jupe",nimi:"Jukka Metso",email:"jm@.hukka.org"},
-              {id:"3",tunnus:"sepe",nimi:"Seppo Kiurula",email:"sk@.hukka.org"}
-    ]}
+              {id:"3",tunnus:"sepe",nimi:"Seppo Kiurula",email:"sk@.hukka.org"}],
+      currentUser: "1",
+    }
   }
 
   componentDidMount() {
@@ -36,22 +52,42 @@ class Users extends Component {
       })
   }
 
-  render () {
+  handleUserClick = (e, {name}) => this.setState({currentUser:name})
 
+  render () {
     const userRivit = this.state.users.map(user => {
       Logger.of('Users.render').warn('user', user)
-      return (<KeskusteluRivi key={user.id}
+      return (<UserRivi key={user.id}
+                              id={user.id}
                               nimi={user.nimi}
                               tunnus={user.tunnus}
-                              email={user.email} />)
+                              email={user.email}
+                              activeUser={this.state.currentUser}
+                              handleUser={this.handleUserClick}/>)
     })
+
+    function userData(currentUser, users) {
+      const user = users[users.findIndex(user => user.id===currentUser)]
+      return user;
+    }
 
     return (
       <>
         <Segment raised>
           <h1>Käyttäjien hallinnointi</h1>
         </Segment>
-        {userRivit}
+        <Grid>
+          <Grid.Column width={4}>
+            <Menu vertical>
+              {userRivit}
+            </Menu>
+          </Grid.Column>
+          <Grid.Column width={12} stretched>
+            <Segment>
+              <User user={userData(this.state.currentUser, this.state.users)} />
+            </Segment>
+          </Grid.Column>
+        </Grid>
       </>
     )
   }

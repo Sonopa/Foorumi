@@ -17,6 +17,7 @@ class Valikko extends Component {
     const {activeItem} = this.state
     return (
       <Menu>
+        <Menu.Item as={Link} to='/' name='etusivu' active={activeItem==='etusivu'} onClick={this.handleItemClick}>Etusivu</Menu.Item>
         <Menu.Item as={Link} to='foorumi' name='foorumi' active={activeItem==='foorumi'} onClick={this.handleItemClick}>Foorumi</Menu.Item>
         <Menu.Item as={Link} to='vaali' name='vaali' active={activeItem==='vaali'} onClick={this.handleItemClick}>Äänestys</Menu.Item>
         <Menu.Item as={Link} to='users' name='users' active={activeItem==='users'} onClick={this.handleItemClick}>Käyttäjät</Menu.Item>

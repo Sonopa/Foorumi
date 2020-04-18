@@ -30,6 +30,13 @@ const Vaali = () => {
   )
 }
 
+const Etusivu = () => {
+  return (
+    <div>
+    </div>
+  )
+}
+
 class App extends Component  {
 
   constructor(props) {
@@ -57,7 +64,7 @@ class App extends Component  {
         </Segment>
         <Router>
           <Valikko />
-          <Route exact path='/'/>
+          <Route exact path='/' component={Etusivu}/>
           <Route path='/foorumi'
             render={() => {
             return (
