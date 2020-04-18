@@ -4,51 +4,63 @@
 /// Paul Kallio 18.4.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
-import React from 'react'
-import {Segment, Grid, Statistic} from 'semantic-ui-react'
+import React, {Component} from 'react'
+import {Segment, Grid, Menu} from 'semantic-ui-react'
 import {Logger} from 'react-logger-lib'
 import Keskustelu from './Keskustelu.js'
 
-const TilastoItem = (props) => {
+
+const AiheRivi = (props) => {
   return (
-    <Statistic>
-      <Statistic.Value>{props.arvo}</Statistic.Value>
-      <Statistic.Label>{props.otsikko}</Statistic.Label>
-    </Statistic>
+    <Menu.Item
+      name={props.id}
+      active={props.currentItem===props.id}
+      onClick={props.handleItem}
+      >
+      {props.title}
+    </Menu.Item>
   )
 }
 
-const Foorumi = (props) => {
-  Logger.of('App.Foorumi').info('props', props)
+class Foorumi extends Component {
 
-  const ehdotusSegmentit = props.aiheet.map(ehdotus => {
-    return (<Segment key={ehdotus.id}>{ehdotus.title}</Segment>)
-  })
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentItem: "1"
+    }
+  }
 
-  return (
-    <Grid columns={2} divided>
-      <Grid.Row>
-        <Grid.Column>
-          <Segment.Group>
-            {ehdotusSegmentit}
-          </Segment.Group>
-          <Segment stacked>
-            <h2>Äänestystulos</h2>
-          </Segment>
-          <Statistic.Group>
-            <TilastoItem arvo="25" otsikko="Puolesta"/>
-            <TilastoItem arvo="25" otsikko="Vastaan"/>
-            <TilastoItem arvo="10" otsikko="Tyhjiä"/>
-          </Statistic.Group>
-        </Grid.Column>
-        <Grid.Column>
-          <Segment>
-            <Keskustelu keskustelut={props.keskustelut}/>
-          </Segment>
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  )
+  handleItemClick = (e, {name}) => this.setState({currentItem:name})
+
+  render() {
+
+    const ehdotusSegmentit = this.props.aiheet.map(ehdotus => {
+      Logger.of('Foorumi.render').info('ehdotus', ehdotus)
+      return (<AiheRivi key={ ehdotus.id}
+                        id={ehdotus.id}
+                        title={ehdotus.title}
+                        currentItem={this.state.currentItem}
+                        handleItem={this.handleItemClick}/>)
+    })
+
+    return (
+      <Grid columns={2} divided>
+        <Grid.Row>
+          <Grid.Column>
+            <Menu vertical fluid>
+              {ehdotusSegmentit}
+            </Menu>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment>
+              <Keskustelu keskustelut={this.props.keskustelut}/>
+            </Segment>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    )
+  }
 }
 
 export default Foorumi

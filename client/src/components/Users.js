@@ -47,7 +47,7 @@ class Users extends Component {
   componentDidMount() {
     usersData.getAll()
       .then(responseData => {
-        Logger.of('Users.componentDidMount').warn('responseData', responseData)
+        Logger.of('Users.componentDidMount').info('responseData', responseData)
         // this.setState({aiheet: responseData}) UNCOMMENT WHEN USER API IS READY
       })
   }
@@ -56,7 +56,7 @@ class Users extends Component {
 
   render () {
     const userRivit = this.state.users.map(user => {
-      Logger.of('Users.render').warn('user', user)
+      Logger.of('Users.render').info('user', user)
       return (<UserRivi key={user.id}
                               id={user.id}
                               nimi={user.nimi}
@@ -78,9 +78,9 @@ class Users extends Component {
         </Segment>
         <Grid>
           <Grid.Column width={4}>
-            <Menu vertical>
-              {userRivit}
-            </Menu>
+              <Menu vertical fluid>
+                {userRivit}
+              </Menu>
           </Grid.Column>
           <Grid.Column width={12} stretched>
             <Segment>

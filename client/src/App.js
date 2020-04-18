@@ -9,33 +9,12 @@ import {BrowserRouter as Router, Route} from 'react-router-dom'
 import {Segment} from 'semantic-ui-react'
 import {Logger} from 'react-logger-lib'
 import foorumiData from './services/foorumi.js'
-import Foorumi from './components/Foorumi.js'
-import Valikko from './components/Valikko.js'
+import Foorumi from './components/Foorumi'
+import Valikko from './components/Valikko'
+import Etusivu from './components/Etusivu'
+import Vaali from './components/Vaali'
 import Users from './components/Users'
-import './App.css';
-
-const Login = () => {
-  return (
-    <Segment raised>
-      <h1>Anna käyttäjätiedot</h1>
-    </Segment>
-  )
-}
-
-const Vaali = () => {
-  return (
-    <Segment raised>
-      <h1>Äänestyspaikka</h1>
-    </Segment>
-  )
-}
-
-const Etusivu = () => {
-  return (
-    <div>
-    </div>
-  )
-}
+import Login from './components/Login'
 
 class App extends Component  {
 
@@ -49,7 +28,7 @@ class App extends Component  {
   componentDidMount() {
     foorumiData.getAll()
       .then(responseData => {
-        Logger.of('App.componentDidMount').warn('responseData', responseData)
+        Logger.of('App.componentDidMount').info('responseData', responseData)
         this.setState({aiheet: responseData})
       })
   }

@@ -7,11 +7,13 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
+    "pure-react-carousel": "^1.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-logger-lib": "^1.0.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "semantic-ui-carousel-react": "^1.1.1",
     "semantic-ui-react": "^0.88.2"
   },
   "scripts": {
