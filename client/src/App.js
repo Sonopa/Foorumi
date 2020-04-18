@@ -11,6 +11,7 @@ import {Logger} from 'react-logger-lib'
 import foorumiData from './services/foorumi.js'
 import Foorumi from './components/Foorumi.js'
 import Valikko from './components/Valikko.js'
+import Users from './components/Users'
 import './App.css';
 
 const Login = () => {
@@ -29,14 +30,6 @@ const Vaali = () => {
   )
 }
 
-const Users = () => {
-  return (
-    <Segment raised>
-      <h1>Käyttäjien hallinnointi</h1>
-    </Segment>
-  )
-}
-
 class App extends Component  {
 
   constructor(props) {
@@ -44,12 +37,6 @@ class App extends Component  {
     this.state = {
       aiheet:  []
     }
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    Logger.of('App.getDerivedStateFromProps.props').info('props', props)
-    Logger.of('App.getDerivedStateFromProps.props').info('state', state)
-    // return {aiheet: props.aiheet}
   }
 
   componentDidMount() {
@@ -70,8 +57,7 @@ class App extends Component  {
         </Segment>
         <Router>
           <Valikko />
-          <Route exact
-          ath='/'/>
+          <Route exact path='/'/>
           <Route path='/foorumi'
             render={() => {
             return (
