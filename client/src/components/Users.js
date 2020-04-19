@@ -49,11 +49,11 @@ class User extends Component {
     componentDidMount() {
       usersData.getAll()
         .then(responseData => {
-          logger.info('updateKeskustelut.componentDidMount.then:', responseData)
+          logger.info('componentDidMount.usersData.then:', responseData)
           this.setState({aiheet: responseData})
         })
         .catch(error => {
-          logger.error('updateKeskustelut.componentDidMount.error:', error.message)
+          logger.error('componentDidMount.usersData.error:', error.message)
         })
     }
 
