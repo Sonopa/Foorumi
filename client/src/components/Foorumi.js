@@ -6,8 +6,9 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Grid, Menu} from 'semantic-ui-react'
-import {Logger} from 'react-logger-lib'
 import Keskustelu from './Keskustelu.js'
+
+const logger = require('simple-console-logger').getLogger('Foorumi')
 
 const AiheRivi = (props) => {
   return (
@@ -51,15 +52,13 @@ class Foorumi extends Component {
 
   handleItemClick = (e, {name}) => {
 
-    Logger.of('Foorumi.handleItemClick').info('this.state.currentItem', this.state.currentItem)
-    Logger.of('Foorumi.handleItemClick').info('ehdotus', name)
+    logger.trace('handleItemClick.currentItem/ehdotus:', this.state.currentItem, name)
     this.setState((state) => { return {currentItem:name}})
 
   }
 
   render() {
 
-    Logger.of('Foorumi.render').info('currentItem', this.state.currentItem)
     const ehdotusSegmentit = this.props.aiheet.map(ehdotus => {
       return (<AiheRivi key={ ehdotus.id}
                         id={ehdotus.id}

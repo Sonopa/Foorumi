@@ -10,11 +10,10 @@
     "pure-react-carousel": "^1.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-logger-lib": "^1.0.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "semantic-ui-carousel-react": "^1.1.1",
-    "semantic-ui-react": "^0.88.2"
+    "semantic-ui-react": "^0.88.2",
+    "simple-console-logger": "^2.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

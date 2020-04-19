@@ -6,8 +6,8 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Form, Button} from 'semantic-ui-react'
-import {Logger} from 'react-logger-lib'
-// import usersData from '../services/users'
+import usersData from '../services/users'
+const logger = require('simple-console-logger').getLogger('Users')
 
 const UserRivi = (props) => {
   return (
@@ -46,8 +46,18 @@ class User extends Component {
       }
     }
 
+    componentDidMount() {
+      usersData.getAll()
+        .then(responseData => {
+          logger.info('updateKeskustelut.componentDidMount.then:', responseData)
+          this.setState({aiheet: responseData})
+        })
+        .catch(error => {
+          logger.error('updateKeskustelut.componentDidMount.error:', error.message)
+        })
+    }
+
     render() {
-      Logger.of('User.render').info('props', this.props)
       return (
         <Form>
           <Form.Input label='Tunnus' name='tunnus' type='input' value={this.props.user.tunnus}/>
@@ -75,7 +85,6 @@ class Users extends Component {
 
   render () {
     const userRivit = this.state.users.map(user => {
-      Logger.of('Users.render').info('user', user)
       return (<UserRivi key={user.id}
                               id={user.id}
                               nimi={user.nimi}

@@ -11,6 +11,7 @@ import {Image, Container} from 'semantic-ui-react'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 
 const Etusivu = () => {
+
 	return (
     <Container>
       <CarouselProvider
