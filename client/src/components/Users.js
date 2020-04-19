@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Form, Button} from 'semantic-ui-react'
 import {Logger} from 'react-logger-lib'
-import usersData from '../services/users'
+// import usersData from '../services/users'
 
 const UserRivi = (props) => {
   return (
@@ -21,15 +21,42 @@ const UserRivi = (props) => {
   )
 }
 
-const User = (props) => {
-    return (
-      <Form>
-        <Form.Input label='Tunnus' name='tunnus' type='input' value={props.user.tunnus}/>
-        <Form.Input label='Nimi' name='nimi' type='input' value={props.user.nimi} />
-        <Form.Input label='Sähköposti' name='email' type='input' value={props.user.email} />
-        <Button primary>Päivitä</Button>
-      </Form>
-    )
+class User extends Component {
+
+    constructor(props) {
+      super(props)
+      this.state = {
+        id: props.user.id,
+        tunnus: props.user.tunnus,
+        nimi: props.user.nimi,
+        email: props.user.email,
+        oldId: ''
+      }
+    }
+
+    componentDidUpdate() {
+      if(this.state.oldId !== this.props.user.id) {
+        this.setState({
+          id: this.props.user.id,
+          oldId: this.props.user.id,
+          tunnus: this.props.user.tunnus,
+          nimi: this.props.user.nimi,
+          email: this.props.user.email
+        })
+      }
+    }
+
+    render() {
+      Logger.of('User.render').info('props', this.props)
+      return (
+        <Form>
+          <Form.Input label='Tunnus' name='tunnus' type='input' value={this.props.user.tunnus}/>
+          <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({nimi: e.target.value})} value={this.state.nimi} />
+          <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
+          <Button primary>Päivitä</Button>
+        </Form>
+      )
+    }
 }
 
 class Users extends Component {
@@ -42,14 +69,6 @@ class Users extends Component {
               {id:"3",tunnus:"sepe",nimi:"Seppo Kiurula",email:"sk@.hukka.org"}],
       currentUser: "1",
     }
-  }
-
-  componentDidMount() {
-    usersData.getAll()
-      .then(responseData => {
-        Logger.of('Users.componentDidMount').info('responseData', responseData)
-        // this.setState({aiheet: responseData}) UNCOMMENT WHEN USER API IS READY
-      })
   }
 
   handleUserClick = (e, {name}) => this.setState({currentUser:name})
@@ -67,8 +86,9 @@ class Users extends Component {
     })
 
     function userData(currentUser, users) {
-      const user = users[users.findIndex(user => user.id===currentUser)]
-      return user;
+      const ix = users.findIndex(user => user.id===currentUser)
+      const user = users.slice(ix, ix + 1)
+      return user[0]
     }
 
     return (

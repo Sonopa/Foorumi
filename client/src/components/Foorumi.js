@@ -9,7 +9,6 @@ import {Segment, Grid, Menu} from 'semantic-ui-react'
 import {Logger} from 'react-logger-lib'
 import Keskustelu from './Keskustelu.js'
 
-
 const AiheRivi = (props) => {
   return (
     <Menu.Item
@@ -22,21 +21,46 @@ const AiheRivi = (props) => {
   )
 }
 
+const FoorumiRivit = (props) => {
+  return (
+      <Grid columns={2} divided>
+        <Grid.Row>
+          <Grid.Column>
+            <Menu vertical fluid>
+              {props.ehdotusSegmentit}
+            </Menu>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment>
+              <Keskustelu aihe={props.currentItem}/>
+            </Segment>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+  )
+}
+
 class Foorumi extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      currentItem: "1"
+      currentItem: this.state ? this.state.currentItem : '1'
     }
   }
 
-  handleItemClick = (e, {name}) => this.setState({currentItem:name})
+  handleItemClick = (e, {name}) => {
+
+    Logger.of('Foorumi.handleItemClick').info('this.state.currentItem', this.state.currentItem)
+    Logger.of('Foorumi.handleItemClick').info('ehdotus', name)
+    this.setState((state) => { return {currentItem:name}})
+
+  }
 
   render() {
 
+    Logger.of('Foorumi.render').info('currentItem', this.state.currentItem)
     const ehdotusSegmentit = this.props.aiheet.map(ehdotus => {
-      Logger.of('Foorumi.render').info('ehdotus', ehdotus)
       return (<AiheRivi key={ ehdotus.id}
                         id={ehdotus.id}
                         title={ehdotus.title}
@@ -45,20 +69,7 @@ class Foorumi extends Component {
     })
 
     return (
-      <Grid columns={2} divided>
-        <Grid.Row>
-          <Grid.Column>
-            <Menu vertical fluid>
-              {ehdotusSegmentit}
-            </Menu>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Keskustelu keskustelut={this.props.keskustelut}/>
-            </Segment>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <FoorumiRivit ehdotusSegmentit={ehdotusSegmentit} currentItem={this.state.currentItem} />
     )
   }
 }
