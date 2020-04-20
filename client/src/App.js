@@ -47,8 +47,8 @@ class App extends Component  {
           <Route exact path='/' component={Etusivu}/>
           <Route path='/foorumi'
             render={() => {
-            return (
-              <Foorumi aiheet={this.state.aiheet} keskustelut={this.props.keskustelut} />
+              return (
+                <Foorumi aiheet={this.state.aiheet} keskustelut={this.props.keskustelut} />
             )}} />
           <Route path='/vaali' component={Vaali} />
           <Route path='/users' component={Users} />
