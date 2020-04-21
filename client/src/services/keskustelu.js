@@ -6,12 +6,21 @@
 /// ---------------------------------
 import axios from 'axios'
 
+const logger = require('simple-console-logger').getLogger('keskustelu')
 const baseUrl = '/api/aiheet'
 const addUrl = '/keskustelut'
 
 const getAll = (id) => {
+  logger.info('axios.getAll:', `${baseUrl}/${id}${addUrl}`)
   const request = axios.get(`${baseUrl}/${id}${addUrl}`)
   return request.then(response => response.data)
 }
 
-export default {getAll}
+/// Create method
+const create = async (topicId, newObject) => {
+  logger.info('axios.create:', `${baseUrl}/${topicId}${addUrl}`)
+  const response = await axios.post(`${baseUrl}/${topicId}${addUrl}`, newObject)
+  return response.data
+}
+
+export default {getAll, create}

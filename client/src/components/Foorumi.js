@@ -6,7 +6,7 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Grid, Menu} from 'semantic-ui-react'
-import Keskustelu from './Keskustelu.js'
+import Keskustelut from './Keskustelut'
 
 const logger = require('simple-console-logger').getLogger('Foorumi')
 
@@ -33,7 +33,7 @@ const FoorumiRivit = (props) => {
           </Grid.Column>
           <Grid.Column>
             <Segment>
-              <Keskustelu aihe={props.currentItem}/>
+              <Keskustelut aihe={props.currentItem}/>
             </Segment>
           </Grid.Column>
         </Grid.Row>
@@ -46,9 +46,29 @@ class Foorumi extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentItem: this.state ? this.state.currentItem : '1'
+      currentItem: this.state ? this.state.currentItem : this.props.aihe
     }
+    logger.trace('constructor.currentItem', this.state.currentItem)
   }
+
+  componentWillMount() {
+    if(this.state.currentItem !== this.props.aihe) {
+      logger.trace('componentWillMount.aihe:', this.props.aihe)
+      this.setState({currentItem: this.props.aihe})
+    }
+    return true;
+  }
+
+  componentDidUpdate() {
+     if(this.state.currentItem !== this.props.aihe) {
+       logger.trace('componentDidUpdate.state.aihe:', this.state.currentItem)
+       logger.trace('componentDidUpdate.props.aihe:', this.props.aihe)
+       if(!this.state.currentItem) {
+         this.setState({currentItem: this.props.aihe})
+       }
+     }
+   }
+
 
   handleItemClick = (e, {name}) => {
 

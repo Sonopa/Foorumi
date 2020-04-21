@@ -37,6 +37,8 @@ class App extends Component  {
 
   render () {
 
+    const alkuAihe = (this.state.aiheet && this.state.aiheet.length > 0) ? this.state.aiheet[0].id : ''
+
     return (
       <>
         <Segment raised>
@@ -48,7 +50,7 @@ class App extends Component  {
           <Route path='/foorumi'
             render={() => {
               return (
-                <Foorumi aiheet={this.state.aiheet} keskustelut={this.props.keskustelut} />
+                <Foorumi aiheet={this.state.aiheet} aihe={alkuAihe} />
             )}} />
           <Route path='/vaali' component={Vaali} />
           <Route path='/users' component={Users} />

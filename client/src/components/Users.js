@@ -53,7 +53,7 @@ class User extends Component {
           this.setState({aiheet: responseData})
         })
         .catch(error => {
-          logger.error('componentDidMount.usersData.error:', error.message)
+          logger.info('componentDidMount.usersData.error:', error.message)
         })
     }
 

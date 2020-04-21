@@ -1,103 +1,75 @@
 /// ---------------------------------
 /// Foorumi Sovellus: Frontend
-/// Keskustelu -komponentti sisältää Keskustelurivit
-/// Paul Kallio 16.4.2020
+/// Keskustelu -komponentti sisältää yhden keskustelun tiedot
+/// Paul Kallio 21.4.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Form, TextArea, Button, Segment, Divider} from 'semantic-ui-react'
-import KeskusteluRivi from './KeskusteluRivi'
 import keskusteluData from '../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('Keskustelu')
-
-const LisaaLomake = (props) => {
-
-  return(
-    <Segment>
-      <Form>
-        <Form.Input label='Otsikko' name='otsikko' type='input' />
-        <div class='field'>
-          <label>Sanoma</label>
-          <TextArea name='sanoma' />
-        </div>
-        <Divider horizontal hidden />
-        <Button onClick={props.handleSave} primary>Tallenna</Button>
-      </Form>
-    </Segment>
-  )
-}
-
-const KeskusteluForm = (props) => {
-
-    return (
-      <>
-        {props.lisaaTila  ?
-          <LisaaLomake handleSave={props.handleSave}/> :
-          <Button onClick={props.handleAdd} primary>Lisää</Button>
-        }
-      </>
-    )
-}
 
 class Keskustelu extends Component {
 
   constructor(props) {
     super(props)
+    logger.info('constructor.props:', props)
+
     this.state = {
-      keskustelut: this.state ? this.state.keskustelut : [],
-      oldAihe: this.state ? this.state.oldAihe : '',
-      lisaaTila: this.state ? this.state.oldAihe : false
+      aihe: this.state ? this.state.aihe : this.props.aihe,
+      otsikko:  this.state ? this.state.otsikko : '',
+      kommentti: this.state ? this.state.kommentti : '',
+      omistaja: 'sepe',
+      lisaaTila: false
     }
   }
 
-  componentWillMount() {
-    if(this.state.oldAihe !== this.props.aihe) {
-      this.setState({oldAihe: this.props.aihe})
-      keskusteluData.getAll(this.props.aihe)
-        .then(responseData => {
-          logger.info('componentWillMount.responseData:', responseData)
-          this.setState({keskustelut: responseData})
-        })
-    }
-    return null;
-  }
-
-  updateKeskustelut = ()  => {
-    if(this.state.oldAihe !== this.props.aihe) {
-      this.setState({oldAihe: this.props.aihe})
-      keskusteluData.getAll(this.props.aihe)
-        .then(responseData => {
-          logger.info('updateKeskustelut.responseData:', responseData)
-          this.setState({keskustelut: responseData, lisaaTila: false})
-        })
+  componentDidUpdate() {
+    if(this.state.aihe !== this.props.aihe) {
+      logger.trace('componentDidUpdate.aihe:', this.state.aihe, this.props.aihe)
+      this.setState({aihe: this.props.aihe, otsikko: '', kommentti: '', lisaaTila: false})
+      logger.trace('componentDidUpdate.lisaaTila:', false)
     }
   }
 
- componentDidUpdate() {
-    logger.trace('componentDidUpdate.oldAihe:', this.state.oldAihe)
-    this.updateKeskustelut()
-  }
-
-  render() {
-    const keskusteluRivit = this.state.keskustelut.map(keskustelu => {
-      return (<KeskusteluRivi key={keskustelu.id}
-                              nimi={keskustelu.nimi}
-                              otsikko={keskustelu.otsikko}
-                              aika={keskustelu.aika}
-                              kommentti={keskustelu.kommentti}
-                              like={keskustelu.like} />)
-    })
+  render () {
 
     const handleAdd = (e, {name}) => this.setState({lisaaTila: true})
-    const handleSave = (e, {name}) => this.setState({lisaaTila: false})
+
+    const handleSave = (e, {name}) => {
+      const newKeskustelu = {
+          owner:  this.state.omistaja,
+          title:  this.state.otsikko,
+          text:   this.state.kommentti
+      }
+      keskusteluData.create(this.state.aihe, newKeskustelu)
+        .then(responseData => {
+          logger.info('handleSave.responseData:', responseData)
+          this.setState({lisaaTila: false, otsikko: '', kommentti: ''})
+        })
+      return null;
+    }
 
     return (
-      <div>
-        <h1>Keskustelut</h1>
-        {keskusteluRivit}
-        <KeskusteluForm lisaaTila={this.state.lisaaTila} handleAdd={handleAdd} handleSave={handleSave} />
-      </div>
+      <>
+        {this.state.lisaaTila  ?
+          <Segment>
+            <Form>
+              <Form.Input label='Otsikko' name='otsikko' type='input'
+                           onChange={(e) => this.setState({otsikko: e.target.value})} value={this.state.otsikko} />
+              <div className='field'>
+                <label>Kommentti</label>
+                <TextArea name='kommentti'
+                           onChange={(e) => this.setState({kommentti: e.target.value})} value={this.state.kommentti} />
+              </div>
+              <Divider horizontal hidden />
+              <Button onClick={handleSave} primary>Tallenna</Button>
+            </Form>
+          </Segment> :
+          <Button onClick={handleAdd} primary>Lisää</Button>
+        }
+      </>
     )
   }
 }
