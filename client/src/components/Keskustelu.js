@@ -20,7 +20,7 @@ class Keskustelu extends Component {
       aihe: this.state ? this.state.aihe : this.props.aihe,
       otsikko:  this.state ? this.state.otsikko : '',
       kommentti: this.state ? this.state.kommentti : '',
-      omistaja: 'sepe',
+      omistaja: '1',
       lisaaTila: false
     }
   }
