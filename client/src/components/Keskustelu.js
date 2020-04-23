@@ -36,7 +36,8 @@ class Keskustelu extends Component {
   render () {
 
     const handleAdd = (e, {name}) => this.setState({lisaaTila: true})
-
+    const handleRestore = (e, {name}) =>
+        this.setState({otsikko: '', kommentti: '', lisaaTila: false})
     const handleSave = (e, {name}) => {
       const newKeskustelu = {
           owner:  this.state.omistaja,
@@ -65,6 +66,7 @@ class Keskustelu extends Component {
               </div>
               <Divider horizontal hidden />
               <Button onClick={handleSave} primary>Tallenna</Button>
+              <Button onClick={handleRestore} secondary>Peruuta</Button>
             </Form>
           </Segment> :
           <Button onClick={handleAdd} primary>Lisää</Button>

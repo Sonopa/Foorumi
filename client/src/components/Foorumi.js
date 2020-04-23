@@ -70,7 +70,7 @@ class Foorumi extends Component {
        logger.trace('componentDidUpdate.state.aihe:', this.state.currentItem)
        logger.trace('componentDidUpdate.props.aihe:', this.props.aihe)
        if(!this.state.currentItem) {
-         this.setState({currentItem: this.props.aihe,  otsikko: '', kommentti: '', lisaaTila: false})
+         this.setState({currentItem: this.props.aihe,  uusiAihe: '', kuvaus: '', lisaaTila: false})
        }
      }
   }
@@ -84,6 +84,8 @@ class Foorumi extends Component {
   render() {
 
     const handleAdd = (e, {name}) => this.setState({lisaaTila: true})
+    const handleRestore = (e, {name}) =>
+        this.setState({uusiAihe: '', kuvaus: '', lisaaTila: false})
     const handleSave = (e, {name}) => {
       const newAihe = {
           owner:        this.state.omistaja,
@@ -121,6 +123,7 @@ class Foorumi extends Component {
             </div>
             <Divider horizontal hidden />
             <Button onClick={handleSave} primary>Tallenna</Button>
+            <Button onClick={handleRestore} secondary>Peruuta</Button>
           </Form>
           :
           <Button onClick={handleAdd} primary>Lisää</Button>
