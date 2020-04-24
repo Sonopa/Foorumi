@@ -7,6 +7,12 @@
 import React from 'react'
 import {Feed, Icon} from 'semantic-ui-react'
 
+// 2020-04-24T10:01:50.607Z
+const finnishDate = (pvmStr) => {
+  const pvm = new Date(pvmStr)
+  return pvm.toUTCString()
+}
+
 const KeskusteluRivi = (props) => {
   return (
     <Feed>
@@ -16,13 +22,14 @@ const KeskusteluRivi = (props) => {
       <Feed.Content>
         <Feed.Summary>
           <Feed.User>{props.nimi}</Feed.User> {props.otsikko}
-          <Feed.Date>{props.aika}</Feed.Date>
+          <Feed.Date>{finnishDate(props.aika)}</Feed.Date>
         </Feed.Summary>
         <Feed.Extra text>{props.kommentti}
         </Feed.Extra>
         <Feed.Meta>
           <Feed.Like>
             <Icon name='like' />{props.like}
+            <Icon name='thumbs down outline' />{props.disLike}
           </Feed.Like>
         </Feed.Meta>
       </Feed.Content>

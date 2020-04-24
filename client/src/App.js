@@ -7,7 +7,6 @@
 import React, {Component} from 'react'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 import {Segment} from 'semantic-ui-react'
-import foorumiData from './services/foorumi.js'
 import Foorumi from './components/Foorumi'
 import Valikko from './components/Valikko'
 import Etusivu from './components/Etusivu'
@@ -16,28 +15,24 @@ import Users from './components/Users'
 import Login from './components/Login'
 
 var logger = require('simple-console-logger')
-logger.configure({level: 'trace'})
+/*
+error
+info
+trace
+debug
+*/
+
+logger.configure({level: 'info'})
 
 class App extends Component  {
 
   constructor(props) {
     super(props)
     this.state = {
-      aiheet:  []
     }
   }
 
-  componentDidMount() {
-    foorumiData.getAll()
-      .then(responseData => {
-        logger.info('App.componentDidMount.responseData:', responseData)
-        this.setState({aiheet: responseData})
-      })
-  }
-
   render () {
-
-    const alkuAihe = (this.state.aiheet && this.state.aiheet.length > 0) ? this.state.aiheet[0].id : ''
 
     return (
       <>
@@ -50,7 +45,7 @@ class App extends Component  {
           <Route path='/foorumi'
             render={() => {
               return (
-                <Foorumi aiheet={this.state.aiheet} aihe={alkuAihe} />
+                <Foorumi />
             )}} />
           <Route path='/vaali' component={Vaali} />
           <Route path='/users' component={Users} />

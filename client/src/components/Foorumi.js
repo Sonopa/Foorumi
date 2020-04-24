@@ -116,15 +116,20 @@ class Foorumi extends Component {
     logger.info('constructor.props:', this.props)
 
     this.state = {
-      currentItem: this.props.aihe,
+      aiheet:  [],
+      currentItem: '',
       omistaja: '1',
       aiheVaihtuu: this.state ? this.state.aiheVaihtuu : false
     }
   }
 
   componentDidMount() {
-     logger.trace('componentDidMount.props.aihe:', this.props.aihe)
-     this.setState({currentItem: this.props.aihe, aiheVaihtuu: true})
+    foorumiData.getAll()
+      .then(responseData => {
+        logger.info('App.componentDidMount.responseData:', responseData)
+        const aihe = (responseData && responseData > 0) ? responseData[0].id : ''
+        this.setState({aiheet: responseData, currentItem: aihe, aiheVaihtuu: true})
+      })
      return true
   }
 
@@ -150,7 +155,7 @@ class Foorumi extends Component {
       this.setState({aiheVaihtuu: false})
     }
 
-    const ehdotusSegmentit = this.props.aiheet.map(ehdotus => {
+    const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
       return (<Aihe key={ ehdotus.id}
                         id={ehdotus.id}
                         title={ehdotus.title}
