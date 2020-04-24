@@ -52,24 +52,32 @@ class Keskustelu extends Component {
       return null;
     }
 
+    const isState = () => {
+      logger.trace('Keskustelu.render.this.state.aihe:', this.state.aihe)
+      return this.state.aihe === ''
+    }
+
+
     return (
       <>
-        {this.state.lisaaTila  ?
-          <Segment>
-            <Form>
-              <Form.Input label='Otsikko' name='otsikko' type='input'
-                           onChange={(e) => this.setState({otsikko: e.target.value})} value={this.state.otsikko} />
-              <div className='field'>
-                <label>Kommentti</label>
-                <TextArea name='kommentti'
-                           onChange={(e) => this.setState({kommentti: e.target.value})} value={this.state.kommentti} />
-              </div>
-              <Divider horizontal hidden />
-              <Button onClick={handleSave} primary>Tallenna</Button>
-              <Button onClick={handleRestore} secondary>Peruuta</Button>
-            </Form>
-          </Segment> :
-          <Button onClick={handleAdd} primary>Lisää</Button>
+        {!isState() ?
+          this.state.lisaaTila  ?
+            <Segment>
+              <Form>
+                <Form.Input label='Otsikko' name='otsikko' type='input'
+                             onChange={(e) => this.setState({otsikko: e.target.value})} value={this.state.otsikko} />
+                <div className='field'>
+                  <label>Kommentti</label>
+                  <TextArea name='kommentti'
+                             onChange={(e) => this.setState({kommentti: e.target.value})} value={this.state.kommentti} />
+                </div>
+                <Divider horizontal hidden />
+                <Button onClick={handleSave} primary>Tallenna</Button>
+                <Button onClick={handleRestore} secondary>Peruuta</Button>
+              </Form>
+            </Segment> :
+            <Button onClick={handleAdd} primary>Lisää</Button>
+          : ''
         }
       </>
     )

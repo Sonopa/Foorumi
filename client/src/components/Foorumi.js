@@ -55,7 +55,6 @@ class AiheLomake extends Component {
 
       return (
         this.state.lisaaTila  ?
-          <Segment>
             <Form>
               <Form.Input label='Aihe' name='aihe' type='input'
                            onChange={(e) => this.setState({uusiAihe: e.target.value})} value={this.state.uusiAihe} />
@@ -68,7 +67,6 @@ class AiheLomake extends Component {
               <Button onClick={handleSave} primary>Tallenna</Button>
               <Button onClick={handleRestore} secondary>Peruuta</Button>
             </Form>
-          </Segment>
           :
           <Button onClick={handleAdd} primary>Lisää</Button>
         )
@@ -92,11 +90,14 @@ const FoorumiRivit = (props) => {
       <Grid columns={2} divided>
         <Grid.Row>
           <Grid.Column>
+            <Segment>
+            <h1>Aiheet</h1>
             <Menu vertical fluid>
               {props.ehdotusSegmentit}
             </Menu>
             <Divider horizontal hidden />
             <AiheLomake omistaja={props.omistaja} aiheVaihtuu={props.aiheVaihtuu} resetAiheVaihtuu={props.resetAiheVaihtuu}/>
+            </Segment>
           </Grid.Column>
           <Grid.Column>
             <Segment>

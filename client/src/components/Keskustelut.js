@@ -47,11 +47,12 @@ class Keskustelut extends Component {
   render() {
     const keskusteluRivit = this.state.keskustelut.map(keskustelu => {
       return (<KeskusteluRivi key={keskustelu.id}
-                              nimi={keskustelu.nimi}
-                              otsikko={keskustelu.otsikko}
-                              aika={keskustelu.aika}
-                              kommentti={keskustelu.kommentti}
-                              like={keskustelu.like} />)
+                              nimi={keskustelu.owner}
+                              otsikko={keskustelu.title}
+                              aika={keskustelu.creationTime}
+                              kommentti={keskustelu.text}
+                              like={keskustelu.votesFor}
+                              disLike={keskustelu.votesAgainst}/>)
     })
 
     return (

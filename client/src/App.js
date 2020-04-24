@@ -16,7 +16,7 @@ import Users from './components/Users'
 import Login from './components/Login'
 
 var logger = require('simple-console-logger')
-logger.configure({level: 'info'})
+logger.configure({level: 'trace'})
 
 class App extends Component  {
 
