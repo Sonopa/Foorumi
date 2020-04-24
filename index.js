@@ -10,10 +10,81 @@ app.use(bodyParser.json());
 let topic_id = 1;
 let discussion_id = 1;
 let comment_id = 1;
+let user_id = 1;
 let topicDatabase = [];
 let discussionDatabase = [];
 let commentDatabase = [];
 
+// USER DB
+const users = [];
+
+// SESSION MANAGEMENT
+
+const loggedSessions = [];
+const time_to_live = 1000*60*5;
+
+// LOGIN API
+
+app.post("/register", function(req, res) {
+    if (!req.body) {
+        return res.status(422).json({message:"Missing valid credentials"})
+    }
+    if (!req.body.username || !req.body.password) {
+        return res.status(422).json({message:"Missing valid credentials"})
+    }
+    if (req.body.username.length < 3 || req.body.password.length < 8) {
+        return res.status(422).json({message:"Missing valid credentials"})
+    }
+    for (let i = 0; i < users.length; i++) {
+        if (req.body.username === users[i].username) {
+            return res.status(409).json({message:"Username not available"})
+        }
+    }
+
+    let user = {
+        id: user_id,
+        username:req.body.username,
+        password:req.body.password,
+        name:req.body.name
+    }
+    users.push(user);
+    user_id++;
+    return res.status(200).json({message:"Registration successful"})
+})
+
+app.post("/login", function(req, res) {
+    if (!req.body) {
+        return res.status(422).json({message:"Missing valid credentials"})
+    }
+    if (!req.body.username || !req.body.password) {
+        return res.status(422).json({message:"Missing valid credentials"})
+    }
+    if (req.body.username.length < 3 || req.body.password.length < 8) {
+        return res.status(422).json({message:"Missing valid credentials"})
+    }
+    for (let i = 0; i < users.length; i++) {
+        if (req.body.username === users[i].username && req.body.password === users[i].password) {
+            let session = {
+                id: users[i].id,
+                username: users[i].username
+            }
+            loggedSessions.push(session)
+            return res.status(200).json({message:"Login successful"})
+        }
+    }
+    return res.status(403).json({message:"Failed login"})
+})
+
+app.post("/logout", function(req, res) {
+    let username = req.body.username;
+    for (let i = 0; i < loggedSessions.length; i++) {
+        if (username === loggedSessions[i].username) {
+            loggedSessions.splice(i, 1);
+            return res.status(200).json({message:"Logged out"})
+        }
+    }
+    return res.status(404).json({message:"Session not found"})
+})
 
 // REST API
 
@@ -165,7 +236,7 @@ app.get("/api/aiheet/:topic_id/keskustelut/:discussion_id/kommentit", function(r
 });
 
 // Poistaa keskustelun discussion_id kommentin id
-app.delete("/api/aiheet/:topic_id/keskustelut/:discussion_id/kommentit:id", function(req, res) {
+app.delete("/api/aiheet/:topic_id/keskustelut/:discussion_id/kommentit/:id", function(req, res) {
     let tempId = parseInt(req.params.id, 10);
     for (let i = 0; i < commentDatabase.length; i++) {
         if (tempId === commentDatabase[i].id) {
