@@ -47,7 +47,7 @@ class Keskustelut extends Component {
       <div>
         <h1>Keskustelut</h1>
         {keskusteluRivit}
-        <Keskustelu aihe={this.state.aihe} />
+        <Keskustelu aihe={this.state.aihe} setMessage={this.props.setMessage} />
       </div>
     )
   }

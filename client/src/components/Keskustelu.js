@@ -8,6 +8,7 @@ import React, {Component} from 'react'
 import {Form, TextArea, Button, Segment, Divider} from 'semantic-ui-react'
 import keskusteluData from '../services/keskustelu'
 import {isLoggedIn} from '../services/session'
+import {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Keskustelu')
 
@@ -22,7 +23,9 @@ class Keskustelu extends Component {
       otsikko:  this.state ? this.state.otsikko : '',
       kommentti: this.state ? this.state.kommentti : '',
       omistaja: '1',
-      lisaaTila: false
+      lisaaTila: false,
+      messu: '',
+      messuTyyppi: messageTypes.CLOSE
     }
   }
 
@@ -49,8 +52,17 @@ class Keskustelu extends Component {
         .then(responseData => {
           logger.info('handleSave.responseData:', responseData)
           this.setState({lisaaTila: false, otsikko: '', kommentti: ''})
+          this.props.setMessage(responseData.message, messageTypes.INFO)
         })
-      return null;
+        .catch(exception => {
+          logger.info('handleSave.catch:', exception)
+          this.props.setMessage(exception.message, messageTypes.WARNING)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.props.setMessage('', messageTypes.CLOSE)
+          }, messageTime.NORMAL)
+      })
     }
 
     const isState = () => {

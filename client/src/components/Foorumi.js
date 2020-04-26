@@ -8,7 +8,7 @@ import React, {Component} from 'react'
 import {Segment, Grid, Menu, Button, Form, TextArea, Divider} from 'semantic-ui-react'
 import foorumiData from '../services/foorumi'
 import {isLoggedIn} from '../services/session'
-
+import Huomio, {messageTypes, messageTime} from './Huomio'
 import Keskustelut from './Keskustelut'
 
 const logger = require('simple-console-logger').getLogger('Foorumi')
@@ -56,8 +56,18 @@ class AiheLomake extends Component {
       }
       foorumiData.create(newAihe)
         .then(responseData => {
-          logger.info('handleSave.responseData:', responseData)
+          logger.info('handleSave.create:', responseData)
           this.setState({lisaaTila: false, uusiAihe: '', kuvaus: ''})
+          this.props.setMessage(responseData.message, messageTypes.INFO)
+        })
+        .catch(exception => {
+          logger.info('handleSave.catch:', exception)
+          this.props.setMessage(exception.message, messageTypes.WARNING)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
       })
     }
 
@@ -84,7 +94,7 @@ class AiheLomake extends Component {
 const Aihe = (props) => {
   return (
     <Menu.Item
-      name={props.id}
+      name={props.id + ''}
       active={props.currentItem===props.id}
       onClick={props.handleItem}
       >
@@ -105,13 +115,13 @@ const FoorumiRivit = (props) => {
             </Menu>
             <Divider horizontal hidden />
             {isLoggedIn()
-            ? <AiheLomake omistaja={props.omistaja} aiheVaihtuu={props.aiheVaihtuu} resetAiheVaihtuu={props.resetAiheVaihtuu}/>
+            ? <AiheLomake omistaja={props.omistaja} aiheVaihtuu={props.aiheVaihtuu} resetAiheVaihtuu={props.resetAiheVaihtuu} setMessage={props.setMessage} />
             : ''}
             </Segment>
           </Grid.Column>
           <Grid.Column>
             <Segment>
-              <Keskustelut aihe={props.currentItem}/>
+              <Keskustelut aihe={props.currentItem} setMessage={props.setMessage} />
             </Segment>
           </Grid.Column>
         </Grid.Row>
@@ -129,7 +139,9 @@ class Foorumi extends Component {
       aiheet:  [],
       currentItem: '',
       omistaja: '1',
-      aiheVaihtuu: this.state ? this.state.aiheVaihtuu : false
+      aiheVaihtuu: this.state ? this.state.aiheVaihtuu : false,
+      messu: '',
+      messuTyyppi: messageTypes.CLOSE
     }
   }
 
@@ -173,13 +185,19 @@ class Foorumi extends Component {
                         handleItem={this.handleItemClick}/>)
     })
 
+    const setMessage = (messu, tyyppi) => {
+      this.setState({messu: messu, messuTyyppi: tyyppi})
+    }
+
     return (
       <Segment>
+        <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <FoorumiRivit ehdotusSegmentit={ehdotusSegmentit}
                       currentItem={this.state.currentItem}
                       omistaja='1'
                       aiheVaihtuu={this.state.aiheVaihtuu}
                       resetAiheVaihtuu={resetAiheVaihtuu}
+                      setMessage={setMessage}
         />
       </Segment>
     )

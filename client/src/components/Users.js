@@ -8,8 +8,10 @@ import React, {Component} from 'react'
 import {Segment, Grid, Menu, Form, Button, Divider} from 'semantic-ui-react'
 import usersData from '../services/users'
 import {getLoggedIn, isLoggedIn} from '../services/session'
+import Huomio, {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Users')
+
 const UserRivi = (props) => {
   return (
     <Menu.Item
@@ -51,8 +53,17 @@ class UserLomake extends Component {
           .then(responseData => {
             logger.info('handleSave.responseData:', responseData)
             this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
+            this.props.setMessage(responseData.message, messageTypes.INFO)
           })
-        return null;
+          .catch(exception => {
+            logger.info('handleSave.responseData:', exception)
+            this.props.setMessage(exception.message, messageTypes.WARNING)
+          })
+          .finally(() => {
+            setTimeout(() => {
+              this.props.setMessage('', messageTypes.CLOSE)
+            }, messageTime.NORMAL)
+          })
       }
 
       return (
@@ -146,7 +157,9 @@ class Users extends Component {
       users: [ /* {id:"1001",username:"tuiti",name:"Tuula Pitkänen",email:"tp@.hukka.org"},
               {id:"1002",username:"jupe",name:"Jukka Metso",email:"jm@.hukka.org"},
               {id:"1003",username:"sepe",name:"Seppo Kiurula",email:"sk@.hukka.org"} */],
-      currentUser: '' // "1001",
+      currentUser: '', // "1001",
+      messu: '',
+      messuTyyppi: messageTypes.CLOSE
     }
   }
 
@@ -179,17 +192,22 @@ class Users extends Component {
       return user[0]
     }
 
+    const setMessage = (messu, tyyppi) => {
+      this.setState({messu: messu, messuTyyppi: tyyppi})
+    }
+
     return (
       <>
         <Segment raised>
           <h1>Käyttäjien hallinnointi</h1>
         </Segment>
+        <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <Grid>
           <Grid.Column width={4}>
             <Menu vertical fluid>
               {userRivit}
             </Menu>
-            <UserLomake />
+            <UserLomake setMessage={setMessage} />
           </Grid.Column>
           <Grid.Column width={12} stretched>
             <Segment>
