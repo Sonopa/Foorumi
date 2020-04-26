@@ -12,7 +12,7 @@ import Valikko from './components/Valikko'
 import Etusivu from './components/Etusivu'
 import Vaali from './components/Vaali'
 import Users from './components/Users'
-import Login from './components/Login'
+import Login, {Logout} from './components/Login'
 
 var logger = require('simple-console-logger')
 /*
@@ -50,6 +50,7 @@ class App extends Component  {
           <Route path='/vaali' component={Vaali} />
           <Route path='/users' component={Users} />
           <Route path='/login' component={Login} />
+          <Route path='/logout' component={Logout} />
         </Router>
       </>
     )

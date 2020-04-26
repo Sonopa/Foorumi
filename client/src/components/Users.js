@@ -1,4 +1,4 @@
-/// ---------------------------------
+  /// ---------------------------------
 /// Foorumi Sovellus: Frontend
 /// Users -komponentti sisältää Käyttäjien hallinnan
 /// Paul Kallio 18.4.2020
@@ -7,6 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Form, Button, Divider} from 'semantic-ui-react'
 import usersData from '../services/users'
+import {getLoggedIn, isLoggedIn} from '../services/session'
 
 const logger = require('simple-console-logger').getLogger('Users')
 const UserRivi = (props) => {
@@ -55,6 +56,7 @@ class UserLomake extends Component {
       }
 
       return (
+        isLoggedIn() ?
         this.state.lisaaTila  ?
           <Segment>
             <Form>
@@ -73,6 +75,7 @@ class UserLomake extends Component {
           </Segment>
           :
           <Button onClick={handleAdd} primary>Lisää</Button>
+          : ''
         )
     }
 }
@@ -82,21 +85,20 @@ class User extends Component {
     constructor(props) {
       super(props)
       this.state = {
-        id: props.user.id,
-        tunnus: props.user.tunnus,
-        nimi: props.user.nimi,
-        email: props.user.email,
-        oldId: ''
+        id: '', // props.user.id,
+        tunnus: '', // props.user.username,
+        nimi: '', // props.user.name,
+        email: '' // props.user.email,
+        // oldId: ''
       }
     }
 
-    componentDidUpdate() {
-      if(this.state.oldId !== this.props.user.id) {
+    componentDidUpdate(prevProps, prevState) {
+      if(this.props.user && this.state.user && (this.state.user.id !== this.props.user.id)) {
         this.setState({
           id: this.props.user.id,
-          oldId: this.props.user.id,
-          tunnus: this.props.user.tunnus,
-          nimi: this.props.user.nimi,
+          tunnus: this.props.user.username,
+          nimi: this.props.user.name,
           email: this.props.user.email
         })
       }
@@ -114,13 +116,24 @@ class User extends Component {
     }
 
     render() {
+      const isUser = (typeof this.props.user) !== 'undefined'
+      if(isUser) {
+          logger.info('User.render.user:', this.props.user)
+          logger.info('getLoggedIn', getLoggedIn())
+          logger.info('isLoggedIn()', isLoggedIn())
+          logger.info('isLoggedIn', isLoggedIn)
+      }
       return (
-        <Form>
-          <Form.Input label='Tunnus' name='tunnus' type='input' value={this.props.user.tunnus}/>
-          <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({nimi: e.target.value})} value={this.state.nimi} />
-          <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
-          <Button primary>Päivitä</Button>
-        </Form>
+         isUser ?
+            <Form>
+              <Form.Input label='Tunnus' name='tunnus' type='input' value={this.props.user.username}/>
+              <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({nimi: e.target.value})} value={this.props.user.name} />
+              <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.props.user.email} />
+              {isLoggedIn() ?
+              <Button primary>Päivitä</Button>
+              : ''}
+            </Form>
+            : ''
       )
     }
 }
@@ -130,11 +143,21 @@ class Users extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      users: [{id:"1001",tunnus:"tuiti",nimi:"Tuula Pitkänen",email:"tp@.hukka.org"},
-              {id:"1002",tunnus:"jupe",nimi:"Jukka Metso",email:"jm@.hukka.org"},
-              {id:"1003",tunnus:"sepe",nimi:"Seppo Kiurula",email:"sk@.hukka.org"}],
-      currentUser: "1001",
+      users: [ /* {id:"1001",username:"tuiti",name:"Tuula Pitkänen",email:"tp@.hukka.org"},
+              {id:"1002",username:"jupe",name:"Jukka Metso",email:"jm@.hukka.org"},
+              {id:"1003",username:"sepe",name:"Seppo Kiurula",email:"sk@.hukka.org"} */],
+      currentUser: '' // "1001",
     }
+  }
+
+  componentDidMount() {
+    usersData.getAll()
+      .then(responseData => {
+        logger.info('Users.componentDidMount.responseData:', responseData)
+        const currentUser = (responseData && responseData.length > 0) ? responseData[0].id : ''
+        this.setState({users: responseData, currentUser: currentUser /*, aiheVaihtuu: true */})
+      })
+     return true
   }
 
   handleUserClick = (e, {name}) => this.setState({currentUser:name})
@@ -143,8 +166,8 @@ class Users extends Component {
     const userRivit = this.state.users.map(user => {
       return (<UserRivi key={user.id}
                               id={user.id}
-                              nimi={user.nimi}
-                              tunnus={user.tunnus}
+                              nimi={user.name}
+                              tunnus={user.username}
                               email={user.email}
                               activeUser={this.state.currentUser}
                               handleUser={this.handleUserClick}/>)

@@ -7,6 +7,7 @@
 import React, {Component} from 'react'
 import {Form, TextArea, Button, Segment, Divider} from 'semantic-ui-react'
 import keskusteluData from '../services/keskustelu'
+import {isLoggedIn} from '../services/session'
 
 const logger = require('simple-console-logger').getLogger('Keskustelu')
 
@@ -54,13 +55,12 @@ class Keskustelu extends Component {
 
     const isState = () => {
       logger.trace('Keskustelu.render.this.state.aihe:', this.state.aihe)
-      return this.state.aihe === ''
+      return this.state.aihe !== ''
     }
-
 
     return (
       <>
-        {!isState() ?
+        {isState() && isLoggedIn() ?
           this.state.lisaaTila  ?
             <Segment>
               <Form>

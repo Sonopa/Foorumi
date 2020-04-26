@@ -21,19 +21,7 @@ class Keskustelut extends Component {
     }
   }
 
-  componentWillMount() {
-    if(this.state.aihe !== this.props.aihe) {
-      this.setState({aihe: this.props.aihe})
-      keskusteluData.getAll(this.props.aihe)
-        .then(responseData => {
-          logger.info('componentWillMount.responseData:', responseData)
-          this.setState({keskustelut: responseData})
-        })
-    }
-    return null;
-  }
-
- componentDidUpdate() {
+  componentDidUpdate() {
     if(this.state.aihe !== this.props.aihe) {
       this.setState({aihe: this.props.aihe})
       keskusteluData.getAll(this.props.aihe)

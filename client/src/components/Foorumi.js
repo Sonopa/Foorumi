@@ -7,6 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Button, Form, TextArea, Divider} from 'semantic-ui-react'
 import foorumiData from '../services/foorumi'
+import {isLoggedIn} from '../services/session'
 
 import Keskustelut from './Keskustelut'
 
@@ -35,42 +36,49 @@ class AiheLomake extends Component {
   }
 
   render() {
-     logger.trace('AiheLomake.render.props.aiheVaihtuu:', this.props.aiheVaihtuu)
-      const handleAdd = (e, {name}) => this.setState({lisaaTila: true})
-      const handleRestore = (e, {name}) =>
-          this.setState({uusiAihe: '', kuvaus: '', lisaaTila: false})
-      const handleSave = (e, {name}) => {
-        const newAihe = {
-            owner:        this.props.omistaja,
-            title:        this.state.uusiAihe,
-            description:  this.state.kuvaus
-        }
-        foorumiData.create(newAihe)
-          .then(responseData => {
-            logger.info('handleSave.responseData:', responseData)
-            this.setState({lisaaTila: false, uusiAihe: '', kuvaus: ''})
-          })
-        return null;
-      }
 
-      return (
-        this.state.lisaaTila  ?
-            <Form>
-              <Form.Input label='Aihe' name='aihe' type='input'
-                           onChange={(e) => this.setState({uusiAihe: e.target.value})} value={this.state.uusiAihe} />
-              <div className='field'>
-                <label>Kuvaus</label>
-                <TextArea name='kuvaus'
-                           onChange={(e) => this.setState({kuvaus: e.target.value})} value={this.state.kuvaus} />
-              </div>
-              <Divider horizontal hidden />
-              <Button onClick={handleSave} primary>Tallenna</Button>
-              <Button onClick={handleRestore} secondary>Peruuta</Button>
-            </Form>
-          :
-          <Button onClick={handleAdd} primary>Lisää</Button>
-        )
+    const handleAdd = (event, {name}) => {
+      event.preventDefault()
+      this.setState({lisaaTila: true})
+    }
+
+    const handleRestore = (event, {name}) => {
+      event.preventDefault()
+      this.setState({uusiAihe: '', kuvaus: '', lisaaTila: false})
+    }
+
+    const handleSave = (event, {name}) => {
+      event.preventDefault()
+      const newAihe = {
+          owner:        this.props.omistaja,
+          title:        this.state.uusiAihe,
+          description:  this.state.kuvaus
       }
+      foorumiData.create(newAihe)
+        .then(responseData => {
+          logger.info('handleSave.responseData:', responseData)
+          this.setState({lisaaTila: false, uusiAihe: '', kuvaus: ''})
+      })
+    }
+
+    return (
+      this.state.lisaaTila  ?
+          <Form>
+            <Form.Input label='Aihe' name='aihe' type='input'
+                         onChange={(e) => this.setState({uusiAihe: e.target.value})} value={this.state.uusiAihe} />
+            <div className='field'>
+              <label>Kuvaus</label>
+              <TextArea name='kuvaus'
+                         onChange={(e) => this.setState({kuvaus: e.target.value})} value={this.state.kuvaus} />
+            </div>
+            <Divider horizontal hidden />
+            <Button onClick={handleSave} primary>Tallenna</Button>
+            <Button onClick={handleRestore} secondary>Peruuta</Button>
+          </Form>
+        :
+        <Button onClick={handleAdd} primary>Lisää</Button>
+      )
+    }
   }
 
 const Aihe = (props) => {
@@ -96,7 +104,9 @@ const FoorumiRivit = (props) => {
               {props.ehdotusSegmentit}
             </Menu>
             <Divider horizontal hidden />
-            <AiheLomake omistaja={props.omistaja} aiheVaihtuu={props.aiheVaihtuu} resetAiheVaihtuu={props.resetAiheVaihtuu}/>
+            {isLoggedIn()
+            ? <AiheLomake omistaja={props.omistaja} aiheVaihtuu={props.aiheVaihtuu} resetAiheVaihtuu={props.resetAiheVaihtuu}/>
+            : ''}
             </Segment>
           </Grid.Column>
           <Grid.Column>

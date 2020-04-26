@@ -5,6 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import axios from 'axios'
+import {getAuth} from './session'
 
 const logger = require('simple-console-logger').getLogger('keskustelu')
 const baseUrl = '/api/aiheet'
@@ -19,8 +20,10 @@ const getAll = (id) => {
 /// Create method
 const create = async (topicId, newObject) => {
   logger.info('axios.create:', `${baseUrl}/${topicId}${addUrl}`)
-  const response = await axios.post(`${baseUrl}/${topicId}${addUrl}`, newObject)
+  const response = await axios.post(`${baseUrl}/${topicId}${addUrl}`, newObject, getAuth())
   return response.data
 }
+  // const response = await axios.post(baseUrl, newObject, config)
+  // return response.data
 
 export default {getAll, create}
