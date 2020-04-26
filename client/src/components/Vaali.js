@@ -22,14 +22,16 @@ const Vaali = () => {
       <Segment raised>
         <h1>Äänestyspaikka</h1>
       </Segment>
-      <Segment stacked>
-        <h2>Äänestystulos</h2>
+      <Segment>
+        <Segment stacked>
+          <h2>Äänestystulos</h2>
+        </Segment>
+        <Statistic.Group>
+          <TilastoItem arvo="25" otsikko="Puolesta"/>
+          <TilastoItem arvo="25" otsikko="Vastaan"/>
+          <TilastoItem arvo="10" otsikko="Tyhjiä"/>
+        </Statistic.Group>
       </Segment>
-      <Statistic.Group>
-        <TilastoItem arvo="25" otsikko="Puolesta"/>
-        <TilastoItem arvo="25" otsikko="Vastaan"/>
-        <TilastoItem arvo="10" otsikko="Tyhjiä"/>
-      </Statistic.Group>
     </>
   )
 }

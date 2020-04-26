@@ -204,10 +204,12 @@ class Users extends Component {
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <Grid>
           <Grid.Column width={4}>
-            <Menu vertical fluid>
-              {userRivit}
-            </Menu>
-            <UserLomake setMessage={setMessage} />
+            <Segment>
+              <Menu vertical fluid>
+                {userRivit}
+              </Menu>
+              <UserLomake setMessage={setMessage} />
+            </Segment>
           </Grid.Column>
           <Grid.Column width={12} stretched>
             <Segment>

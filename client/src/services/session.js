@@ -12,6 +12,11 @@ const isLoggedIn = () => window.localStorage.getItem(foorumiStore) ? true : fals
 
 const getLoggedIn = () => JSON.parse(window.localStorage.getItem(foorumiStore))
 
+const getUser = () => {
+  const userData = getLoggedIn()
+  return userData ? userData.username : ''
+}
+
 const storeSession = (user) => {
 
   return (window.localStorage.setItem(foorumiStore, user))
@@ -31,4 +36,4 @@ const getAuth = () => {
   return author
 }
 
-export {isLoggedIn, getLoggedIn, storeSession, removeSession, getAuth}
+export {isLoggedIn, getLoggedIn, storeSession, removeSession, getAuth, getUser}

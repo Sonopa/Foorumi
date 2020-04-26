@@ -7,6 +7,8 @@
 import React, { Component } from 'react'
 import {Segment, Form, Button, Container} from 'semantic-ui-react'
 import usersData from '../services/users'
+import Huomio, {messageTypes, messageTime} from './Huomio'
+import {getUser} from '../services/session'
 
 const logger = require('simple-console-logger').getLogger('Login')
 
@@ -40,8 +42,18 @@ class LoginForm extends Component {
 
       usersData.login(newLogin)
         .then(responseData => {
-          logger.info('LoginForm.render.handleSave.responseData', responseData)
+          logger.info('LoginForm.render.login.responseData', responseData)
+          this.props.setMessage(`Käyttäjä ${this.state.username} kirjautui Foorumiin.`, messageTypes.INFO)
           this.setState({username: '', password: ''})
+        })
+        .catch(exception => {
+          logger.info('LogoutForm.catch:', exception)
+          this.props.setMessage(exception.message, messageTypes.WARNING)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.props.setMessage('', messageTypes.CLOSE)
+          }, messageTime.NORMAL)
       })
     }
 
@@ -57,18 +69,32 @@ class LoginForm extends Component {
 
 class LogoutForm extends Component {
 
+  constructor(props) {
+    super(props)
+  }
+
   render () {
 
     const handleSave = event => {
       event.preventDefault()
 
       const logoutUser = {
-          username: 'testi'
+          username: getUser()
       }
 
       usersData.logout(logoutUser)
         .then(responseData => {
-          logger.info('LogoutForm.render.handleSave.responseData', responseData)
+          logger.info('LogoutForm.then.responseData', responseData)
+          this.props.setMessage(`Käyttäjä ${logoutUser.username} poistui Foorumista.`, messageTypes.INFO)
+        })
+        .catch(exception => {
+          logger.info('LogoutForm.catch:', exception)
+          this.props.setMessage(exception.message, messageTypes.WARNING)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.props.setMessage('', messageTypes.CLOSE)
+          }, messageTime.NORMAL)
       })
     }
 
@@ -82,28 +108,58 @@ class LogoutForm extends Component {
 
 export default class Login extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      messu: '',
+      messuTyyppi: messageTypes.CLOSE
+    }
+  }
+
   render() {
+    const setMessage = (messu, tyyppi) => {
+      this.setState({messu: messu, messuTyyppi: tyyppi})
+    }
+
     return (
-      <Container>
-        <Segment compact raised>
-          <h1>Anna käyttäjätiedot</h1>
-          <LoginForm />
-        </Segment>
-      </Container>
+      <>
+        <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
+        <Container>
+          <Segment compact raised>
+            <h1>Anna käyttäjätiedot</h1>
+            <LoginForm setMessage={setMessage} />
+          </Segment>
+        </Container>
+      </>
     )
   }
 }
 
 export class Logout extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      messu: '',
+      messuTyyppi: messageTypes.CLOSE
+    }
+  }
+
   render() {
+    const setMessage = (messu, tyyppi) => {
+      this.setState({messu: messu, messuTyyppi: tyyppi})
+    }
+
     return (
-      <Container>
-        <Segment compact raised>
-          <h1>Kirjaudu Ulos</h1>
-          <LogoutForm />
-        </Segment>
-      </Container>
+      <>
+      <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
+        <Container>
+          <Segment compact raised>
+            <h1>Kirjaudu Ulos</h1>
+            <LogoutForm setMessage={setMessage} />
+          </Segment>
+        </Container>
+      </>
     )
   }
 }
