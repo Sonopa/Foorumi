@@ -14,25 +14,21 @@ import Vaali from './components/Vaali'
 import Users from './components/Users'
 import Login, {Logout} from './components/Login'
 
-var logger = require('simple-console-logger')
-/*
-error
-info
-trace
-debug
-*/
-
-logger.configure({level: 'info'})
+const logger = require('simple-console-logger').getLogger('App')
 
 class App extends Component  {
 
   constructor(props) {
     super(props)
     this.state = {
+      aihe: ''
     }
   }
 
   render () {
+    const setAihe = (aihe) => {
+      this.setState({aihe: aihe})
+    }
 
     return (
       <>
@@ -45,9 +41,14 @@ class App extends Component  {
           <Route path='/foorumi'
             render={() => {
               return (
-                <Foorumi />
+                <Foorumi setAihe={setAihe} />
             )}} />
-          <Route path='/vaali' component={Vaali} />
+          <Route path='/vaali'
+            render={() => {
+             logger.info('Route.vaali.state.aihe:', this.state.aihe)
+              return (
+                <Vaali aihe={this.state.aihe} />
+            )}} />
           <Route path='/users' component={Users} />
           <Route path='/login' component={Login} />
           <Route path='/logout' component={Logout} />

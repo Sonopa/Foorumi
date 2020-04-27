@@ -53,7 +53,7 @@ class UserLomake extends Component {
           .then(responseData => {
             logger.info('handleSave.responseData:', responseData)
             this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
-            this.props.setMessage(responseData.message, messageTypes.INFO)
+            this.props.setMessage(`Käyttäjä ${newUser.tunnus} on lisätty Foorumille.`, messageTypes.INFO)
           })
           .catch(exception => {
             logger.info('handleSave.responseData:', exception)
@@ -121,9 +121,15 @@ class User extends Component {
           logger.info('componentDidMount.usersData.then:', responseData)
           this.setState({aiheet: responseData})
         })
-        .catch(error => {
-          logger.info('componentDidMount.usersData.error:', error.message)
+        .catch(exception => {
+          logger.info('handleSave.catch:', exception)
+          this.props.setMessage(exception.message, messageTypes.ERROR)
         })
+        .finally(() => {
+          setTimeout(() => {
+            this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.EXTRA)
+      })
     }
 
     render() {
@@ -213,7 +219,7 @@ class Users extends Component {
           </Grid.Column>
           <Grid.Column width={12} stretched>
             <Segment>
-              <User user={userData(this.state.currentUser, this.state.users)} />
+              <User user={userData(this.state.currentUser, this.state.users)}  setMessage={setMessage} />
             </Segment>
           </Grid.Column>
         </Grid>

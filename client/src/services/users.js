@@ -7,14 +7,14 @@
 import axios from 'axios'
 import {storeSession, removeSession, getAuth} from './session'
 
-// const baseUrl = '/api/Users' // THIS REAL USERS RESQUEST
+// const baseUrl = '/api/Users' // THIS IS REAL USERS RESQUEST
 const registerUrl = '/register'
 const loginUrl = '/login'
 const logoutUrl = '/logout'
 const logger = require('simple-console-logger').getLogger('users')
 
 const getAll = () => {
-  // TEST DUMMY Start
+  // OK TEST DUMMY Start
   const users = [
          {"id": "1",
           "username":"testi",
@@ -29,10 +29,16 @@ const getAll = () => {
   return  new Promise(function (resolve, reject) {
       resolve(users)
   })
-  // TEST DUMMY End
+  // OK TEST DUMMY End
+  /* ERROR TEST Start
+  const virhe = new Error("Tietokanta on alhalla. Ota yhteys tukeen 09-123123.")
+  return  new Promise(function (resolve, reject) {
+      reject(virhe)
+  })
+  // ERROR TEST End */
 
-  // const request = axios.get(baseUrl) // THIS REAL USERS RESQUEST
-  // return request.then(response => response.data) // THIS REAL USERS RESQUEST
+  // const request = axios.get(baseUrl) // THIS IS REAL USERS RESQUEST
+  // return request.then(response => response.data) // THIS IS REAL USERS RESQUEST
 }
 
 /// Create method
@@ -52,7 +58,7 @@ const login = async (newObject) => {
     token: response.data.token,
     username: newObject.username
   }
-  storeSession(JSON.stringify(user))
+  storeSession(user)
   return response.data
 }
 

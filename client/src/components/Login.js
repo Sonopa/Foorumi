@@ -69,10 +69,6 @@ class LoginForm extends Component {
 
 class LogoutForm extends Component {
 
-  constructor(props) {
-    super(props)
-  }
-
   render () {
 
     const handleSave = event => {

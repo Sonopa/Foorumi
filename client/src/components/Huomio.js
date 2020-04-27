@@ -18,7 +18,8 @@ export const messageTime = {
   SHORT:    2000,
   NORMAL:   3000,
   LONG:     5000,
-  ULTRA:    8000
+  EXTRA:    8000,
+  SUPER:   10000,  
 }
 
 const Info = ({teksti}) =>  (

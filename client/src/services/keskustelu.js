@@ -23,7 +23,5 @@ const create = async (topicId, newObject) => {
   const response = await axios.post(`${baseUrl}/${topicId}${addUrl}`, newObject, getAuth())
   return response.data
 }
-  // const response = await axios.post(baseUrl, newObject, config)
-  // return response.data
 
 export default {getAll, create}

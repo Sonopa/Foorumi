@@ -10,7 +10,9 @@ import {getAuth} from './session'
 const logger = require('simple-console-logger').getLogger('foorumi')
 const baseUrl = '/api/aiheet'
 
+/// getAll method
 const getAll = () => {
+  logger.info('axios.getAll:', `${baseUrl}`)
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
@@ -22,4 +24,11 @@ const create = async (newObject) => {
   return response.data
 }
 
-export default {getAll, create}
+/// getAihe method
+const getAihe = (id) => {
+  logger.info('axios.get:', `${baseUrl}/${id}`)
+  const request = axios.get(`${baseUrl}/${id}`)
+  return request.then(response => response.data)
+}
+
+export default {getAll, create, getAihe}

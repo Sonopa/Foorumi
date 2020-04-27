@@ -8,6 +8,7 @@ import React, {Component} from 'react'
 import KeskusteluRivi from './KeskusteluRivi'
 import Keskustelu from './Keskustelu'
 import keskusteluData from '../services/keskustelu'
+import {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Keskustelut')
 
@@ -29,6 +30,15 @@ class Keskustelut extends Component {
           logger.info('updateKeskustelut.responseData:', responseData)
           this.setState({keskustelut: responseData, lisaaTila: false})
         })
+      .catch(exception => {
+        logger.info('handleSave.catch:', exception)
+        this.props.setMessage(exception.message, messageTypes.ERROR)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+      }, messageTime.EXTRA)
+    })
     }
   }
 

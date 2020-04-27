@@ -58,7 +58,7 @@ class AiheLomake extends Component {
         .then(responseData => {
           logger.info('handleSave.create:', responseData)
           this.setState({lisaaTila: false, uusiAihe: '', kuvaus: ''})
-          this.props.setMessage(responseData.message, messageTypes.INFO)
+          this.props.setMessage(`Aihe ${newAihe.title} on lisätty Foorumille.`, messageTypes.INFO)
         })
         .catch(exception => {
           logger.info('handleSave.catch:', exception)
@@ -149,10 +149,20 @@ class Foorumi extends Component {
     foorumiData.getAll()
       .then(responseData => {
         logger.info('App.componentDidMount.responseData:', responseData)
-        const aihe = (responseData && responseData > 0) ? responseData[0].id : ''
+        const aihe = (responseData && responseData.length > 0) ? responseData[0].id : ''
         this.setState({aiheet: responseData, currentItem: aihe, aiheVaihtuu: true})
+        this.props.setAihe(aihe)
       })
-     return true
+      .catch(exception => {
+        logger.info('handleSave.catch:', exception)
+        // this.setState({messu: exception.message, messuTyyppi: messageTypes.ERROR})
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.setState({messu: '', messuTyyppi: messageTypes.CLOSE})
+      }, messageTime.EXTRA)
+    })
+    return true
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -166,6 +176,7 @@ class Foorumi extends Component {
   handleItemClick = (e, {name}) => {
 
     this.setState((state) => { return {currentItem:name}})
+    this.props.setAihe(name)
     logger.trace('handleItemClick.currentItem/ehdotus:', this.state.currentItem, name)
   }
 
