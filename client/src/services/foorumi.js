@@ -27,7 +27,7 @@ const create = async (newObject) => {
 /// getAihe method
 const getAihe = (id) => {
   logger.info('axios.get:', `${baseUrl}/${id}`)
-  const request = axios.get(`${baseUrl}/${id}`)
+  const request = axios.get(`${baseUrl}/${id}`,{id: id})
   return request.then(response => response.data)
 }
 

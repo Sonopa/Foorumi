@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Segment, Statistic} from 'semantic-ui-react'
+import {Segment, Statistic, List} from 'semantic-ui-react'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 import foorumiData from '../services/foorumi'
 
@@ -43,9 +43,17 @@ const Aihe = (props) => {
   const owner = props.aihe ? props.aihe.owner: ''
   return (
     <Segment>
-        Numero: {id}
-        Aihe:   {title}
-        Tekijä: {owner}
+      <List>
+        <List.Item>
+          {title}
+        </List.Item>
+        <List.Item>
+          Tekijä: {owner}
+        </List.Item>
+        <List.Item>
+          Numero: {id}
+        </List.Item>
+      </List>
     </Segment>
   )
 }
