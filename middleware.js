@@ -1,4 +1,4 @@
-let jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const config = require("./config.js");
 
 let checkToken = (req, res, next) => {
@@ -11,6 +11,7 @@ let checkToken = (req, res, next) => {
             if (err) {
                 return res.status(401).json({message:"Invalid token"});
             } else {
+                console.log(decoded);
                 req.decoded = decoded;
                 next();
             }

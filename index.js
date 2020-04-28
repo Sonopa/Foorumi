@@ -19,7 +19,6 @@ const users = [];
 // SESSION MANAGEMENT
 
 const loggedSessions = [];
-const time_to_live = 1000*60*5;
 
 // LOGIN API
 
@@ -63,17 +62,51 @@ app.post("/login", function(req, res) {
     for (let i = 0; i < users.length; i++) {
         if (req.body.username === users[i].username && req.body.password === users[i].password) {
             //TODO: Change config.secret to an env variable
-            let token = jwt.sign({username: req.body.username}, config.secret, {expiresIn: 60})
+            let token = jwt.sign({id: users[i].id, username: users[i].username}, config.secret, {expiresIn: 600})
             let session = {
                 username: users[i].username,
                 token: token
             }
             loggedSessions.push(session);
-            return res.status(200).json({token:token})
+            return res.status(200).json({token:token});
         }
     }
-    return res.status(403).json({message:"Failed login"})
+    return res.status(403).json({message:"Failed login"});
 });
+
+app.get("/users", function(req, res) {
+    tempUsers = [];
+    for(let i = 0; i < users.length; i++) {
+        let user = {
+            username: users[i].username,
+            name: users[i].name
+        }
+        tempUsers.push(user);
+    }
+    return res.status(200).json(tempUsers);
+})
+
+//TODO:  Update user
+app.post("/users/:id", middleware.checkToken, function (req, res) {
+    let id = parseInt(req.params.id, 10);
+    // Check that id is the same as the id of the logged in user
+    if (id === req.decoded.id) {
+        for (let i = 0; i < users.length; i++) {
+            if (id === users[i].id) {
+                modifiedUser = {
+                    id : users[i].id,
+                    username: req.body.username || users[i].username,
+                    password: req.body.password || users[i].password,
+                    name: req.body.name || users[i].name
+                }
+                users[i] = modifiedUser;
+                return res.status(200).json({message:"User modified"});
+            }
+        }
+    } else {
+        return res.status(403).json({message:"Forbidden"})
+    }
+})
 
 app.post("/logout", function(req, res) {
     let username = req.body.username;
