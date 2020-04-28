@@ -19,7 +19,7 @@ export const messageTime = {
   NORMAL:   3000,
   LONG:     5000,
   EXTRA:    8000,
-  SUPER:   10000,  
+  SUPER:   10000,
 }
 
 const Info = ({teksti}) =>  (

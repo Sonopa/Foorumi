@@ -60,31 +60,51 @@ const Aihe = (props) => {
 
 class Vaali extends Component {
 
+  isLive = true
+
   constructor(props) {
     super(props)
     this.state = {
       aihe: null,
       messu: '',
-      messuTyyppi: messageTypes.CLOSE
+      messuTyyppi: messageTypes.CLOSE,
     }
+  }
+
+  componentWillUnmount() {
+    this.isLive = false
   }
 
   componentDidMount() {
     foorumiData.getAihe(this.props.aihe)
       .then(responseData => {
+        this.setAihe(responseData)
         logger.info('componentDidMount.responseData:', responseData)
-        this.setState({aihe: responseData})
       })
       .catch(exception => {
         logger.info('componentDidMount.catch:', exception)
-        this.setState({messu: exception.message, messuTyyppi: messageTypes.ERROR})
+        this.setMessage(exception.message, messageTypes.ERROR)
       })
       .finally(() => {
         setTimeout(() => {
-          this.setState({messu: '', messuTyyppi: messageTypes.CLOSE})
-      }, messageTime.EXTRA)
+          this.setMessage('', messageTypes.CLOSE)
+        }, messageTime.EXTRA)
     })
     return true
+  }
+
+  setMessage = (messu, messuTyyppi) => {
+    if(this.isLive) {
+      logger.error('setMessage:', messu, messuTyyppi)
+      this.setState({messu: messu, messuTyyppi: messuTyyppi})
+    }
+  }
+
+  setAihe = (responseData) => {
+    if(this.isLive) {
+      logger.error('setAihe:', responseData)
+      this.setState({aihe: responseData})
+    }
   }
 
   render() {

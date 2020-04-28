@@ -37,35 +37,35 @@ class UserLomake extends Component {
     }
   }
 
+  handleAdd = (e, {name}) => this.setState({lisaaTila: true})
+  handleRestore = (e, {name}) =>
+      this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
+
+  handleSave = (e, {name}) => {
+    const newUser = {
+        username: this.state.tunnus,
+        password: this.state.salasana,
+        name:     this.state.nimi
+    }
+
+    usersData.create(newUser)
+      .then(responseData => {
+        logger.info('handleSave.responseData:', responseData)
+        this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
+        this.props.setMessage(`Käyttäjä ${newUser.tunnus} on lisätty Foorumille.`, messageTypes.INFO)
+      })
+      .catch(exception => {
+        logger.info('handleSave.responseData:', exception)
+        this.props.setMessage(exception.message, messageTypes.WARNING)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+    })
+  }
 
   render() {
-      const handleAdd = (e, {name}) => this.setState({lisaaTila: true})
-      const handleRestore = (e, {name}) =>
-          this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
-      const handleSave = (e, {name}) => {
-        const newUser = {
-            username: this.state.tunnus,
-            password: this.state.salasana,
-            name:     this.state.nimi
-        }
-
-        usersData.create(newUser)
-          .then(responseData => {
-            logger.info('handleSave.responseData:', responseData)
-            this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
-            this.props.setMessage(`Käyttäjä ${newUser.tunnus} on lisätty Foorumille.`, messageTypes.INFO)
-          })
-          .catch(exception => {
-            logger.info('handleSave.responseData:', exception)
-            this.props.setMessage(exception.message, messageTypes.WARNING)
-          })
-          .finally(() => {
-            setTimeout(() => {
-              this.props.setMessage('', messageTypes.CLOSE)
-            }, messageTime.NORMAL)
-          })
-      }
-
       return (
         isLoggedIn() ?
         this.state.lisaaTila  ?
@@ -80,12 +80,12 @@ class UserLomake extends Component {
               <Form.Input label='Salasana' name='salasana' type='password'
                            onChange={(e) => this.setState({salasana: e.target.value})} value={this.state.salasana} />
               <Divider horizontal hidden />
-              <Button onClick={handleSave} primary>Tallenna</Button>
-              <Button onClick={handleRestore} secondary>Peruuta</Button>
+              <Button onClick={this.handleSave} primary>Tallenna</Button>
+              <Button onClick={this.handleRestore} secondary>Peruuta</Button>
             </Form>
           </Segment>
           :
-          <Button onClick={handleAdd} primary>Lisää</Button>
+          <Button onClick={this.handleAdd} primary>Lisää</Button>
           : ''
         )
     }
