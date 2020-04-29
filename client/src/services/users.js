@@ -7,7 +7,7 @@
 import axios from 'axios'
 import {storeSession, removeSession, getAuth} from './session'
 
-// const baseUrl = '/api/Users' // THIS IS REAL USERS RESQUEST
+const baseUrl = '/users'
 const registerUrl = '/register'
 const loginUrl = '/login'
 const logoutUrl = '/logout'
@@ -15,7 +15,7 @@ const logger = require('simple-console-logger').getLogger('users')
 
 const getAll = () => {
   // OK TEST DUMMY Start
-  const users = [
+  /* const users = [
          {"id": "1",
           "username":"testi",
           "password":"sala1234",
@@ -37,8 +37,8 @@ const getAll = () => {
   })
   // ERROR TEST End */
 
-  // const request = axios.get(baseUrl) // THIS IS REAL USERS RESQUEST
-  // return request.then(response => response.data) // THIS IS REAL USERS RESQUEST
+  const request = axios.get(baseUrl) // THIS IS REAL USERS RESQUEST
+  return request.then(response => response.data) // THIS IS REAL USERS RESQUEST
 }
 
 /// Create method

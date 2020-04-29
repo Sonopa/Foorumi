@@ -104,6 +104,8 @@ class LogoutForm extends Component {
 
 export default class Login extends Component {
 
+  isLive = true
+
   constructor(props) {
     super(props)
     this.state = {
@@ -112,9 +114,16 @@ export default class Login extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.isLive = false
+  }
+
   render() {
     const setMessage = (messu, tyyppi) => {
-      this.setState({messu: messu, messuTyyppi: tyyppi})
+      if(this.isLive) {
+        logger.trace('setMessage:', messu, tyyppi)
+        this.setState({messu: messu, messuTyyppi: tyyppi})
+      }
     }
 
     return (

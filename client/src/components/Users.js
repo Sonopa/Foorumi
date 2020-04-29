@@ -67,7 +67,7 @@ class UserLomake extends Component {
 
   render() {
       return (
-        isLoggedIn() ?
+        // isLoggedIn() ?
         this.state.lisaaTila  ?
           <Segment>
             <Form>
@@ -157,16 +157,20 @@ class User extends Component {
 
 class Users extends Component {
 
+  isLive = true
+
   constructor(props) {
     super(props)
     this.state = {
-      users: [ /* {id:"1001",username:"tuiti",name:"Tuula Pitkänen",email:"tp@.hukka.org"},
-              {id:"1002",username:"jupe",name:"Jukka Metso",email:"jm@.hukka.org"},
-              {id:"1003",username:"sepe",name:"Seppo Kiurula",email:"sk@.hukka.org"} */],
-      currentUser: '', // "1001",
+      users: [],
+      currentUser: '',
       messu: '',
       messuTyyppi: messageTypes.CLOSE
     }
+  }
+
+  componentWillUnmount() {
+    this.isLive = false
   }
 
   componentDidMount() {
@@ -199,7 +203,10 @@ class Users extends Component {
     }
 
     const setMessage = (messu, tyyppi) => {
-      this.setState({messu: messu, messuTyyppi: tyyppi})
+      if(this.isLive) {
+        logger.trace('setMessage:', messu, tyyppi)
+        this.setState({messu: messu, messuTyyppi: tyyppi})
+      }
     }
 
     return (

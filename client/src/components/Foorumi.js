@@ -131,6 +131,8 @@ const FoorumiRivit = (props) => {
 
 class Foorumi extends Component {
 
+  isLive = true
+
   constructor(props) {
     super(props)
     logger.info('constructor.props:', this.props)
@@ -145,6 +147,10 @@ class Foorumi extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.isLive = false
+  }
+
   componentDidMount() {
     foorumiData.getAll()
       .then(responseData => {
@@ -155,14 +161,21 @@ class Foorumi extends Component {
       })
       .catch(exception => {
         logger.info('handleSave.catch:', exception)
-        // this.setState({messu: exception.message, messuTyyppi: messageTypes.ERROR})
+        this.setMessage = (exception.message, messageTypes.ERROR)
       })
       .finally(() => {
         setTimeout(() => {
-          this.setState({messu: '', messuTyyppi: messageTypes.CLOSE})
+          this.setMessage = ('', messageTypes.CLOSE)
       }, messageTime.EXTRA)
     })
     return true
+  }
+
+  setMessage = (messu, messuTyyppi) => {
+    if(this.isLive) {
+      logger.trace('setMessage:', messu, messuTyyppi)
+      this.setState({messu: messu, messuTyyppi: messuTyyppi})
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {

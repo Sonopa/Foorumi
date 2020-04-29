@@ -14,12 +14,18 @@ const logger = require('simple-console-logger').getLogger('Keskustelut')
 
 class Keskustelut extends Component {
 
+  isLive = true
+
   constructor(props) {
     super(props)
     this.state = {
       keskustelut: this.state ? this.state.keskustelut : [],
       aihe: this.state ? this.state.aihe : '',
     }
+  }
+
+  componentWillUnmount() {
+    this.isLive = false
   }
 
   componentDidUpdate() {

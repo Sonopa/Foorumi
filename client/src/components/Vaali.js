@@ -95,14 +95,14 @@ class Vaali extends Component {
 
   setMessage = (messu, messuTyyppi) => {
     if(this.isLive) {
-      logger.error('setMessage:', messu, messuTyyppi)
+      logger.trace('setMessage:', messu, messuTyyppi)
       this.setState({messu: messu, messuTyyppi: messuTyyppi})
     }
   }
 
   setAihe = (responseData) => {
     if(this.isLive) {
-      logger.error('setAihe:', responseData)
+      logger.trace('setAihe:', responseData)
       this.setState({aihe: responseData})
     }
   }

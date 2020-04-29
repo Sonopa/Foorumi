@@ -14,6 +14,8 @@ const logger = require('simple-console-logger').getLogger('Keskustelu')
 
 class Keskustelu extends Component {
 
+  isLive = true
+
   constructor(props) {
     super(props)
     logger.info('constructor.props:', props)
@@ -27,6 +29,10 @@ class Keskustelu extends Component {
       messu: '',
       messuTyyppi: messageTypes.CLOSE
     }
+  }
+
+  componentWillUnmount() {
+    this.isLive = false
   }
 
   componentDidUpdate() {
@@ -52,17 +58,24 @@ class Keskustelu extends Component {
         .then(responseData => {
           logger.info('handleSave.responseData:', responseData)
           this.setState({lisaaTila: false, otsikko: '', kommentti: ''})
-          this.props.setMessage(`Mielipide ${newKeskustelu.otsikko} on lisätty Foorumille.`, messageTypes.INFO)
+          setMessage(`Mielipide ${newKeskustelu.otsikko} on lisätty Foorumille.`, messageTypes.INFO)
         })
         .catch(exception => {
           logger.info('handleSave.catch:', exception)
-          this.props.setMessage(exception.message, messageTypes.WARNING)
+          setMessage(exception.message, messageTypes.WARNING)
         })
         .finally(() => {
           setTimeout(() => {
-            this.props.setMessage('', messageTypes.CLOSE)
+            setMessage('', messageTypes.CLOSE)
           }, messageTime.NORMAL)
       })
+    }
+
+    const setMessage = (messu, messuTyyppi) => {
+      if(this.isLive) {
+        logger.trace('setMessage:', messu, messuTyyppi)
+        this.setState({messu: messu, messuTyyppi: messuTyyppi})
+      }
     }
 
     const isState = () => {
