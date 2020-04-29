@@ -79,12 +79,25 @@ app.get("/users", function(req, res) {
     for(let i = 0; i < users.length; i++) {
         let user = {
             username: users[i].username,
-            name: users[i].name
+            name: users[i].name,
+            id: users[i].id
         }
         tempUsers.push(user);
     }
     return res.status(200).json(tempUsers);
-})
+});
+
+app.get("/users/:id", function(req, res) {
+    for(let i = 0; i < users.length; i++) {
+        if (parseInt(req.params.id, 10) === users[i].id)
+        let user = {
+            username: users[i].username,
+            name: users[i].name
+        }
+        return res.status(200).json(user);
+    }
+    return res.status(404).json({message: "User not found"});
+});
 
 //TODO:  Update user
 app.post("/users/:id", middleware.checkToken, function (req, res) {
