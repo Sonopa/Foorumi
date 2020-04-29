@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Button, Form, TextArea, Divider} from 'semantic-ui-react'
 import foorumiData from '../services/foorumi'
-import {isLoggedIn} from '../services/session'
+import {isLoggedIn, checkAuth} from '../services/session'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 import Keskustelut from './Keskustelut'
 
@@ -60,9 +60,10 @@ class AiheLomake extends Component {
           this.setState({lisaaTila: false, uusiAihe: '', kuvaus: ''})
           this.props.setMessage(`Aihe ${newAihe.title} on lisätty Foorumille.`, messageTypes.INFO)
         })
-        .catch(exception => {
-          logger.info('handleSave.catch:', exception)
-          this.props.setMessage(exception.message, messageTypes.WARNING)
+        .catch(error => {
+          logger.info('handleSave.catch:', error)
+          const virhe = checkAuth(error) ? "Sessiosi on vanhentunut. Ole hyvä ja kirjaudu uudelleen." : error.message
+          this.props.setMessage(virhe, messageTypes.WARNING)
         })
         .finally(() => {
           setTimeout(() => {
@@ -92,6 +93,10 @@ class AiheLomake extends Component {
   }
 
 const Aihe = (props) => {
+
+  logger.info('Aihe.id', props.id, (typeof props.id))
+  logger.info('Aihe.currentItem', props.currentItem, (typeof props.currentItem))
+
   return (
     <Menu.Item
       name={props.id + ''}
@@ -139,8 +144,8 @@ class Foorumi extends Component {
 
     this.state = {
       aiheet:  [],
-      currentItem: '',
-      omistaja: '1',
+      currentItem: -1,
+      omistaja: 1,
       aiheVaihtuu: this.state ? this.state.aiheVaihtuu : false,
       messu: '',
       messuTyyppi: messageTypes.CLOSE
@@ -171,24 +176,16 @@ class Foorumi extends Component {
     return true
   }
 
-  setMessage = (messu, messuTyyppi) => {
-    if(this.isLive) {
-      logger.trace('setMessage:', messu, messuTyyppi)
-      this.setState({messu: messu, messuTyyppi: messuTyyppi})
-    }
-  }
-
   componentDidUpdate(prevProps, prevState) {
      if(this.state.currentItem !== prevState.currentItem) {
-       logger.trace('componentDidUpdate.state.aihe:', this.state.currentItem)
-       logger.trace('componentDidUpdate.props.aihe:', this.props.aihe)
+       logger.info('componentDidUpdate.state.aihe:', this.state.currentItem)
        this.setState({aiheVaihtuu: true})
      }
   }
 
   handleItemClick = (e, {name}) => {
 
-    this.setState((state) => { return {currentItem:name}})
+    this.setState((state) => { return {currentItem: parseInt(name)}})
     this.props.setAihe(name)
     logger.trace('handleItemClick.currentItem/ehdotus:', this.state.currentItem, name)
   }
@@ -200,6 +197,13 @@ class Foorumi extends Component {
   }
 
   render() {
+
+    const setMessage = (messu, messuTyyppi) => {
+      if(this.isLive) {
+        logger.trace('setMessage:', messu, messuTyyppi)
+        this.setState({messu: messu, messuTyyppi: messuTyyppi})
+      }
+    }
 
     const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
       return (<Aihe key={ ehdotus.id}
@@ -217,7 +221,7 @@ class Foorumi extends Component {
                       omistaja='1'
                       aiheVaihtuu={this.state.aiheVaihtuu}
                       resetAiheVaihtuu={this.resetAiheVaihtuu}
-                      setMessage={this.setMessage}
+                      setMessage={setMessage}
         />
       </Segment>
     )

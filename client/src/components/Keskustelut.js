@@ -18,9 +18,9 @@ class Keskustelut extends Component {
 
   constructor(props) {
     super(props)
+    logger.info('constructor.props.aihe', props.aihe, (typeof props.aihe))
     this.state = {
       keskustelut: this.state ? this.state.keskustelut : [],
-      aihe: this.state ? this.state.aihe : '',
     }
   }
 
@@ -29,8 +29,7 @@ class Keskustelut extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.state.aihe !== prevState.aihe) {
-      this.setState({aihe: this.props.aihe})
+    if(this.props.aihe !== prevProps.aihe) {
       keskusteluData.getAll(this.props.aihe)
         .then(responseData => {
           logger.info('updateKeskustelut.responseData:', responseData)
@@ -63,7 +62,7 @@ class Keskustelut extends Component {
       <div>
         <h1>Keskustelut</h1>
         {keskusteluRivit}
-        <Keskustelu aihe={this.state.aihe} setMessage={this.props.setMessage} />
+        <Keskustelu aihe={this.props.aihe} setMessage={this.props.setMessage} />
       </div>
     )
   }

@@ -27,6 +27,7 @@ class App extends Component  {
 
   render () {
     const setAihe = (aihe) => {
+      logger.info('render.setAihe.aihe:', aihe)
       this.setState({aihe: aihe})
     }
 

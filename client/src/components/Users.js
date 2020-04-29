@@ -52,7 +52,7 @@ class UserLomake extends Component {
       .then(responseData => {
         logger.info('handleSave.responseData:', responseData)
         this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
-        this.props.setMessage(`Käyttäjä ${newUser.tunnus} on lisätty Foorumille.`, messageTypes.INFO)
+        this.props.setMessage(`Käyttäjä ${newUser.username} on lisätty Foorumille.`, messageTypes.INFO)
       })
       .catch(exception => {
         logger.info('handleSave.responseData:', exception)

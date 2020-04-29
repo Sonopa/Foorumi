@@ -29,6 +29,16 @@ const removeSession = () => {
   return (browserStore().removeItem(foorumiStore))
 }
 
+const checkAuth = (error) => {
+  if(error && error.response && error.response.status) {
+    if(error.response.status === 401) {
+      removeSession()
+      return true
+    }
+  }
+  return false
+}
+
 const getAuth = () => {
   const session = getLoggedIn()
   logger.info('getAuth.session', session)
@@ -39,4 +49,4 @@ const getAuth = () => {
   return author
 }
 
-export {isLoggedIn, getLoggedIn, storeSession, removeSession, getAuth, getUser}
+export {isLoggedIn, getLoggedIn, storeSession, removeSession, getAuth, checkAuth, getUser}

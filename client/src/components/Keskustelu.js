@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Form, TextArea, Button, Segment, Divider} from 'semantic-ui-react'
 import keskusteluData from '../services/keskustelu'
-import {isLoggedIn} from '../services/session'
+import {isLoggedIn, checkAuth, getUser} from '../services/session'
 import {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Keskustelu')
@@ -21,13 +21,9 @@ class Keskustelu extends Component {
     logger.info('constructor.props:', props)
 
     this.state = {
-      aihe: this.state ? this.state.aihe : this.props.aihe,
       otsikko:  this.state ? this.state.otsikko : '',
       kommentti: this.state ? this.state.kommentti : '',
-      omistaja: '1',
-      lisaaTila: false,
-      messu: '',
-      messuTyyppi: messageTypes.CLOSE
+      lisaaTila: false
     }
   }
 
@@ -36,9 +32,9 @@ class Keskustelu extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.state.aihe !== prevState.aihe) {
-      logger.trace('componentDidUpdate.aihe:', this.state.aihe, this.props.aihe)
-      this.setState({aihe: this.props.aihe, otsikko: '', kommentti: '', lisaaTila: false})
+    if(this.props.aihe !== prevProps.aihe) {
+      logger.trace('componentDidUpdate.aihe:', this.props.aihe)
+      this.setState({otsikko: '', kommentti: '', lisaaTila: false})
       logger.trace('componentDidUpdate.lisaaTila:', false)
     }
   }
@@ -50,42 +46,31 @@ class Keskustelu extends Component {
         this.setState({otsikko: '', kommentti: '', lisaaTila: false})
     const handleSave = (e, {name}) => {
       const newKeskustelu = {
-          owner:  this.state.omistaja,
+          owner:  getUser(),
           title:  this.state.otsikko,
           text:   this.state.kommentti
       }
-      keskusteluData.create(this.state.aihe, newKeskustelu)
+      keskusteluData.create(this.props.aihe, newKeskustelu)
         .then(responseData => {
           logger.info('handleSave.responseData:', responseData)
           this.setState({lisaaTila: false, otsikko: '', kommentti: ''})
-          setMessage(`Mielipide ${newKeskustelu.otsikko} on lisätty Foorumille.`, messageTypes.INFO)
+          this.props.setMessage(`Mielipide ${newKeskustelu.title} on lisätty Foorumille.`, messageTypes.INFO)
         })
-        .catch(exception => {
-          logger.info('handleSave.catch:', exception)
-          setMessage(exception.message, messageTypes.WARNING)
+        .catch(error => {
+          logger.info('handleSave.catch:', error)
+          const virhe = checkAuth(error) ? "Sessiosi on vanhentunut. Ole hyvä ja kirjaudu uudelleen." : error.message
+          this.props.setMessage(virhe, messageTypes.WARNING)
         })
         .finally(() => {
           setTimeout(() => {
-            setMessage('', messageTypes.CLOSE)
+            this.props.setMessage('', messageTypes.CLOSE)
           }, messageTime.NORMAL)
       })
     }
 
-    const setMessage = (messu, messuTyyppi) => {
-      if(this.isLive) {
-        logger.trace('setMessage:', messu, messuTyyppi)
-        this.setState({messu: messu, messuTyyppi: messuTyyppi})
-      }
-    }
-
-    const isState = () => {
-      logger.trace('Keskustelu.render.this.state.aihe:', this.state.aihe)
-      return this.state.aihe !== ''
-    }
-
     return (
       <>
-        {isState() && isLoggedIn() ?
+        {isLoggedIn() ?
           this.state.lisaaTila  ?
             <Segment>
               <Form>

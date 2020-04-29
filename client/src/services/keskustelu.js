@@ -19,7 +19,7 @@ const getAll = (id) => {
 
 /// Create method
 const create = async (topicId, newObject) => {
-  logger.info('axios.create:', `${baseUrl}/${topicId}${addUrl}`)
+  logger.info('axios.create:', `${baseUrl}/${topicId}${addUrl}`, newObject)
   const response = await axios.post(`${baseUrl}/${topicId}${addUrl}`, newObject, getAuth())
   return response.data
 }

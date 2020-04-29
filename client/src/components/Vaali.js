@@ -91,7 +91,7 @@ class Vaali extends Component {
   }
 
   componentDidMount() {
-    if(this.props.aihe != this.state.aihe) {
+    if(this.props.aihe !== this.state.aihe) {
       foorumiData.getAihe(this.props.aihe)
         .then(responseData => {
           this.setAihe(responseData)
