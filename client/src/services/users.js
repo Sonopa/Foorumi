@@ -18,6 +18,12 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
+const getUser = (id) => {
+  logger.info('axios.getUser.id:', `${baseUrl}/${id}`)
+  const request = axios.get(`${baseUrl}/${id}`)
+  return request.then(response => response.data)
+}
+
 /// Create method
 const create = async (newObject) => {
   logger.info('axios.create.Url:', `${registerUrl}`)
@@ -48,4 +54,4 @@ const logout = async (newObject) => {
   return response.data
 }
 
-export default {getAll, create, login, logout}
+export default {getAll, getUser, create, login, logout}

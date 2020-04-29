@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Form, Button, Divider} from 'semantic-ui-react'
 import usersData from '../services/users'
-import {getLoggedIn, isLoggedIn} from '../services/session'
+import {isLoggedIn} from '../services/session'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Users')
@@ -15,7 +15,7 @@ const logger = require('simple-console-logger').getLogger('Users')
 const UserRivi = (props) => {
   return (
     <Menu.Item
-      name={props.id}
+      name={props.id + ''}
       active={props.activeUser===props.id}
       onClick={props.handleUser}
       >
@@ -93,33 +93,50 @@ class UserLomake extends Component {
 
 class User extends Component {
 
+    isLive = true
+
     constructor(props) {
       super(props)
       this.state = {
-        id: '', // props.user.id,
-        tunnus: '', // props.user.username,
-        nimi: '', // props.user.name,
-        email: '' // props.user.email,
-        // oldId: ''
+        id: 0,
+        username: '',
+        name: '',
+        email: ''
       }
     }
+
+    componentWillUnmount() {
+      this.isLive = false
+    }
+
 
     componentDidUpdate(prevProps, prevState) {
-      if(this.props.user && this.state.user && (this.state.user.id !== this.props.user.id)) {
-        this.setState({
-          id: this.props.user.id,
-          tunnus: this.props.user.username,
-          nimi: this.props.user.name,
-          email: this.props.user.email
-        })
+      if(this.isLive) {
+          if(this.props.user !== prevProps.user) {
+            usersData.getUser(this.props.user)
+              .then(responseData => {
+                logger.info('componentDidMount.usersData.then:', responseData)
+                this.setState({id: responseData.id, username: responseData.username, name: responseData.name})
+              })
+              .catch(exception => {
+                logger.info('handleSave.catch:', exception)
+                this.props.setMessage(exception.message, messageTypes.ERROR)
+              })
+              .finally(() => {
+                setTimeout(() => {
+                  this.props.setMessage('', messageTypes.CLOSE)
+              }, messageTime.EXTRA)
+            })
+          }
       }
     }
 
+
     componentDidMount() {
-      usersData.getAll()
+      usersData.getUser(this.props.user)
         .then(responseData => {
           logger.info('componentDidMount.usersData.then:', responseData)
-          this.setState({aiheet: responseData})
+          this.setState({user: responseData})
         })
         .catch(exception => {
           logger.info('handleSave.catch:', exception)
@@ -134,18 +151,11 @@ class User extends Component {
 
     render() {
       const isUser = (typeof this.props.user) !== 'undefined'
-      if(isUser) {
-          logger.info('User.render.user:', this.props.user)
-          logger.info('getLoggedIn', getLoggedIn())
-          logger.info('isLoggedIn()', isLoggedIn())
-          logger.info('isLoggedIn', isLoggedIn)
-      }
       return (
          isUser ?
             <Form>
-              <Form.Input label='Tunnus' name='tunnus' type='input' value={this.props.user.username}/>
-              <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({nimi: e.target.value})} value={this.props.user.name} />
-              <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.props.user.email} />
+              <Form.Input label='Tunnus' name='tunnus' type='input' value={this.state.username}/>
+              <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({name: e.target.value})} value={this.state.name} />
               {isLoggedIn() ?
               <Button primary>Päivitä</Button>
               : ''}
@@ -154,6 +164,7 @@ class User extends Component {
       )
     }
 }
+//              <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.user.email} />
 
 class Users extends Component {
 
@@ -163,7 +174,7 @@ class Users extends Component {
     super(props)
     this.state = {
       users: [],
-      currentUser: '',
+      currentUser: 0,
       messu: '',
       messuTyyppi: messageTypes.CLOSE
     }
@@ -176,14 +187,21 @@ class Users extends Component {
   componentDidMount() {
     usersData.getAll()
       .then(responseData => {
-        logger.info('Users.componentDidMount.responseData:', responseData)
-        const currentUser = (responseData && responseData.length > 0) ? responseData[0].id : ''
-        this.setState({users: responseData, currentUser: currentUser /*, aiheVaihtuu: true */})
+        if(this.isLive) {
+          logger.info('Users.componentDidMount.responseData:', responseData)
+          const currentUser = (responseData && responseData.length > 0) ? responseData[0].id : ''
+          this.setState({users: responseData, currentUser: currentUser})
+        }
       })
      return true
   }
 
-  handleUserClick = (e, {name}) => this.setState({currentUser:name})
+  handleUserClick = (event, {name}) =>  {
+      event.preventDefault()
+      logger.info('Users.handleUserClick.currentUser:', parseInt(name))
+      this.setState({currentUser: parseInt(name)})
+  }
+
 
   render () {
     const userRivit = this.state.users.map(user => {
@@ -196,11 +214,13 @@ class Users extends Component {
                               handleUser={this.handleUserClick}/>)
     })
 
-    function userData(currentUser, users) {
+/*    const userData = (currentUser, users) => {
       const ix = users.findIndex(user => user.id===currentUser)
       const user = users.slice(ix, ix + 1)
+      logger.info('userData.user', user, currentUser, users)
       return user[0]
     }
+  */
 
     const setMessage = (messu, tyyppi) => {
       if(this.isLive) {
@@ -209,6 +229,8 @@ class Users extends Component {
       }
     }
 
+    // const user = userData(this.state.currentUser, this.state.users)
+    // logger.info('Users.render.user', user)
     return (
       <>
         <Segment raised>
@@ -226,7 +248,7 @@ class Users extends Component {
           </Grid.Column>
           <Grid.Column width={12} stretched>
             <Segment>
-              <User user={userData(this.state.currentUser, this.state.users)}  setMessage={setMessage} />
+              <User user={this.state.currentUser}  setMessage={setMessage} />
             </Segment>
           </Grid.Column>
         </Grid>

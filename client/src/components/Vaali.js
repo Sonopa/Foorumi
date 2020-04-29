@@ -8,6 +8,7 @@ import React, {Component} from 'react'
 import {Segment, Statistic, List, Grid} from 'semantic-ui-react'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 import foorumiData from '../services/foorumi'
+import {finnishDate} from '../services/tools'
 
 const logger = require('simple-console-logger').getLogger('Vaali')
 const TilastoItem = (props) => {
@@ -54,7 +55,7 @@ const Aihe = (props) => {
                   Tekijä: {omistaja}
                 </List.Item>
                 <List.Item>
-                  Luontiaika: {aika}
+                  Luontiaika: {finnishDate(aika)}
                 </List.Item>
               </List>
             </Segment>

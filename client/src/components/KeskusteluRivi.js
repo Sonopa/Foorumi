@@ -6,12 +6,7 @@
 /// ---------------------------------
 import React from 'react'
 import {Feed, Icon} from 'semantic-ui-react'
-
-// 2020-04-24T10:01:50.607Z
-const finnishDate = (pvmStr) => {
-  const pvm = new Date(pvmStr)
-  return pvm.toUTCString()
-}
+import {finnishDate} from '../services/tools'
 
 const KeskusteluRivi = (props) => {
   return (
