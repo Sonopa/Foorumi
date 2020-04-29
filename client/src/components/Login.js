@@ -142,6 +142,8 @@ export default class Login extends Component {
 
 export class Logout extends Component {
 
+  isLive = true
+
   constructor(props) {
     super(props)
     this.state = {
@@ -150,18 +152,25 @@ export class Logout extends Component {
     }
   }
 
-  render() {
-    const setMessage = (messu, tyyppi) => {
-      this.setState({messu: messu, messuTyyppi: tyyppi})
-    }
+  componentWillUnmount() {
+    this.isLive = false
+  }
 
+  setMessage = (messu, messuTyyppi) => {
+    if(this.isLive) {
+      logger.trace('setMessage', messu, messuTyyppi)
+      this.setState({messu: messu, messuTyyppi: messuTyyppi})
+    }
+  }
+
+  render() {
     return (
       <>
       <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <Container>
           <Segment compact raised>
             <h1>Kirjaudu Ulos</h1>
-            <LogoutForm setMessage={setMessage} />
+            <LogoutForm setMessage={this.setMessage} />
           </Segment>
         </Container>
       </>

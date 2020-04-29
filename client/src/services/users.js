@@ -14,31 +14,8 @@ const logoutUrl = '/logout'
 const logger = require('simple-console-logger').getLogger('users')
 
 const getAll = () => {
-  // OK TEST DUMMY Start
-  /* const users = [
-         {"id": "1",
-          "username":"testi",
-          "password":"sala1234",
-          "name":"Testi Käyttäjä",
-          "email": "testi.@userit.orc"},
-         {"id": "1001",
-          "username":"simppe",
-          "password":"sala1234",
-          "name":"Simo the Manager",
-          "email": "simo@userit.orc"}]
-  return  new Promise(function (resolve, reject) {
-      resolve(users)
-  })
-  // OK TEST DUMMY End
-  /* ERROR TEST Start
-  const virhe = new Error("Tietokanta on alhalla. Ota yhteys tukeen 09-123123.")
-  return  new Promise(function (resolve, reject) {
-      reject(virhe)
-  })
-  // ERROR TEST End */
-
-  const request = axios.get(baseUrl) // THIS IS REAL USERS RESQUEST
-  return request.then(response => response.data) // THIS IS REAL USERS RESQUEST
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
 }
 
 /// Create method

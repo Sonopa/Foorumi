@@ -193,13 +193,13 @@ class Foorumi extends Component {
     logger.trace('handleItemClick.currentItem/ehdotus:', this.state.currentItem, name)
   }
 
+  resetAiheVaihtuu = () => {
+
+    logger.trace('Foorumi.resetAiheVaihtuu.aiheVaihtuu:', this.state.aiheVaihtuu)
+    this.setState({aiheVaihtuu: false})
+  }
+
   render() {
-
-    const resetAiheVaihtuu = () => {
-
-      logger.trace('Foorumi.resetAiheVaihtuu.aiheVaihtuu:', this.state.aiheVaihtuu)
-      this.setState({aiheVaihtuu: false})
-    }
 
     const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
       return (<Aihe key={ ehdotus.id}
@@ -209,10 +209,6 @@ class Foorumi extends Component {
                         handleItem={this.handleItemClick}/>)
     })
 
-    const setMessage = (messu, tyyppi) => {
-      this.setState({messu: messu, messuTyyppi: tyyppi})
-    }
-
     return (
       <Segment>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
@@ -220,8 +216,8 @@ class Foorumi extends Component {
                       currentItem={this.state.currentItem}
                       omistaja='1'
                       aiheVaihtuu={this.state.aiheVaihtuu}
-                      resetAiheVaihtuu={resetAiheVaihtuu}
-                      setMessage={setMessage}
+                      resetAiheVaihtuu={this.resetAiheVaihtuu}
+                      setMessage={this.setMessage}
         />
       </Segment>
     )

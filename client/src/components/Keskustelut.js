@@ -28,8 +28,8 @@ class Keskustelut extends Component {
     this.isLive = false
   }
 
-  componentDidUpdate() {
-    if(this.state.aihe !== this.props.aihe) {
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.aihe !== prevState.aihe) {
       this.setState({aihe: this.props.aihe})
       keskusteluData.getAll(this.props.aihe)
         .then(responseData => {

@@ -35,8 +35,8 @@ class Keskustelu extends Component {
     this.isLive = false
   }
 
-  componentDidUpdate() {
-    if(this.state.aihe !== this.props.aihe) {
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.aihe !== prevState.aihe) {
       logger.trace('componentDidUpdate.aihe:', this.state.aihe, this.props.aihe)
       this.setState({aihe: this.props.aihe, otsikko: '', kommentti: '', lisaaTila: false})
       logger.trace('componentDidUpdate.lisaaTila:', false)

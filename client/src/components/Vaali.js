@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Segment, Statistic, List} from 'semantic-ui-react'
+import {Segment, Statistic, List, Grid} from 'semantic-ui-react'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 import foorumiData from '../services/foorumi'
 
@@ -20,9 +20,9 @@ const TilastoItem = (props) => {
 }
 
 const Tilasto = (props) => {
-  const puolesta = 25 /* this.props.aihe ? this.props.aihe.votesFor: 0 */
-  const vastaan =  24 /* this.props.aihe ? this.props.aihe.votesAgainst: 0 */
-  const poissa =  10 /* this.props.aihe ? this.props.aihe.votesNo: 0 */
+  const puolesta =  props.aihe ? props.aihe.votesFor: 0
+  const vastaan =   props.aihe ? props.aihe.votesAgainst: 0
+
   return (
     <Segment>
       <Segment stacked>
@@ -31,30 +31,45 @@ const Tilasto = (props) => {
       <Statistic.Group>
         <TilastoItem arvo={puolesta} otsikko="Puolesta"/>
         <TilastoItem arvo={vastaan} otsikko="Vastaan"/>
-        <TilastoItem arvo={poissa} otsikko="Tyhjiä"/>
       </Statistic.Group>
     </Segment>
   )
 }
 
 const Aihe = (props) => {
-  const id    = props.aiheId // props.aihe ? props.aihe.id: ''
-  const title = props.aihe ? props.aihe.title: ''
-  const owner = props.aihe ? props.aihe.owner: ''
+  const otsikko   = props.aihe ? props.aihe.title: ''
+  const ehdotus   = props.aihe ? props.aihe.description: ''
+  const omistaja  = props.aihe ? props.aihe.owner: ''
+  const aika      = props.aihe ? props.aihe.creationTime: ''
   return (
-    <Segment>
-      <List>
-        <List.Item>
-          {title}
-        </List.Item>
-        <List.Item>
-          Tekijä: {owner}
-        </List.Item>
-        <List.Item>
-          Numero: {id}
-        </List.Item>
-      </List>
-    </Segment>
+      <Grid columns={2}>
+        <Grid.Row>
+          <Grid.Column>
+            <Segment>
+              <List>
+                <List.Item>
+                  Asia: {otsikko}
+                </List.Item>
+                <List.Item>
+                  Tekijä: {omistaja}
+                </List.Item>
+                <List.Item>
+                  Luontiaika: {aika}
+                </List.Item>
+              </List>
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment>
+              <List>
+                <List.Item>
+                  Sisältö: {ehdotus}
+                </List.Item>
+              </List>
+            </Segment>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
   )
 }
 
@@ -76,20 +91,22 @@ class Vaali extends Component {
   }
 
   componentDidMount() {
-    foorumiData.getAihe(this.props.aihe)
-      .then(responseData => {
-        this.setAihe(responseData)
-        logger.info('componentDidMount.responseData:', responseData)
+    if(this.props.aihe != this.state.aihe) {
+      foorumiData.getAihe(this.props.aihe)
+        .then(responseData => {
+          this.setAihe(responseData)
+          logger.info('componentDidMount.responseData:', responseData)
+        })
+        .catch(exception => {
+          logger.info('componentDidMount.catch:', exception)
+          this.setMessage(exception.message, messageTypes.ERROR)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.setMessage('', messageTypes.CLOSE)
+          }, messageTime.EXTRA)
       })
-      .catch(exception => {
-        logger.info('componentDidMount.catch:', exception)
-        this.setMessage(exception.message, messageTypes.ERROR)
-      })
-      .finally(() => {
-        setTimeout(() => {
-          this.setMessage('', messageTypes.CLOSE)
-        }, messageTime.EXTRA)
-    })
+    }
     return true
   }
 
