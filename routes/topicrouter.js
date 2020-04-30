@@ -103,7 +103,7 @@ router.get("/aiheet/:topic_id/keskustelut/:id", function(req, res) {
 router.get("/aiheet/:topic_id/keskustelut", function(req, res) {
     topicDiscussions = []
     for (let i = 0; i < discussionDatabase.length; i++) {
-        if (discussionDatabase[i].topic === req.params.topic_id) {
+        if (discussionDatabase[i].topic === parseInt(req.params.topic_id, 10)) {
             topicDiscussions.push(discussionDatabase[i]);
         }
     }
@@ -158,7 +158,7 @@ router.get("/aiheet/:topic_id/keskustelut/:discussion_id/kommentit:id", function
 router.get("/aiheet/:topic_id/keskustelut/:discussion_id/kommentit", function(req, res) {
     discussionComments = []
     for (let i = 0; i < commentDatabase.length; i++) {
-        if (commentDatabase[i].topic === req.params.discussion_id) {
+        if (commentDatabase[i].topic === parseInt(req.params.discussion_id, 10)) {
             discussionComments.push(commentDatabase[i]);
         }
     }
