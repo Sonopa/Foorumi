@@ -113,40 +113,43 @@ class User extends Component {
     componentDidUpdate(prevProps, prevState) {
       if(this.isLive) {
           if(this.props.user !== prevProps.user) {
-            usersData.getUser(this.props.user)
-              .then(responseData => {
-                logger.info('componentDidMount.usersData.then:', responseData)
-                this.setState({id: responseData.id, username: responseData.username, name: responseData.name})
+            if(this.props.user > 0) {
+              usersData.getUser(this.props.user)
+                .then(responseData => {
+                  logger.info('componentDidMount.usersData.then:', responseData)
+                  this.setState({id: responseData.id, username: responseData.username, name: responseData.name})
+                })
+                .catch(exception => {
+                  logger.info('handleSave.catch:', exception)
+                  this.props.setMessage(exception.message, messageTypes.ERROR)
+                })
+                .finally(() => {
+                  setTimeout(() => {
+                    this.props.setMessage('', messageTypes.CLOSE)
+                }, messageTime.EXTRA)
               })
-              .catch(exception => {
-                logger.info('handleSave.catch:', exception)
-                this.props.setMessage(exception.message, messageTypes.ERROR)
-              })
-              .finally(() => {
-                setTimeout(() => {
-                  this.props.setMessage('', messageTypes.CLOSE)
-              }, messageTime.EXTRA)
-            })
+            }
           }
       }
     }
 
-
     componentDidMount() {
-      usersData.getUser(this.props.user)
-        .then(responseData => {
-          logger.info('componentDidMount.usersData.then:', responseData)
-          this.setState({user: responseData})
+      if(this.props.user > 0) {
+        usersData.getUser(this.props.user)
+          .then(responseData => {
+            logger.info('componentDidMount.usersData.then:', responseData)
+            this.setState({user: responseData})
+          })
+          .catch(exception => {
+            logger.info('handleSave.catch:', exception)
+            this.props.setMessage(exception.message, messageTypes.ERROR)
+          })
+          .finally(() => {
+            setTimeout(() => {
+              this.props.setMessage('', messageTypes.CLOSE)
+          }, messageTime.EXTRA)
         })
-        .catch(exception => {
-          logger.info('handleSave.catch:', exception)
-          this.props.setMessage(exception.message, messageTypes.ERROR)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.props.setMessage('', messageTypes.CLOSE)
-        }, messageTime.EXTRA)
-      })
+      }
     }
 
     render() {
@@ -156,6 +159,7 @@ class User extends Component {
             <Form>
               <Form.Input label='Tunnus' name='tunnus' type='input' value={this.state.username}/>
               <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({name: e.target.value})} value={this.state.name} />
+              <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
               {isLoggedIn() ?
               <Button primary>Päivitä</Button>
               : ''}
@@ -164,7 +168,6 @@ class User extends Component {
       )
     }
 }
-//              <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.user.email} />
 
 class Users extends Component {
 

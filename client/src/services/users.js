@@ -41,7 +41,7 @@ const login = async (newObject) => {
     token: response.data.token,
     username: newObject.username
   }
-  storeSession(user)
+  storeSession(user, response.data.id)
   return response.data
 }
 

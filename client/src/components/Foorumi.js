@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Button, Form, TextArea, Divider} from 'semantic-ui-react'
 import foorumiData from '../services/foorumi'
-import {isLoggedIn, checkAuth} from '../services/session'
+import {isLoggedIn, checkAuth, getUserId} from '../services/session'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 import Keskustelut from './Keskustelut'
 
@@ -212,13 +212,13 @@ class Foorumi extends Component {
                         currentItem={this.state.currentItem}
                         handleItem={this.handleItemClick}/>)
     })
-
+    
     return (
       <Segment>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <FoorumiRivit ehdotusSegmentit={ehdotusSegmentit}
                       currentItem={this.state.currentItem}
-                      omistaja='1'
+                      omistaja={getUserId()}
                       aiheVaihtuu={this.state.aiheVaihtuu}
                       resetAiheVaihtuu={this.resetAiheVaihtuu}
                       setMessage={setMessage}

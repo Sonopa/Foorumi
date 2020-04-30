@@ -8,6 +8,7 @@ import React, {Component} from 'react'
 import {Segment, Statistic, List, Grid} from 'semantic-ui-react'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 import foorumiData from '../services/foorumi'
+import usersData from '../services/users'
 import {finnishDate} from '../services/tools'
 
 const logger = require('simple-console-logger').getLogger('Vaali')
@@ -38,9 +39,11 @@ const Tilasto = (props) => {
 }
 
 const Aihe = (props) => {
+
+  logger.info('Aihe.props', props)
   const otsikko   = props.aihe ? props.aihe.title: ''
   const ehdotus   = props.aihe ? props.aihe.description: ''
-  const omistaja  = props.aihe ? props.aihe.owner: ''
+  const omistajaNimi  = props.aihe ? props.omistajaNimi: ''
   const aika      = props.aihe ? props.aihe.creationTime: ''
   return (
       <Grid columns={2}>
@@ -52,7 +55,7 @@ const Aihe = (props) => {
                   Asia: {otsikko}
                 </List.Item>
                 <List.Item>
-                  Tekijä: {omistaja}
+                  Tekijä: {omistajaNimi}
                 </List.Item>
                 <List.Item>
                   Luontiaika: {finnishDate(aika)}
@@ -82,13 +85,27 @@ class Vaali extends Component {
     super(props)
     this.state = {
       aihe: null,
+      omistajaNimi: '',
       messu: '',
-      messuTyyppi: messageTypes.CLOSE,
+      messuTyyppi: messageTypes.CLOSE
     }
   }
 
   componentWillUnmount() {
     this.isLive = false
+  }
+
+  setUserName = (userId) => {
+      if(userId > 0) {
+        usersData.getUser(userId)
+            .then(responseData => {
+            logger.info('findUserName.usersData', responseData)
+            this.setOmistaja(responseData.name)
+          })
+          .catch(exception => {
+            logger.info('findUserName.catch:', exception)
+        })
+      }
   }
 
   componentDidMount() {
@@ -97,6 +114,7 @@ class Vaali extends Component {
         .then(responseData => {
           this.setAihe(responseData)
           logger.info('componentDidMount.responseData:', responseData)
+          this.setUserName(responseData.owner)
         })
         .catch(exception => {
           logger.info('componentDidMount.catch:', exception)
@@ -125,13 +143,20 @@ class Vaali extends Component {
     }
   }
 
+  setOmistaja = (responseData) => {
+    if(this.isLive) {
+      logger.info('setOmistaja:', responseData)
+      this.setState({omistajaNimi: responseData})
+    }
+  }
+
   render() {
     return (
       <>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <Segment raised>
           <h1>Äänestyspaikka</h1>
-          <Aihe aihe={this.state.aihe} aiheId={this.props.aihe} />
+          <Aihe aihe={this.state.aihe} aiheId={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
           <Tilasto aihe={this.state.aihe} />
         </Segment>
       </>

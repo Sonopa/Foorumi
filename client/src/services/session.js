@@ -7,6 +7,7 @@
 const logger = require('simple-console-logger').getLogger('session')
 
 const foorumiStore = 'foorumiUser'
+const foorumiID = 'foorumiID'
 const browserStore = () => {
   return window.localStorage
 }
@@ -20,12 +21,18 @@ const getUser = () => {
   return userData ? userData.username : ''
 }
 
-const storeSession = (user) => {
+const getUserId = () => {
+  const userData = JSON.parse(browserStore().getItem(foorumiID))
+  return userData ? userData.id : 0
+}
 
+const storeSession = (user, id) => {
+  browserStore().setItem(foorumiID, JSON.stringify({id: id}))
   return (browserStore().setItem(foorumiStore, JSON.stringify(user)))
 }
 
 const removeSession = () => {
+  browserStore().removeItem(foorumiID)
   return (browserStore().removeItem(foorumiStore))
 }
 
@@ -49,4 +56,4 @@ const getAuth = () => {
   return author
 }
 
-export {isLoggedIn, getLoggedIn, storeSession, removeSession, getAuth, checkAuth, getUser}
+export {isLoggedIn, getLoggedIn, storeSession, removeSession, getAuth, checkAuth, getUser, getUserId}
