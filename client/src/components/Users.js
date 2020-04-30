@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Form, Button, Divider} from 'semantic-ui-react'
 import usersData from '../services/users'
-import {isLoggedIn} from '../services/session'
+import {isLoggedIn, checkAuth} from '../services/session'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Users')
@@ -50,13 +50,13 @@ class UserLomake extends Component {
 
     usersData.create(newUser)
       .then(responseData => {
-        logger.info('handleSave.responseData:', responseData)
+        logger.info('usersData.create:', responseData)
         this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
         this.props.setMessage(`Käyttäjä ${newUser.username} on lisätty Foorumille.`, messageTypes.INFO)
       })
-      .catch(exception => {
-        logger.info('handleSave.responseData:', exception)
-        this.props.setMessage(exception.message, messageTypes.WARNING)
+      .catch(error => {
+        logger.info('usersData.create:', error)
+        this.props.setMessage(error.message, messageTypes.WARNING)
       })
       .finally(() => {
         setTimeout(() => {
@@ -109,7 +109,6 @@ class User extends Component {
       this.isLive = false
     }
 
-
     componentDidUpdate(prevProps, prevState) {
       if(this.isLive) {
           if(this.props.user !== prevProps.user) {
@@ -119,14 +118,14 @@ class User extends Component {
                   logger.info('componentDidMount.usersData.then:', responseData)
                   this.setState({id: responseData.id, username: responseData.username, name: responseData.name})
                 })
-                .catch(exception => {
-                  logger.info('handleSave.catch:', exception)
-                  this.props.setMessage(exception.message, messageTypes.ERROR)
+                .catch(error => {
+                  logger.error('handleSave.catch:', error)
+                  this.props.setMessage(error.message, messageTypes.ERROR)
                 })
                 .finally(() => {
                   setTimeout(() => {
                     this.props.setMessage('', messageTypes.CLOSE)
-                }, messageTime.EXTRA)
+                }, messageTime.NORMAL)
               })
             }
           }
@@ -140,9 +139,9 @@ class User extends Component {
             logger.info('componentDidMount.usersData.then:', responseData)
             this.setState({user: responseData})
           })
-          .catch(exception => {
-            logger.info('handleSave.catch:', exception)
-            this.props.setMessage(exception.message, messageTypes.ERROR)
+          .catch(error => {
+            logger.error('handleSave.catch:', error)
+            this.props.setMessage(error.message, messageTypes.ERROR)
           })
           .finally(() => {
             setTimeout(() => {
@@ -152,19 +151,44 @@ class User extends Component {
       }
     }
 
-    render() {
-      const isUser = (typeof this.props.user) !== 'undefined'
-      return (
-         isUser ?
-            <Form>
-              <Form.Input label='Tunnus' name='tunnus' type='input' value={this.state.username}/>
-              <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({name: e.target.value})} value={this.state.name} />
-              <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
-              {isLoggedIn() ?
-              <Button primary>Päivitä</Button>
-              : ''}
-            </Form>
-            : ''
+  render() {
+    const updateUser = (e, {name}) => {
+      const newUser = {
+        id: this.state.id ,
+        username: this.state.username ,
+        name: this.state.name ,
+        email: this.state.email
+      }
+      logger.info('User.updateUser', newUser)
+      usersData.update(newUser.id, newUser)
+        .then(responseData => {
+          logger.info('User.updateUser.response:', responseData)
+          this.props.setMessage(`Käyttäjän ${newUser.username} tiedot on päivitetty Foorumille.`, messageTypes.INFO)
+        })
+        .catch(error => {
+          logger.info('handleSave.catch:', error)
+          const virhe = checkAuth(error) ? "Sessiosi on vanhentunut. Ole hyvä ja kirjaudu uudelleen." : error.message
+          this.props.setMessage(virhe, messageTypes.WARNING)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.EXTRA)
+      })
+    }
+
+    const isUser = (typeof this.props.user) !== 'undefined'
+    return (
+       isUser ?
+          <Form>
+            <Form.Input label='Tunnus' name='tunnus' type='input' value={this.state.username}/>
+            <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({name: e.target.value})} value={this.state.name} />
+            <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
+            {isLoggedIn() ?
+            <Button onClick={updateUser} primary>Päivitä</Button>
+            : ''}
+          </Form>
+          : ''
       )
     }
 }

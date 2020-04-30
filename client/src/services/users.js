@@ -7,36 +7,48 @@
 import axios from 'axios'
 import {storeSession, removeSession, getAuth} from './session'
 
-const baseUrl = '/users'
+const userUrl = '/users'
 const registerUrl = '/register'
 const loginUrl = '/login'
 const logoutUrl = '/logout'
 const logger = require('simple-console-logger').getLogger('users')
 
 const getAll = () => {
-  const request = axios.get(baseUrl)
+  const request = axios.get(userUrl)
   return request.then(response => response.data)
 }
 
 const getUser = (id) => {
-  logger.info('axios.getUser.id:', `${baseUrl}/${id}`)
-  const request = axios.get(`${baseUrl}/${id}`)
+  const request = axios.get(`${userUrl}/${id}`)
+  logger.info('axios.getUser', `${userUrl}/${id}`)
   return request.then(response => response.data)
 }
 
 /// Create method
 const create = async (newObject) => {
-  logger.info('axios.create.Url:', `${registerUrl}`)
   const response = await axios.post(`${registerUrl}`, newObject)
-  logger.trace('axios.create.response:', response)
+  logger.info('axios.create', `${registerUrl}`, newObject, response)
+  return response.data
+}
+
+/// Update method
+const update = async (userId, newObject) => {
+  const response = await axios.post(`${userUrl}/${userId}`, newObject, getAuth())
+  logger.info('axios.update', `${userUrl}/${userId}`, newObject, response)
+  return response.data
+}
+
+/// Delete method
+const remove = async (userId) => {
+  const response = await axios.delete(`${userUrl}/${userId}`, getAuth())
+  logger.info('axios.delete:', `${userUrl}/${userId}`, response)
   return response.data
 }
 
 /// Login method
 const login = async (newObject) => {
-  logger.info('axios.login.Url:', `${loginUrl}`, newObject)
   const response = await axios.post(`${loginUrl}`, newObject)
-  logger.info('axios.login.response:', response)
+  logger.info('axios.login', `${loginUrl}`, newObject, response)
   const user = {
     token: response.data.token,
     username: newObject.username
@@ -47,11 +59,10 @@ const login = async (newObject) => {
 
 /// Logout method
 const logout = async (newObject) => {
-  logger.info('axios.logout.Url:', `${logoutUrl}`, )
   removeSession(newObject)
   const response = await axios.post(`${logoutUrl}`, newObject, getAuth())
-  logger.trace('axios.logout.response:', response)
+  logger.info('axios.logout.Url:', `${logoutUrl}`, newObject, response)
   return response.data
 }
 
-export default {getAll, getUser, create, login, logout}
+export default {getAll, getUser, create, update, remove, login, logout}
