@@ -69,7 +69,7 @@ app.post("/login", function(req, res) {
                 token: token
             }
             loggedSessions.push(session);
-            return res.status(200).json({token:token});
+            return res.status(200).json({session:session});
         }
     }
     return res.status(403).json({message:"Failed login"});
