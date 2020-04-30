@@ -103,7 +103,7 @@ router.get("/aiheet/:topic_id/keskustelut/:id", function(req, res) {
 router.get("/aiheet/:topic_id/keskustelut", function(req, res) {
     topicDiscussions = []
     for (let i = 0; i < discussionDatabase.length; i++) {
-        if (discussionDatabase[i].topic === req.params.topic_id) {
+        if (discussionDatabase[i].topic === parseInt(req.params.topic_id, 10)) {
             topicDiscussions.push(discussionDatabase[i]);
         }
     }
