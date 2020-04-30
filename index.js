@@ -65,10 +65,11 @@ app.post("/login", function(req, res) {
             let token = jwt.sign({id: users[i].id, username: users[i].username}, config.secret, {expiresIn: 600})
             let session = {
                 username: users[i].username,
+                id: users[i].id,
                 token: token
             }
             loggedSessions.push(session);
-            return res.status(200).json({token:token});
+            return res.status(200).json({session:session});
         }
     }
     return res.status(403).json({message:"Failed login"});
@@ -92,6 +93,7 @@ app.get("/users/:id", function(req, res) {
         if (parseInt(req.params.id, 10) === users[i].id)
         let user = {
             username: users[i].username,
+            id: users[i].id,
             name: users[i].name
         }
         return res.status(200).json(user);
@@ -107,7 +109,7 @@ app.post("/users/:id", middleware.checkToken, function (req, res) {
         for (let i = 0; i < users.length; i++) {
             if (id === users[i].id) {
                 modifiedUser = {
-                    id : users[i].id,
+                    id: users[i].id,
                     username: req.body.username || users[i].username,
                     password: req.body.password || users[i].password,
                     name: req.body.name || users[i].name
