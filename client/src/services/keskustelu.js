@@ -25,7 +25,7 @@ const create = async (topicId, newObject) => {
   return response.data
 }
 
-/// Remove - luo uusi keskustelu aiheen alle
+/// Remove - poista keskustelu aiheelta
 const remove = async (id, topicId) => {
   logger.info('axios.remove:', `${baseUrl}/${topicId}${addUrl}/${id}`)
   const response = await axios.delete(`${baseUrl}/${topicId}${addUrl}/${id}`, getAuth())

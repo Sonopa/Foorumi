@@ -31,4 +31,11 @@ const getAihe = (id) => {
   return request.then(response => response.data)
 }
 
-export default {getAll, create, getAihe}
+/// Remove - poista keskustelun aihe Foorumilta
+const remove = async (id) => {
+  logger.info('axios.remove:', `${baseUrl}/${id}`)
+  const response = await axios.delete(`${baseUrl}/${id}`, getAuth())
+  return response.data
+}
+
+export default {getAll, create, remove, getAihe}

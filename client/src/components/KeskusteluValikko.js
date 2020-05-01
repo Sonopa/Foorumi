@@ -7,8 +7,6 @@
 import React from 'react'
 import {Icon, Menu} from 'semantic-ui-react'
 
-const logger = require('simple-console-logger').getLogger('KeskusteluValikko')
-
 export const iMenuType = {
   LIKE: 'like',
   DIS:  'disl',
@@ -28,12 +26,18 @@ const KeskusteluValinta = (props) => {
       menuIcon = 'thumbs down outline'
       break
     case iMenuType.EDIT:
+      if(!props.isOwner) {
+        return ''
+      }
       menuIcon = 'pencil alternate'
       break
     case iMenuType.ADD:
       menuIcon = 'plus'
       break
     case iMenuType.DEL:
+      if(!props.isOwner) {
+        return ''
+      }
       menuIcon = 'minus'
       break
     default:
@@ -52,13 +56,14 @@ const KeskusteluValinta = (props) => {
 }
 
 const KeskusteluValikko = (props) => {
+
   return (
       <Menu compact>
         <KeskusteluValinta menuType={iMenuType.LIKE} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value={props.like} />
         <KeskusteluValinta menuType={iMenuType.DIS}  nowMenu={props.nowMenu} handleMenu={props.handleMenu} value={props.disLike} />
-        <KeskusteluValinta menuType={iMenuType.EDIT} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' />
+        <KeskusteluValinta menuType={iMenuType.EDIT} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value=''  isOwner={props.isOwner}/>
         <KeskusteluValinta menuType={iMenuType.ADD} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' />
-        <KeskusteluValinta menuType={iMenuType.DEL} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' />
+        <KeskusteluValinta menuType={iMenuType.DEL} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' isOwner={props.isOwner} />
       </Menu>
   )
 }

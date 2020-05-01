@@ -13,11 +13,13 @@ const loginUrl = '/login'
 const logoutUrl = '/logout'
 const logger = require('simple-console-logger').getLogger('users')
 
+/// getAll - Hae kaikki käyttäjät
 const getAll = () => {
   const request = axios.get(userUrl)
   return request.then(response => response.data)
 }
 
+/// getUser - Hae käyttäjä tunniste numerolla
 const getUser = (id) => {
   const request = axios.get(`${userUrl}/${id}`)
   logger.info('axios.getUser', `${userUrl}/${id}`)

@@ -9,7 +9,7 @@ import {Feed, Icon, Divider} from 'semantic-ui-react'
 import KeskusteluValikko, {iMenuType} from './KeskusteluValikko'
 import {finnishDate} from '../services/tools'
 import keskusteluData from '../services/keskustelu'
-import {isLoggedIn, checkAuth} from '../services/session'
+import {isUserOwner} from '../services/session'
 import {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
@@ -90,6 +90,8 @@ class KeskusteluRivi extends Component {
 
   render () {
 
+    const isOwner = isUserOwner(this.props.omistaja)
+
     return (
       <Feed>
         <Feed.Label>
@@ -97,13 +99,15 @@ class KeskusteluRivi extends Component {
         </Feed.Label>
         <Feed.Content>
           <Feed.Summary>
-            <Feed.User>{this.props.nimi}</Feed.User> {this.props.otsikko}
+            <Feed.User>{this.props.omistaja}</Feed.User> {this.props.otsikko}
             <Feed.Date>{finnishDate(this.props.aika)}</Feed.Date>
           </Feed.Summary>
           <Feed.Extra text>{this.props.kommentti}
           </Feed.Extra>
           <Divider horizontal hidden />
-          <KeskusteluValikko like={this.props.like} disLike={this.props.disLike} nowMenu={this.state.nowMenu} handleMenu={this.handleMenu}/>
+          <KeskusteluValikko  isOwner={isOwner}
+                              like={this.props.like} disLike={this.props.disLike}
+                              nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />
         </Feed.Content>
         <Feed>
         </Feed>

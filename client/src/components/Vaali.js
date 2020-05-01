@@ -12,6 +12,8 @@ import usersData from '../services/users'
 import {finnishDate} from '../services/tools'
 
 const logger = require('simple-console-logger').getLogger('Vaali')
+
+/// Aihe TilastoItem
 const TilastoItem = (props) => {
   return (
     <Statistic>
@@ -21,6 +23,7 @@ const TilastoItem = (props) => {
   )
 }
 
+/// Tilasto komponentti
 const Tilasto = (props) => {
   const puolesta =  props.aihe ? props.aihe.votesFor: 0
   const vastaan =   props.aihe ? props.aihe.votesAgainst: 0
@@ -38,6 +41,7 @@ const Tilasto = (props) => {
   )
 }
 
+/// Aihe komponentti
 const Aihe = (props) => {
 
   logger.info('Aihe.props', props)
@@ -77,6 +81,7 @@ const Aihe = (props) => {
   )
 }
 
+/// Vaali komponentti
 class Vaali extends Component {
 
   isLive = true

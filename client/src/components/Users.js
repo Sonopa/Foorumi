@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Form, Button, Divider} from 'semantic-ui-react'
 import usersData from '../services/users'
-import {isLoggedIn, checkAuth} from '../services/session'
+import {isLoggedIn, checkAuth, getUser} from '../services/session'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Users')
@@ -261,7 +261,16 @@ class Users extends Component {
     return (
       <>
         <Segment raised>
-          <h1>Käyttäjien hallinnointi</h1>
+          <Grid>
+            <Grid.Column width={15}>
+              <h1>Käyttäjien hallinnointi</h1>
+            </Grid.Column>
+            <Grid.Column width={1}>
+              <Segment floated='right'>
+                {isLoggedIn() ? getUser() : 'Vierailija'}
+              </Segment>
+            </Grid.Column>
+          </Grid>
         </Segment>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <Grid>

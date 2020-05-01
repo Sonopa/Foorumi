@@ -21,6 +21,11 @@ const getUser = () => {
   return userData ? userData.username : ''
 }
 
+const isUserOwner = (owner) => {
+  const user = getUser()
+  return owner === user
+}
+
 const getUserId = () => {
   const userData = JSON.parse(browserStore().getItem(foorumiID))
   return userData ? userData.id : 0
@@ -56,4 +61,4 @@ const getAuth = () => {
   return author
 }
 
-export {isLoggedIn, getLoggedIn, storeSession, removeSession, getAuth, checkAuth, getUser, getUserId}
+export {isLoggedIn, getLoggedIn, storeSession, removeSession, getAuth, checkAuth, getUser, getUserId, isUserOwner}

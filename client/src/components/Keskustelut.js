@@ -52,7 +52,7 @@ class Keskustelut extends Component {
       return (<KeskusteluRivi key={keskustelu.id}
                               id={keskustelu.id}
                               aihe={keskustelu.topic}
-                              nimi={keskustelu.owner}
+                              omistaja={keskustelu.owner}
                               otsikko={keskustelu.title}
                               aika={keskustelu.creationTime}
                               kommentti={keskustelu.text}

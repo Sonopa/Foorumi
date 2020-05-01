@@ -13,6 +13,7 @@ import Keskustelut from './Keskustelut'
 
 const logger = require('simple-console-logger').getLogger('Foorumi')
 
+/// AiheLomake komponentti
 class AiheLomake extends Component {
 
   constructor(props) {
@@ -92,6 +93,7 @@ class AiheLomake extends Component {
     }
   }
 
+/// Aihe komponentti
 const Aihe = (props) => {
 
   logger.info('Aihe.id', props.id, (typeof props.id))
@@ -108,6 +110,7 @@ const Aihe = (props) => {
   )
 }
 
+/// FoorumiRivit komponentti
 const FoorumiRivit = (props) => {
   return (
       <Grid columns={2} divided>
@@ -134,6 +137,7 @@ const FoorumiRivit = (props) => {
   )
 }
 
+/// Foorumi komponentti
 class Foorumi extends Component {
 
   isLive = true
@@ -212,7 +216,7 @@ class Foorumi extends Component {
                         currentItem={this.state.currentItem}
                         handleItem={this.handleItemClick}/>)
     })
-    
+
     return (
       <Segment>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
