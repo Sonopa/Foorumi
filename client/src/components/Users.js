@@ -173,7 +173,7 @@ class User extends Component {
         .finally(() => {
           setTimeout(() => {
             this.props.setMessage('', messageTypes.CLOSE)
-        }, messageTime.EXTRA)
+        }, messageTime.NORMAL)
       })
     }
 
