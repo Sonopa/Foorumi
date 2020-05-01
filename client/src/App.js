@@ -42,7 +42,7 @@ class App extends Component  {
           <Route path='/foorumi'
             render={() => {
               return (
-                <Foorumi setAihe={setAihe} />
+                <Foorumi setAihe={setAihe} aihe={this.state.aihe} />
             )}} />
           <Route path='/vaali'
             render={() => {

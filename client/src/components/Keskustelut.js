@@ -18,7 +18,6 @@ class Keskustelut extends Component {
 
   constructor(props) {
     super(props)
-    logger.info('constructor.props.aihe', props.aihe, (typeof props.aihe))
     this.state = {
       keskustelut: this.state ? this.state.keskustelut : [],
     }
@@ -30,20 +29,34 @@ class Keskustelut extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if(this.props.aihe !== prevProps.aihe) {
+      logger.info('componentDidMount.aihe', this.props.aihe)
+      this.refresh()
+    }
+  }
+
+/*
+  componentDidMount() {
+    logger.info('componentDidMount.aihe', this.props.aihe)
+    this.refresh()
+  }
+*/
+
+  refresh = () => {
+    if(this.isLive ) {
       keskusteluData.getAll(this.props.aihe)
         .then(responseData => {
           logger.info('updateKeskustelut.responseData:', responseData)
           this.setState({keskustelut: responseData, lisaaTila: false})
         })
-      .catch(exception => {
-        logger.info('handleSave.catch:', exception)
-        this.props.setMessage(exception.message, messageTypes.ERROR)
+        .catch(exception => {
+          logger.info('handleSave.catch:', exception)
+          this.props.setMessage(exception.message, messageTypes.ERROR)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.EXTRA)
       })
-      .finally(() => {
-        setTimeout(() => {
-          this.props.setMessage('', messageTypes.CLOSE)
-      }, messageTime.EXTRA)
-    })
     }
   }
 
@@ -58,6 +71,7 @@ class Keskustelut extends Component {
                               kommentti={keskustelu.text}
                               like={keskustelu.likes}
                               disLike={keskustelu.dislikes}
+                              refresh={this.refresh}
                               setMessage={this.props.setMessage}/>)
     })
 
@@ -65,7 +79,7 @@ class Keskustelut extends Component {
       <div>
         <h1>Keskustelut</h1>
         {keskusteluRivit}
-        <Keskustelu aihe={this.props.aihe} setMessage={this.props.setMessage} />
+        <Keskustelu aihe={this.props.aihe} refresh={this.refresh} setMessage={this.props.setMessage} />
       </div>
     )
   }

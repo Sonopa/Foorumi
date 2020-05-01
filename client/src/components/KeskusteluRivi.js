@@ -54,6 +54,7 @@ class KeskusteluRivi extends Component {
       .then(responseData => {
         logger.info('keskusteluData.remove:', responseData)
         this.props.setMessage(`Keskustelu ${this.props.otsikko} on poistettu Foorumilta.`, messageTypes.INFO)
+        this.props.refresh()
       })
       .catch(error => {
         logger.info('usersData.create:', error)

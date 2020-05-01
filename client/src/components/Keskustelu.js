@@ -57,6 +57,7 @@ class Keskustelu extends Component {
           logger.info('handleSave.responseData:', responseData)
           this.setState({lisaaTila: false, otsikko: '', kommentti: ''})
           this.props.setMessage(`Mielipide ${newKeskustelu.title} on lisätty Foorumille.`, messageTypes.INFO)
+          this.props.refresh()
         })
         .catch(error => {
           logger.info('handleSave.catch:', error)

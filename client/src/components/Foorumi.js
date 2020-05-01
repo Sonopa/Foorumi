@@ -5,104 +5,21 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Segment, Grid, Menu, Button, Form, TextArea, Divider} from 'semantic-ui-react'
+import {Segment, Grid, Menu, Divider} from 'semantic-ui-react'
 import foorumiData from '../services/foorumi'
-import {isLoggedIn, checkAuth, getUserId} from '../services/session'
+import {isLoggedIn, checkAuth} from '../services/session'
 import Huomio, {messageTypes, messageTime} from './Huomio'
 import Keskustelut from './Keskustelut'
-
+import AiheLomake from '../forms/AiheLomake'
 const logger = require('simple-console-logger').getLogger('Foorumi')
-
-/// AiheLomake komponentti
-class AiheLomake extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      uusiAihe:   this.state ? this.state.uusiAihe : '',
-      kuvaus:     this.state ? this.state.kuvaus : '',
-      lisaaTila:  this.state ? this.state.lisaaTila : false
-    }
-    logger.trace('AiheLomake.constructor.currentItem', this.state.currentItem)
-  }
-
-  componentDidUpdate() {
-     if(this.props.aiheVaihtuu) {
-       logger.trace('AiheLomake.componentDidUpdate.props.aihe:', this.props.aiheVaihtuu)
-       if(this.state.lisaaTila) {
-         this.setState({uusiAihe: '', kuvaus: '', lisaaTila: false})
-       }
-       this.props.resetAiheVaihtuu()
-     }
-  }
-
-  render() {
-
-    const handleAdd = (event, {name}) => {
-      event.preventDefault()
-      this.setState({lisaaTila: true})
-    }
-
-    const handleRestore = (event, {name}) => {
-      event.preventDefault()
-      this.setState({uusiAihe: '', kuvaus: '', lisaaTila: false})
-    }
-
-    const handleSave = (event, {name}) => {
-      event.preventDefault()
-      const newAihe = {
-          owner:        this.props.omistaja,
-          title:        this.state.uusiAihe,
-          description:  this.state.kuvaus
-      }
-      foorumiData.create(newAihe)
-        .then(responseData => {
-          logger.info('handleSave.create:', responseData)
-          this.setState({lisaaTila: false, uusiAihe: '', kuvaus: ''})
-          this.props.setMessage(`Aihe ${newAihe.title} on lisätty Foorumille.`, messageTypes.INFO)
-        })
-        .catch(error => {
-          logger.info('handleSave.catch:', error)
-          const virhe = checkAuth(error) ? "Sessiosi on vanhentunut. Ole hyvä ja kirjaudu uudelleen." : error.message
-          this.props.setMessage(virhe, messageTypes.WARNING)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.props.setMessage('', messageTypes.CLOSE)
-        }, messageTime.NORMAL)
-      })
-    }
-
-    return (
-      this.state.lisaaTila  ?
-          <Form>
-            <Form.Input label='Aihe' name='aihe' type='input'
-                         onChange={(e) => this.setState({uusiAihe: e.target.value})} value={this.state.uusiAihe} />
-            <div className='field'>
-              <label>Kuvaus</label>
-              <TextArea name='kuvaus'
-                         onChange={(e) => this.setState({kuvaus: e.target.value})} value={this.state.kuvaus} />
-            </div>
-            <Divider horizontal hidden />
-            <Button onClick={handleSave} primary>Tallenna</Button>
-            <Button onClick={handleRestore} secondary>Peruuta</Button>
-          </Form>
-        :
-        <Button onClick={handleAdd} primary>Lisää</Button>
-      )
-    }
-  }
 
 /// Aihe komponentti
 const Aihe = (props) => {
-
-  logger.info('Aihe.id', props.id, (typeof props.id))
-  logger.info('Aihe.currentItem', props.currentItem, (typeof props.currentItem))
-
+  logger.info('Aihe', props.id, props.aihe)
   return (
     <Menu.Item
       name={props.id + ''}
-      active={props.currentItem===props.id}
+      active={props.aihe===props.id}
       onClick={props.handleItem}
       >
       {props.title}
@@ -123,13 +40,13 @@ const FoorumiRivit = (props) => {
             </Menu>
             <Divider horizontal hidden />
             {isLoggedIn()
-            ? <AiheLomake omistaja={props.omistaja} aiheVaihtuu={props.aiheVaihtuu} resetAiheVaihtuu={props.resetAiheVaihtuu} setMessage={props.setMessage} />
+            ? <AiheLomake setMessage={props.setMessage} refresh={props.refresh} handleDelete={props.handleDelete} />
             : ''}
             </Segment>
           </Grid.Column>
           <Grid.Column>
             <Segment>
-              <Keskustelut aihe={props.currentItem} setMessage={props.setMessage} />
+              <Keskustelut aihe={props.aihe} setMessage={props.setMessage} />
             </Segment>
           </Grid.Column>
         </Grid.Row>
@@ -144,13 +61,9 @@ class Foorumi extends Component {
 
   constructor(props) {
     super(props)
-    logger.info('constructor.props:', this.props)
-
     this.state = {
       aiheet:  [],
-      currentItem: -1,
-      omistaja: 1,
-      aiheVaihtuu: this.state ? this.state.aiheVaihtuu : false,
+      aihe: -1,
       messu: '',
       messuTyyppi: messageTypes.CLOSE
     }
@@ -161,59 +74,79 @@ class Foorumi extends Component {
   }
 
   componentDidMount() {
+    this.refresh()
+  }
+
+/*  componentDidUpdate(prevProps, prevState) {
+    if(this.state.aihe !== prevState.aihe) {
+      this.refresh()
+    }
+  } */
+
+  refresh = () => {
     foorumiData.getAll()
       .then(responseData => {
         logger.info('App.componentDidMount.responseData:', responseData)
-        const aihe = (responseData && responseData.length > 0) ? responseData[0].id : ''
-        this.setState({aiheet: responseData, currentItem: aihe, aiheVaihtuu: true})
-        this.props.setAihe(aihe)
+        if(this.isLive) {
+          this.setState({aiheet: responseData})
+        }
+        if(this.state.aihe < 1 && responseData && responseData.length > 0) {
+          if(this.isLive) {
+            this.setState({aihe: responseData[0].id})
+          }
+        }
       })
       .catch(exception => {
         logger.info('handleSave.catch:', exception)
-        this.setMessage = (exception.message, messageTypes.ERROR)
+        this.setMessage(exception.message, messageTypes.ERROR)
       })
       .finally(() => {
         setTimeout(() => {
-          this.setMessage = ('', messageTypes.CLOSE)
+          this.setMessage('', messageTypes.CLOSE)
       }, messageTime.EXTRA)
     })
-    return true
   }
 
-  componentDidUpdate(prevProps, prevState) {
-     if(this.state.currentItem !== prevState.currentItem) {
-       logger.info('componentDidUpdate.state.aihe:', this.state.currentItem)
-       this.setState({aiheVaihtuu: true})
-     }
+  setMessage = (messu, messuTyyppi) => {
+    if(this.isLive) {
+      logger.trace('setMessage:', messu, messuTyyppi)
+      this.setState({messu: messu, messuTyyppi: messuTyyppi})
+    }
   }
 
   handleItemClick = (e, {name}) => {
-
-    this.setState((state) => { return {currentItem: parseInt(name)}})
+    this.setState((state) => { return {aihe: parseInt(name)}})
     this.props.setAihe(name)
-    logger.trace('handleItemClick.currentItem/ehdotus:', this.state.currentItem, name)
+    logger.error('handleItemClick.currentItem/ehdotus:', this.state.aihe, name)
   }
 
-  resetAiheVaihtuu = () => {
-
-    logger.trace('Foorumi.resetAiheVaihtuu.aiheVaihtuu:', this.state.aiheVaihtuu)
-    this.setState({aiheVaihtuu: false})
+  handleDelete = (event, {name}) => {
+    event.preventDefault()
+    foorumiData.remove(this.state.aihe)
+      .then(responseData => {
+        logger.info('handleDelete', responseData)
+        this.setMessage(`Aihe ${''} on poistettu Foorumilta.`, messageTypes.INFO)
+        this.refresh()
+      })
+      .catch(error => {
+        logger.info('handleDelete.catch:', error)
+        const virhe = checkAuth(error) ? "Sessiosi on vanhentunut. Ole hyvä ja kirjaudu uudelleen." : error.message
+        this.setMessage(virhe, messageTypes.WARNING)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.setMessage('', messageTypes.CLOSE)
+      }, messageTime.NORMAL)
+    })
   }
 
   render() {
-
-    const setMessage = (messu, messuTyyppi) => {
-      if(this.isLive) {
-        logger.trace('setMessage:', messu, messuTyyppi)
-        this.setState({messu: messu, messuTyyppi: messuTyyppi})
-      }
-    }
 
     const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
       return (<Aihe key={ ehdotus.id}
                         id={ehdotus.id}
                         title={ehdotus.title}
-                        currentItem={this.state.currentItem}
+                        aihe={this.state.aihe}
                         handleItem={this.handleItemClick}/>)
     })
 
@@ -221,11 +154,10 @@ class Foorumi extends Component {
       <Segment>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <FoorumiRivit ehdotusSegmentit={ehdotusSegmentit}
-                      currentItem={this.state.currentItem}
-                      omistaja={getUserId()}
-                      aiheVaihtuu={this.state.aiheVaihtuu}
-                      resetAiheVaihtuu={this.resetAiheVaihtuu}
-                      setMessage={setMessage}
+                      aihe={this.state.aihe}
+                      setMessage={this.setMessage}
+                      refresh={this.refresh}
+                      handleDelete={this.handleDelete}
         />
       </Segment>
     )
