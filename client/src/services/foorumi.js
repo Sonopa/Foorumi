@@ -10,25 +10,25 @@ import {getAuth} from './session'
 const logger = require('simple-console-logger').getLogger('foorumi')
 const baseUrl = '/api/aiheet'
 
-/// getAll method
+/// GetAll - Hae kaikki aiheet
 const getAll = () => {
   logger.info('axios.getAll:', `${baseUrl}`)
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
 
-/// Create method
-const create = async (newObject) => {
-  logger.info('axios.create:', `${baseUrl}`)
-  const response = await axios.post(`${baseUrl}`, newObject, getAuth())
-  return response.data
-}
-
-/// getAihe method
+/// GetAihe - Hae aihe tunnisteella
 const getAihe = (id) => {
   logger.info('axios.get:', `${baseUrl}/${id}`)
   const request = axios.get(`${baseUrl}/${id}`,{id: id})
   return request.then(response => response.data)
+}
+
+/// Create - luo uusi keskustelun aihe Foorumille
+const create = async (newObject) => {
+  logger.info('axios.create:', `${baseUrl}`)
+  const response = await axios.post(`${baseUrl}`, newObject, getAuth())
+  return response.data
 }
 
 /// Remove - poista keskustelun aihe Foorumilta

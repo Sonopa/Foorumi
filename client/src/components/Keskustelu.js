@@ -34,19 +34,24 @@ class Keskustelu extends Component {
   componentDidUpdate(prevProps, prevState) {
     if(this.isLive) {
       if(this.props.aihe !== prevProps.aihe) {
-        logger.trace('componentDidUpdate.aihe:', this.props.aihe)
+        logger.info('componentDidUpdate.aihe:', this.props.aihe)
         this.setState({otsikko: '', kommentti: '', lisaaTila: false})
-        logger.trace('componentDidUpdate.lisaaTila:', false)
       }
     }
   }
 
   render () {
 
-    const handleAdd = (e, {name}) => this.setState({lisaaTila: true})
-    const handleRestore = (e, {name}) =>
-        this.setState({otsikko: '', kommentti: '', lisaaTila: false})
-    const handleSave = (e, {name}) => {
+    const handleAdd = (event, {name}) => {
+      event.preventDefault()
+      this.setState({lisaaTila: true})
+    }
+    const handleRestore = (event, {name}) => {
+      event.preventDefault()
+      this.setState({otsikko: '', kommentti: '', lisaaTila: false})
+    }
+    const handleSave = (event, {name}) => {
+      event.preventDefault()
       const newKeskustelu = {
           owner:  getUser(),
           title:  this.state.otsikko,

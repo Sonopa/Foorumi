@@ -69,7 +69,8 @@ class KeskusteluRivi extends Component {
   }
 
   handleMenu = (event, {name}) => {
-
+    
+    event.preventDefault()
     logger.info('handleMenu', this.props)
     this.setMenu(name)
 

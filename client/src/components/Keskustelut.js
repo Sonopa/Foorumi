@@ -34,13 +34,6 @@ class Keskustelut extends Component {
     }
   }
 
-/*
-  componentDidMount() {
-    logger.info('componentDidMount.aihe', this.props.aihe)
-    this.refresh()
-  }
-*/
-
   refresh = () => {
     if(this.isLive ) {
       keskusteluData.getAll(this.props.aihe)

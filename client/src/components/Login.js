@@ -24,10 +24,12 @@ class LoginForm extends Component {
 
   render () {
     const handleName = event => {
+      event.preventDefault()
       this.setState({username: event.target.value})
     }
 
     const handlePass = event => {
+      event.preventDefault()
       this.setState({password: event.target.value})
     }
 

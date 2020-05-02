@@ -6,6 +6,7 @@
 /// ---------------------------------
 
 // 2020-04-24T10:01:50.607Z
+/// FinnishDate - muotoiltu päivämääräkenttä
 export const finnishDate = (pvmStr) => {
   if(pvmStr) {
     const pvm = new Date(pvmStr)

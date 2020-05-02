@@ -9,12 +9,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 var logger = require('simple-console-logger')
-/*
-error
-info
-trace
-debug
-*/
+/// error
+/// info
+/// trace
+/// debug
 logger.configure({level: 'info'})
 
 ReactDOM.render(

@@ -23,11 +23,17 @@ class UserLomake extends Component {
     }
   }
 
-  handleAdd = (e, {name}) => this.setState({lisaaTila: true})
-  handleRestore = (e, {name}) =>
-      this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
+  handleAdd = (event, {name}) => {
+    event.preventDefault()
+    this.setState({lisaaTila: true})
+  }
+  handleRestore = (event, {name}) => {
+    event.preventDefault()
+    this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
+  }
 
-  handleSave = (e, {name}) => {
+  handleSave = (event, {name}) => {
+    event.preventDefault()
     const newUser = {
         username: this.state.tunnus,
         password: this.state.salasana,

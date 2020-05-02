@@ -77,12 +77,6 @@ class Foorumi extends Component {
     this.refresh()
   }
 
-/*  componentDidUpdate(prevProps, prevState) {
-    if(this.state.aihe !== prevState.aihe) {
-      this.refresh()
-    }
-  } */
-
   refresh = () => {
     foorumiData.getAll()
       .then(responseData => {
@@ -114,10 +108,11 @@ class Foorumi extends Component {
     }
   }
 
-  handleItemClick = (e, {name}) => {
+  handleItemClick = (event, {name}) => {
+    event.preventDefault()
     this.setState((state) => { return {aihe: parseInt(name)}})
     this.props.setAihe(name)
-    logger.error('handleItemClick.currentItem/ehdotus:', this.state.aihe, name)
+    logger.info('handleItemClick.currentItem/ehdotus:', this.state.aihe, name)
   }
 
   handleDelete = (event, {name}) => {

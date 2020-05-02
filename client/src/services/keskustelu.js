@@ -11,7 +11,7 @@ const logger = require('simple-console-logger').getLogger('keskustelu')
 const baseUrl = '/api/aiheet'
 const addUrl = '/keskustelut'
 
-/// getAll - Hae aiheen kaikki keskustelut
+/// GetAll - Hae aiheen kaikki keskustelut
 const getAll = (id) => {
   logger.info('axios.getAll:', `${baseUrl}/${id}${addUrl}`)
   const request = axios.get(`${baseUrl}/${id}${addUrl}`)

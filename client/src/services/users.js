@@ -13,41 +13,41 @@ const loginUrl = '/login'
 const logoutUrl = '/logout'
 const logger = require('simple-console-logger').getLogger('users')
 
-/// getAll - Hae kaikki käyttäjät
+/// GetAll - Hae kaikki käyttäjät
 const getAll = () => {
   const request = axios.get(userUrl)
   return request.then(response => response.data)
 }
 
-/// getUser - Hae käyttäjä tunniste numerolla
+/// GetUser - Hae käyttäjä tunniste -numerolla
 const getUser = (id) => {
   const request = axios.get(`${userUrl}/${id}`)
   logger.info('axios.getUser', `${userUrl}/${id}`)
   return request.then(response => response.data)
 }
 
-/// Create method
+/// Create - luo uusi käyttäjä Foorumille
 const create = async (newObject) => {
   const response = await axios.post(`${registerUrl}`, newObject)
   logger.info('axios.create', `${registerUrl}`, newObject, response)
   return response.data
 }
 
-/// Update method
+/// Update - päivitä käyttäjän tiedot
 const update = async (userId, newObject) => {
   const response = await axios.post(`${userUrl}/${userId}`, newObject, getAuth())
   logger.info('axios.update', `${userUrl}/${userId}`, newObject, response)
   return response.data
 }
 
-/// Delete method
+/// Remove - poista käyttäjä Foorumilta
 const remove = async (userId) => {
   const response = await axios.delete(`${userUrl}/${userId}`, getAuth())
   logger.info('axios.delete:', `${userUrl}/${userId}`, response)
   return response.data
 }
 
-/// Login method
+/// Login - kirjaudu sisään
 const login = async (newObject) => {
   const response = await axios.post(`${loginUrl}`, newObject)
   logger.info('axios.login', `${loginUrl}`, newObject, response)
@@ -59,7 +59,7 @@ const login = async (newObject) => {
   return response.data
 }
 
-/// Logout method
+/// Logout - kirjaudu ulos
 const logout = async (newObject) => {
   removeSession(newObject)
   const response = await axios.post(`${logoutUrl}`, newObject, getAuth())
