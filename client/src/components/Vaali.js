@@ -6,10 +6,10 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Statistic, List, Grid} from 'semantic-ui-react'
-import Huomio, {messageTypes, messageTime} from './Huomio'
+import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
+import {finnishDate} from '../tools/aika'
 import foorumiData from '../services/foorumi'
 import usersData from '../services/users'
-import {finnishDate} from '../services/tools'
 
 const logger = require('simple-console-logger').getLogger('Vaali')
 

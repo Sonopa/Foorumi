@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import axios from 'axios'
-import {getAuth} from './session'
+import {getAuth} from '../tools/session'
 
 const logger = require('simple-console-logger').getLogger('keskustelu')
 const baseUrl = '/api/aiheet'

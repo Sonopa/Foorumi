@@ -7,6 +7,7 @@
 import React from 'react'
 import {Message} from 'semantic-ui-react'
 
+/// Viesti ilmoitus tyypit, Huomio ikkunaa varten
 export const messageTypes = {
   INFO:     'info',
   WARNING:  'warning',
@@ -14,6 +15,7 @@ export const messageTypes = {
   CLOSE:    'close'
 }
 
+/// Viesti ilmoitusten näyttöajat, Huomio ikkunaa varten
 export const messageTime = {
   SHORT:    2000,
   NORMAL:   3000,
@@ -22,24 +24,28 @@ export const messageTime = {
   SUPER:   10000,
 }
 
+/// Info ruutu Viesti -ikkunaan
 const Info = ({teksti}) =>  (
   <Message
     info
     content={teksti} />
 )
 
+/// Varoitus ruutu Viesti -ikkunaan
 const Warning = (props) => (
   <Message
     warning
     content={props.teksti} />
 )
 
+/// Virhe ruutu Viesti -ikkunaan
 const Error = (props) => (
   <Message
     negative
     content={props.teksti} />
 )
 
+/// Viesti -ikkunan valinta viestityypin eprusteella.
 const Huomio = ({teksti, tyyppi}) =>  {
   switch(tyyppi) {
     case messageTypes.ERROR:

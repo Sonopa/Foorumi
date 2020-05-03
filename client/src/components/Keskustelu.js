@@ -6,25 +6,27 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Form, TextArea, Button, Segment, Divider} from 'semantic-ui-react'
+import {messageTypes, messageTime} from '../tools/Huomio'
+import {isLoggedIn, checkAuth, getUser} from '../tools/session'
 import keskusteluData from '../services/keskustelu'
-import {isLoggedIn, checkAuth, getUser} from '../services/session'
-import {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Keskustelu')
 
 class Keskustelu extends Component {
 
   isLive = true
-
   constructor(props) {
     super(props)
     logger.info('constructor.props:', props)
 
     this.state = {
-      otsikko:  this.state ? this.state.otsikko : '',
-      kommentti: this.state ? this.state.kommentti : '',
+      otsikko: '',
+      kommentti: '',
       lisaaTila: false
     }
+    this.handleAdd      = this.handleAdd.bind(this)
+    this.handleRestore  = this.handleRestore.bind(this)
+    this.handleSave     = this.handleSave.bind(this)
   }
 
   componentWillUnmount() {
@@ -40,42 +42,43 @@ class Keskustelu extends Component {
     }
   }
 
-  render () {
+  handleAdd = (event, {name}) => {
+    event.preventDefault()
+    this.setState({lisaaTila: true})
+  }
 
-    const handleAdd = (event, {name}) => {
-      event.preventDefault()
-      this.setState({lisaaTila: true})
+  handleRestore = (event, {name}) => {
+    event.preventDefault()
+    this.setState({otsikko: '', kommentti: '', lisaaTila: false})
+  }
+
+  handleSave = (event, {name}) => {
+    event.preventDefault()
+    const newKeskustelu = {
+        owner:  getUser(),
+        title:  this.state.otsikko,
+        text:   this.state.kommentti
     }
-    const handleRestore = (event, {name}) => {
-      event.preventDefault()
-      this.setState({otsikko: '', kommentti: '', lisaaTila: false})
-    }
-    const handleSave = (event, {name}) => {
-      event.preventDefault()
-      const newKeskustelu = {
-          owner:  getUser(),
-          title:  this.state.otsikko,
-          text:   this.state.kommentti
-      }
-      keskusteluData.create(this.props.aihe, newKeskustelu)
-        .then(responseData => {
-          logger.info('handleSave.responseData:', responseData)
-          this.setState({lisaaTila: false, otsikko: '', kommentti: ''})
-          this.props.setMessage(`Mielipide ${newKeskustelu.title} on lisätty Foorumille.`, messageTypes.INFO)
-          this.props.refresh()
-        })
-        .catch(error => {
-          logger.info('handleSave.catch:', error)
-          const virhe = checkAuth(error) ? "Sessiosi on vanhentunut. Ole hyvä ja kirjaudu uudelleen." : error.message
-          this.props.setMessage(virhe, messageTypes.WARNING)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.props.setMessage('', messageTypes.CLOSE)
-          }, messageTime.NORMAL)
+    keskusteluData.create(this.props.aihe, newKeskustelu)
+      .then(responseData => {
+        logger.info('handleSave.responseData:', responseData)
+        this.setState({lisaaTila: false, otsikko: '', kommentti: ''})
+        this.props.setMessage(`Mielipide ${newKeskustelu.title} on lisätty Foorumille.`, messageTypes.INFO)
+        this.props.refresh()
       })
-    }
+      .catch(error => {
+        logger.info('handleSave.catch:', error)
+        const virhe = checkAuth(error) ? "Sessiosi on vanhentunut. Ole hyvä ja kirjaudu uudelleen." : error.message
+        this.props.setMessage(virhe, messageTypes.WARNING)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+    })
+  }
 
+  render () {
     return (
       <>
         {isLoggedIn() ?
@@ -90,11 +93,11 @@ class Keskustelu extends Component {
                              onChange={(e) => this.setState({kommentti: e.target.value})} value={this.state.kommentti} />
                 </div>
                 <Divider horizontal hidden />
-                <Button onClick={handleSave} primary>Tallenna</Button>
-                <Button onClick={handleRestore} secondary>Peruuta</Button>
+                <Button onClick={this.handleSave} primary>Tallenna</Button>
+                <Button onClick={this.handleRestore} secondary>Peruuta</Button>
               </Form>
             </Segment> :
-            <Button onClick={handleAdd} primary>Lisää</Button>
+            <Button onClick={this.handleAdd} primary>Lisää</Button>
           : ''
         }
       </>

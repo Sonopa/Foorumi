@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Menu} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
-import {isLoggedIn} from '../services/session'
+import {isLoggedIn} from '../tools/session'
 
 class Valikko extends Component {
 

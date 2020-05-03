@@ -7,8 +7,8 @@
 import React, {Component} from 'react'
 import KeskusteluRivi from './KeskusteluRivi'
 import Keskustelu from './Keskustelu'
+import {messageTypes, messageTime} from '../tools/Huomio'
 import keskusteluData from '../services/keskustelu'
-import {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('Keskustelut')
 
@@ -19,7 +19,7 @@ class Keskustelut extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      keskustelut: this.state ? this.state.keskustelut : [],
+      keskustelut: [],
     }
   }
 
@@ -29,9 +29,14 @@ class Keskustelut extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if(this.props.aihe !== prevProps.aihe) {
-      logger.info('componentDidMount.aihe', this.props.aihe)
+      logger.info('componentDidUpdate.aihe', this.props.aihe)
       this.refresh()
     }
+  }
+
+  componentDidMount() {
+    logger.info('componentDidMount.keskustelut', this.keskustelut)
+    this.refresh()
   }
 
   refresh = () => {

@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import axios from 'axios'
-import {storeSession, removeSession, getAuth} from './session'
+import {storeSession, removeSession, getAuth} from '../tools/session'
 
 const userUrl = '/users'
 const registerUrl = '/register'

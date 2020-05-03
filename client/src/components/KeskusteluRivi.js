@@ -7,10 +7,10 @@
 import React, {Component} from 'react'
 import {Feed, Icon, Divider} from 'semantic-ui-react'
 import KeskusteluValikko, {iMenuType} from './KeskusteluValikko'
-import {finnishDate} from '../services/tools'
+import {messageTypes, messageTime} from '../tools/Huomio'
+import {finnishDate} from '../tools/aika'
+import {isUserOwner} from '../tools/session'
 import keskusteluData from '../services/keskustelu'
-import {isUserOwner} from '../services/session'
-import {messageTypes, messageTime} from './Huomio'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
 
@@ -24,6 +24,7 @@ class KeskusteluRivi extends Component {
     this.state = {
       nowMenu: ''
     }
+    this.handleMenu  = this.handleMenu.bind(this)
   }
 
   componentWillUnmount() {
@@ -69,7 +70,7 @@ class KeskusteluRivi extends Component {
   }
 
   handleMenu = (event, {name}) => {
-    
+
     event.preventDefault()
     logger.info('handleMenu', this.props)
     this.setMenu(name)

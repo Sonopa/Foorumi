@@ -6,8 +6,8 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Form, Button, Divider} from 'semantic-ui-react'
+import {messageTypes, messageTime} from '../tools/Huomio'
 import usersData from '../services/users'
-import {messageTypes, messageTime} from '../components/Huomio'
 const logger = require('simple-console-logger').getLogger('UserLomake')
 
 class UserLomake extends Component {
@@ -27,6 +27,7 @@ class UserLomake extends Component {
     event.preventDefault()
     this.setState({lisaaTila: true})
   }
+
   handleRestore = (event, {name}) => {
     event.preventDefault()
     this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
@@ -45,6 +46,7 @@ class UserLomake extends Component {
         logger.info('usersData.create:', responseData)
         this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
         this.props.setMessage(`Käyttäjä ${newUser.username} on lisätty Foorumille.`, messageTypes.INFO)
+        this.props.refresh()
       })
       .catch(error => {
         logger.info('usersData.create:', error)

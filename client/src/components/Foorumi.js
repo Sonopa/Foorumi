@@ -6,21 +6,20 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Grid, Menu, Divider} from 'semantic-ui-react'
-import foorumiData from '../services/foorumi'
-import {isLoggedIn, checkAuth} from '../services/session'
-import Huomio, {messageTypes, messageTime} from './Huomio'
 import Keskustelut from './Keskustelut'
 import AiheLomake from '../forms/AiheLomake'
+import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
+import {isLoggedIn, checkAuth} from '../tools/session'
+import foorumiData from '../services/foorumi'
 const logger = require('simple-console-logger').getLogger('Foorumi')
 
 /// Aihe komponentti
 const Aihe = (props) => {
-  logger.info('Aihe', props.id, props.aihe)
   return (
     <Menu.Item
       name={props.id + ''}
       active={props.aihe===props.id}
-      onClick={props.handleItem}
+      onClick={props.handleSelect}
       >
       {props.title}
     </Menu.Item>
@@ -29,6 +28,7 @@ const Aihe = (props) => {
 
 /// FoorumiRivit komponentti
 const FoorumiRivit = (props) => {
+  logger.info('FoorumiRivit', props.aihe)
   return (
       <Grid columns={2} divided>
         <Grid.Row>
@@ -67,6 +67,9 @@ class Foorumi extends Component {
       messu: '',
       messuTyyppi: messageTypes.CLOSE
     }
+    // Binding of event handling methods
+    this.handleSelect   = this.handleSelect.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentWillUnmount() {
@@ -74,6 +77,7 @@ class Foorumi extends Component {
   }
 
   componentDidMount() {
+    logger.info('componentDidMount', this.aihe)
     this.refresh()
   }
 
@@ -108,11 +112,11 @@ class Foorumi extends Component {
     }
   }
 
-  handleItemClick = (event, {name}) => {
+  handleSelect = (event, {name}) => {
     event.preventDefault()
     this.setState((state) => { return {aihe: parseInt(name)}})
     this.props.setAihe(name)
-    logger.info('handleItemClick.currentItem/ehdotus:', this.state.aihe, name)
+    logger.info('handleSelect.aihe:', this.state.aihe, name)
   }
 
   handleDelete = (event, {name}) => {
@@ -137,12 +141,16 @@ class Foorumi extends Component {
 
   render() {
 
+    if(this.state.aiheet.length === 0) {
+      return null
+    }
+
     const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
       return (<Aihe key={ ehdotus.id}
                         id={ehdotus.id}
                         title={ehdotus.title}
                         aihe={this.state.aihe}
-                        handleItem={this.handleItemClick}/>)
+                        handleSelect={this.handleSelect}/>)
     })
 
     return (
