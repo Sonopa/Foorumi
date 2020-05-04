@@ -141,10 +141,6 @@ class Foorumi extends Component {
 
   render() {
 
-    if(this.state.aiheet.length === 0) {
-      return null
-    }
-
     const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
       return (<Aihe key={ ehdotus.id}
                         id={ehdotus.id}
