@@ -13,7 +13,7 @@ const aiheetAction = {
   UPDATE: 'updateAiheet'
 }
 
-const aiheetReducer = (state={}, action) => {
+const aiheetReducer = (state=[], action) => {
 
   switch(action.type) {
     case aiheetAction.ADD:

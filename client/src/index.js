@@ -6,11 +6,14 @@
 /// ---------------------------------
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore} from 'redux'
+import {createStore, applyMiddleware, combineReducers} from 'redux'
 import {Provider} from 'react-redux'
 import {BrowserRouter as Router} from 'react-router-dom'
 import App from './App'
+import loginReducer from './reducers/loginReducer'
 import userReducer from './reducers/userReducer'
+import aiheReducer from './reducers/aiheReducer'
+import thunk from 'redux-thunk'
 import './index.scss'
 
 var logger = require('simple-console-logger')
@@ -20,7 +23,13 @@ var logger = require('simple-console-logger')
 // debug
 logger.configure({level: 'info'})
 
-const store = createStore(userReducer)
+const reducer = combineReducers({
+  login: loginReducer,
+  user: userReducer,
+  aihe: aiheReducer
+})
+
+const store = createStore(reducer, applyMiddleware(thunk))
 
 /// React käyttöliittymä kytketään aloitus -sivulle
 ReactDOM.render(
