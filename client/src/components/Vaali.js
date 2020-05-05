@@ -5,6 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
+import { connect } from 'react-redux'
 import {Segment, List, Grid, Divider} from 'semantic-ui-react'
 import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
 import {finnishDate} from '../tools/aika'
@@ -63,7 +64,7 @@ class Vaali extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      aihe: null,
+//      aihe: null,
       omistajaNimi: '',
       messu: '',
       messuTyyppi: messageTypes.CLOSE
@@ -114,13 +115,13 @@ class Vaali extends Component {
       this.setState({messu: messu, messuTyyppi: messuTyyppi})
     }
   }
-
+/*
   setAihe = (responseData) => {
     if(this.isLive) {
       logger.trace('setAihe:', responseData)
       this.setState({aihe: responseData})
     }
-  }
+  } */
 
   setOmistaja = (responseData) => {
     if(this.isLive) {
@@ -139,10 +140,10 @@ class Vaali extends Component {
                 <Segment stacked>
                   <h2>Äänestettävä asia</h2>
                 </Segment>
-                <Aihe aihe={this.state.aihe} aiheId={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
+                <Aihe aihe={this.props.aihe} aiheId={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
               </Grid.Column>
               <Grid.Column>
-                <Tilasto aihe={this.state.aihe} />
+                <Tilasto aihe={this.props.aihe} />
               </Grid.Column>
           </Grid>
         </Segment>
@@ -151,4 +152,10 @@ class Vaali extends Component {
   }
 }
 
-export default Vaali
+const mapStateToProps = state => {
+  return {
+    aihe: state.aihe
+  }
+}
+
+export default connect(mapStateToProps, null)(Vaali)

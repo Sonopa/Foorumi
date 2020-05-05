@@ -6,15 +6,26 @@
 /// ---------------------------------
 const logger = require('simple-console-logger').getLogger('aiheetReducer')
 
-const aiheetAction = {
-  INIT: 'initAiheet',
+export const aiheetAction = {
+  LOAD: 'loadAiheet',
   ADD: 'addAiheet',
   DELETE: 'deleteAiheet',
   UPDATE: 'updateAiheet'
 }
 
-const aiheetReducer = (state=[], action) => {
+export function loadAiheet(aiheet) {
+  return {
+    type: aiheetAction.LOAD,
+    aiheet
 
+  }
+}
+
+const aiheetReducer = (state=[], action) => {
+  logger.info('aiheetReducer.state', state, 'action', action)
+  if(!action || !state) {
+      return state
+  }
   switch(action.type) {
     case aiheetAction.ADD:
       logger.info(aiheetAction.ADD, action)
@@ -25,9 +36,9 @@ const aiheetReducer = (state=[], action) => {
     case aiheetAction.DELETE:
       logger.info(aiheetAction.DELETE, action)
       return state
-    case aiheetAction.INIT:
-      logger.info(aiheetAction.INIT, action)
-      return state
+    case aiheetAction.LOAD:
+      logger.info(aiheetAction.LOAD, action)
+      return action.data
     default:
       return state
   }

@@ -6,28 +6,25 @@
 /// ---------------------------------
 const logger = require('simple-console-logger').getLogger('aiheReducer')
 
-const aiheAction = {
-  INIT: 'initAihe',
-  ADD: 'addAihe',
-  DELETE: 'deleteAihe',
-  UPDATE: 'updateAihe'
+export const aiheAction = {
+  CURRENT: 'currentAihe'
+}
+
+export const setCurrentAihe = aihe => {
+  return {
+    type: aiheAction.CURRENT,
+    data: {
+      aihe: aihe
+    }
+  }
 }
 
 const aiheReducer = (state={}, action) => {
 
   switch(action.type) {
-    case aiheAction.ADD:
-      logger.info(aiheAction.ADD, action)
-      return state
-    case aiheAction.UPDATE:
-      logger.info(aiheAction.UPDATE, action)
-      return state
-    case aiheAction.DELETE:
-      logger.info(aiheAction.DELETE, action)
-      return state
-    case aiheAction.INIT:
-      logger.info(aiheAction.INIT, action)
-      return state
+    case aiheAction.CURRENT:
+      logger.info(aiheAction.CURRENT, action)
+      return action.data.aihe
     default:
       return state
   }

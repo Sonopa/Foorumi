@@ -5,11 +5,15 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
+import {withRouter} from 'react-router-dom'
 import {Segment, Grid, Menu, Divider} from 'semantic-ui-react'
 import Keskustelut from './Keskustelut'
 import AiheLomake from '../forms/AiheLomake'
-import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
+import {connect} from 'react-redux'
 import {isLoggedIn, checkAuth} from '../tools/session'
+import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
+import {loadAiheet} from '../reducers/aiheetReducer'
+import {setCurrentAihe} from '../reducers/aiheReducer'
 import foorumiData from '../services/foorumi'
 const logger = require('simple-console-logger').getLogger('Foorumi')
 
@@ -114,9 +118,12 @@ class Foorumi extends Component {
 
   handleSelect = (event, {name}) => {
     event.preventDefault()
-    this.setState((state) => { return {aihe: parseInt(name)}})
+    const aiheId = parseInt(name)
+    this.setState((state) => { return {aihe: aiheId}})
     this.props.setAihe(name)
     logger.info('handleSelect.aihe:', this.state.aihe, name)
+    const aihe = this.state.aiheet.find(ehdotus => ehdotus.id===aiheId)
+    this.props.setCurrentAihe(aihe ? aihe : {id:0})
   }
 
   handleDelete = (event, {name}) => {
@@ -163,4 +170,16 @@ class Foorumi extends Component {
   }
 }
 
-export default Foorumi
+const mapStateToProps = state => {
+  return {
+    aiheet: state.aiheet,
+    aihe: state.aihe
+  }
+}
+
+const mapDispatchToProps = {
+  loadAiheet,
+  setCurrentAihe
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Foorumi))

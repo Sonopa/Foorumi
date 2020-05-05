@@ -12,7 +12,7 @@ const userAction = {
   DELETE: 'deleteUser',
   UPDATE: 'updateUser'
 }
-
+/*
 const getInitialStateFromStorage = () => {
 
 }
@@ -20,7 +20,7 @@ const getInitialStateFromStorage = () => {
 const saveToStorage = (state) => {
     sessionStorage.setItem("loginState")
 }
-
+*/
 const loginReducer = (state={}, action) => {
 
   switch(action.type) {
