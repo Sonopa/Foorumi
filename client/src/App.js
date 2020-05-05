@@ -22,13 +22,6 @@ const logger = require('simple-console-logger').getLogger('App')
 
 class App extends Component  {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      aihe: ''
-    }
-  }
-
   componentDidMount() {
     foorumiData.getAll()
       .then(aiheetList => {
@@ -36,16 +29,12 @@ class App extends Component  {
         if(aiheetList && aiheetList.length > 0) {
           logger.info('constructor.loadAiheet.getAll', aiheetList[0], typeof aiheetList[0])
           this.props.setCurrentAihe(aiheetList[0])
+          this.props.loadAiheet(aiheetList)
         }
       })
   }
 
   render () {
-    const setAihe = (aihe) => {
-      logger.info('render.setAihe.aihe:', aihe)
-      this.setState({aihe: aihe})
-    }
-
     return (
       <>
         <Segment raised>
@@ -57,13 +46,12 @@ class App extends Component  {
           <Route path='/foorumi'
             render={() => {
               return (
-                <Foorumi setAihe={setAihe} aihe={this.state.aihe} />
+                <Foorumi />
             )}} />
           <Route path='/vaali'
             render={() => {
-             logger.info('Route.vaali.state.aihe:', this.state.aihe)
               return (
-                <Vaali aihe={this.state.aihe} />
+                <Vaali />
             )}} />
           <Route path='/users' component={Users} />
           <Route path='/login' component={Login} />

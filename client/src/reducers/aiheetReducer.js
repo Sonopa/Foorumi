@@ -16,8 +16,9 @@ export const aiheetAction = {
 export function loadAiheet(aiheet) {
   return {
     type: aiheetAction.LOAD,
-    aiheet
-
+    data: {
+      aiheet: aiheet
+    }
   }
 }
 
@@ -38,7 +39,7 @@ const aiheetReducer = (state=[], action) => {
       return state
     case aiheetAction.LOAD:
       logger.info(aiheetAction.LOAD, action)
-      return action.data
+      return action.data.aiheet
     default:
       return state
   }

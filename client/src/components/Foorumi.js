@@ -120,7 +120,7 @@ class Foorumi extends Component {
     event.preventDefault()
     const aiheId = parseInt(name)
     this.setState((state) => { return {aihe: aiheId}})
-    this.props.setAihe(name)
+    // this.props.setAihe(name)
     logger.info('handleSelect.aihe:', this.state.aihe, name)
     const aihe = this.state.aiheet.find(ehdotus => ehdotus.id===aiheId)
     this.props.setCurrentAihe(aihe ? aihe : {id:0})
