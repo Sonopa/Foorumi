@@ -6,8 +6,13 @@
 /// ---------------------------------
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
+import {BrowserRouter as Router} from 'react-router-dom'
+import App from './App'
+import userReducer from './reducers/userReducer'
+import './index.scss'
+
 var logger = require('simple-console-logger')
 // error
 // info
@@ -15,10 +20,16 @@ var logger = require('simple-console-logger')
 // debug
 logger.configure({level: 'info'})
 
+const store = createStore(userReducer)
+
 /// React käyttöliittymä kytketään aloitus -sivulle
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

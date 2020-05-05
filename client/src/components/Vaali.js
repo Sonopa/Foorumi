@@ -5,41 +5,14 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Segment, Statistic, List, Grid} from 'semantic-ui-react'
+import {Segment, List, Grid, Divider} from 'semantic-ui-react'
 import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
 import {finnishDate} from '../tools/aika'
+import Tilasto from '../components/Tilasto'
 import foorumiData from '../services/foorumi'
 import usersData from '../services/users'
 
 const logger = require('simple-console-logger').getLogger('Vaali')
-
-/// Aihe TilastoItem
-const TilastoItem = (props) => {
-  return (
-    <Statistic>
-      <Statistic.Value>{props.arvo}</Statistic.Value>
-      <Statistic.Label>{props.otsikko}</Statistic.Label>
-    </Statistic>
-  )
-}
-
-/// Tilasto komponentti
-const Tilasto = (props) => {
-  const puolesta =  props.aihe ? props.aihe.votesFor: 0
-  const vastaan =   props.aihe ? props.aihe.votesAgainst: 0
-
-  return (
-    <Segment>
-      <Segment stacked>
-        <h2>Äänestystulos</h2>
-      </Segment>
-      <Statistic.Group>
-        <TilastoItem arvo={puolesta} otsikko="Puolesta"/>
-        <TilastoItem arvo={vastaan} otsikko="Vastaan"/>
-      </Statistic.Group>
-    </Segment>
-  )
-}
 
 /// Aihe komponentti
 const Aihe = (props) => {
@@ -50,9 +23,9 @@ const Aihe = (props) => {
   const omistajaNimi  = props.aihe ? props.omistajaNimi: ''
   const aika      = props.aihe ? props.aihe.creationTime: ''
   return (
-      <Grid columns={2}>
-        <Grid.Row>
+      <Grid>
           <Grid.Column>
+        <Grid.Row>
             <Segment>
               <List>
                 <List.Item>
@@ -66,8 +39,9 @@ const Aihe = (props) => {
                 </List.Item>
               </List>
             </Segment>
-          </Grid.Column>
-          <Grid.Column>
+        </Grid.Row>
+            <Divider horizontal hidden />
+        <Grid.Row>
             <Segment>
               <List>
                 <List.Item>
@@ -75,8 +49,8 @@ const Aihe = (props) => {
                 </List.Item>
               </List>
             </Segment>
-          </Grid.Column>
         </Grid.Row>
+          </Grid.Column>
       </Grid>
   )
 }
@@ -160,9 +134,17 @@ class Vaali extends Component {
       <>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <Segment raised>
-          <h1>Äänestyspaikka</h1>
-          <Aihe aihe={this.state.aihe} aiheId={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
-          <Tilasto aihe={this.state.aihe} />
+          <Grid columns={2}>
+              <Grid.Column>
+                <Segment stacked>
+                  <h2>Äänestettävä asia</h2>
+                </Segment>
+                <Aihe aihe={this.state.aihe} aiheId={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
+              </Grid.Column>
+              <Grid.Column>
+                <Tilasto aihe={this.state.aihe} />
+              </Grid.Column>
+          </Grid>
         </Segment>
       </>
     )

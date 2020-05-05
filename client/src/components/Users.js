@@ -5,7 +5,8 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Segment, Grid, Menu} from 'semantic-ui-react'
+import {Segment, Grid} from 'semantic-ui-react'
+import UserRivit from './UserRivit'
 import User from './User'
 import UserLomake from '../forms/UserLomake'
 import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
@@ -13,19 +14,6 @@ import {isLoggedIn, getUser} from '../tools/session'
 import usersData from '../services/users'
 
 const logger = require('simple-console-logger').getLogger('Users')
-
-const UserRivi = (props) => {
-  return (
-    <Menu.Item
-      name={props.id + ''}
-      active={props.activeUser===props.id}
-      onClick={props.handleUser}
-      >
-      {props.tunnus}
-    </Menu.Item>
-  )
-}
-
 
 class Users extends Component {
 
@@ -83,15 +71,6 @@ class Users extends Component {
   }
 
   render () {
-    const userRivit = this.state.users.map(user => {
-      return (<UserRivi key={user.id}
-                              id={user.id}
-                              nimi={user.name}
-                              tunnus={user.username}
-                              email={user.email}
-                              activeUser={this.state.currentUser}
-                              handleUser={this.handleUserClick}/>)
-    })
 
     return (
       <>
@@ -111,9 +90,9 @@ class Users extends Component {
         <Grid>
           <Grid.Column width={4}>
             <Segment>
-              <Menu vertical fluid>
-                {userRivit}
-              </Menu>
+              <UserRivit  users={this.state.users}
+                          activeUser={this.state.currentUser}
+                          handleUser={this.handleUserClick} />
               <UserLomake setMessage={this.setMessage} refresh={this.refresh} />
             </Segment>
           </Grid.Column>
