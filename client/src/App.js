@@ -16,6 +16,8 @@ import Users from './components/Users'
 import Login, {Logout} from './components/Login'
 import {loadAiheet} from './reducers/aiheetReducer'
 import {setCurrentAihe} from './reducers/aiheReducer'
+import {setCurrentUser} from './reducers/userReducer'
+import {getUser} from './tools/session'
 import foorumiData from './services/foorumi'
 
 const logger = require('simple-console-logger').getLogger('App')
@@ -30,6 +32,7 @@ class App extends Component  {
           logger.info('constructor.loadAiheet.getAll', aiheetList[0], typeof aiheetList[0])
           this.props.setCurrentAihe(aiheetList[0])
           this.props.loadAiheet(aiheetList)
+          this.props.setCurrentUser(getUser())
         }
       })
   }
@@ -71,7 +74,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   loadAiheet,
-  setCurrentAihe
+  setCurrentAihe,
+  setCurrentUser
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))

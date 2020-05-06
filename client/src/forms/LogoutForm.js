@@ -5,7 +5,10 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, { Component } from 'react'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Form, Button} from 'semantic-ui-react'
+import {setCurrentUser} from '../reducers/userReducer'
 import {messageTypes, messageTime} from '../tools/Huomio'
 import {getUser} from '../tools/session'
 import usersData from '../services/users'
@@ -25,6 +28,7 @@ class LogoutForm extends Component {
       usersData.logout(logoutUser)
         .then(responseData => {
           logger.info('LogoutForm.then.responseData', responseData)
+          this.props.setCurrentUser({username:''})
           this.props.setMessage(`Käyttäjä ${logoutUser.username} poistui Foorumista.`, messageTypes.INFO)
         })
         .catch(exception => {
@@ -45,4 +49,15 @@ class LogoutForm extends Component {
     )
   }
 }
-export default LogoutForm
+
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = {
+  setCurrentUser
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LogoutForm))

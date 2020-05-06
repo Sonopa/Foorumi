@@ -6,10 +6,10 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Segment, Grid, Menu, Divider} from 'semantic-ui-react'
 import Keskustelut from './Keskustelut'
 import AiheLomake from '../forms/AiheLomake'
-import {connect} from 'react-redux'
 import {isLoggedIn, checkAuth} from '../tools/session'
 import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
 import {loadAiheet} from '../reducers/aiheetReducer'

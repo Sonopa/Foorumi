@@ -6,28 +6,25 @@
 /// ---------------------------------
 const logger = require('simple-console-logger').getLogger('userReducer')
 
-const userAction = {
-  INIT: 'initUser',
-  ADD: 'addUser',
-  DELETE: 'deleteUser',
-  UPDATE: 'updateUser'
+export const userAction = {
+  CURRENT: 'currentUser'
+}
+
+export const setCurrentUser = user => {
+  return {
+    type: userAction.CURRENT,
+    data: {
+      user: user
+    }
+  }
 }
 
 const userReducer = (state={}, action) => {
 
   switch(action.type) {
-    case userAction.ADD:
-      logger.info(userAction.ADD, action)
-      return state
-    case userAction.UPDATE:
-      logger.info(userAction.UPDATE, action)
-      return state
-    case userAction.DELETE:
-      logger.info(userAction.DELETE, action)
-      return state
-    case userAction.INIT:
-      logger.info(userAction.INIT, action)
-      return state
+    case userAction.CURRENT:
+      logger.info(userAction.CURRENT, action)
+      return action.data.user
     default:
       return state
   }

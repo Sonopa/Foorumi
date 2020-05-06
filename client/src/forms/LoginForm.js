@@ -5,7 +5,10 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, { Component } from 'react'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Form, Button} from 'semantic-ui-react'
+import {setCurrentUser} from '../reducers/userReducer'
 import {messageTypes, messageTime} from '../tools/Huomio'
 import usersData from '../services/users'
 const logger = require('simple-console-logger').getLogger('LoginForm')
@@ -43,6 +46,7 @@ class LoginForm extends Component {
       usersData.login(newLogin)
         .then(responseData => {
           logger.info('LoginForm.render.login.responseData', responseData)
+          this.props.setCurrentUser({username:newLogin.username})
           this.props.setMessage(`Käyttäjä ${this.state.username} kirjautui Foorumiin.`, messageTypes.INFO)
           this.setState({username: '', password: ''})
         })
@@ -67,4 +71,14 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = {
+  setCurrentUser
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm))
