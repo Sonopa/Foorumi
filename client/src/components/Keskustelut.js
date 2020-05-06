@@ -28,8 +28,8 @@ class Keskustelut extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.props.aihe !== prevProps.aihe) {
-      logger.info('componentDidUpdate.aihe', this.props.aihe)
+    if(this.props.aiheId !== prevProps.aiheId) {
+      logger.info('componentDidUpdate.aiheId', this.props.aiheId)
       this.refresh()
     }
   }
@@ -41,7 +41,7 @@ class Keskustelut extends Component {
 
   refresh = () => {
     if(this.isLive ) {
-      keskusteluData.getAll(this.props.aihe)
+      keskusteluData.getAll(this.props.aiheId)
         .then(responseData => {
           logger.info('updateKeskustelut.responseData:', responseData)
           this.setState({keskustelut: responseData, lisaaTila: false})
@@ -77,7 +77,7 @@ class Keskustelut extends Component {
       <div>
         <h1>Keskustelut</h1>
         {keskusteluRivit}
-        <Keskustelu aihe={this.props.aihe} refresh={this.refresh} setMessage={this.props.setMessage} />
+        <Keskustelu aiheId={this.props.aiheId} refresh={this.refresh} setMessage={this.props.setMessage} />
       </div>
     )
   }

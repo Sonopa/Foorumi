@@ -25,16 +25,16 @@ const logger = require('simple-console-logger').getLogger('App')
 class App extends Component  {
 
   componentDidMount() {
+    logger.info('getUser()', getUser())
+    this.props.setCurrentUser(getUser())
     foorumiData.getAll()
       .then(aiheetList => {
         logger.info('constructor.loadAiheet.getAll', aiheetList, typeof aiheetList)
-        if(aiheetList && aiheetList.length > 0) {
-          logger.info('constructor.loadAiheet.getAll', aiheetList[0], typeof aiheetList[0])
-          this.props.setCurrentAihe(aiheetList[0])
-          this.props.loadAiheet(aiheetList)
-          this.props.setCurrentUser(getUser())
-        }
+        logger.info('constructor.loadAiheet.getAll', aiheetList[0], typeof aiheetList[0])
+        this.props.setCurrentAihe(aiheetList[0])
+        this.props.loadAiheet(aiheetList)
       })
+    logger.info('username', this.props.username)
   }
 
   render () {
@@ -57,18 +57,17 @@ class App extends Component  {
                 <Vaali />
             )}} />
           <Route path='/users' component={Users} />
-          <Route path='/login' component={Login} />
           <Route path='/logout' component={Logout} />
+          <Route path='/login' component={Login} />
         </Router>
       </>
     )
   }
 }
-
-const mapStateToProps = (state) => {
+/// App -aloitus komponentti - Redux Tilankäsittely
+const mapStateToProps = state => {
   return {
-    aiheet: state.aiheet,
-    aihe: state.aihe
+    username: state.username
   }
 }
 
@@ -77,5 +76,4 @@ const mapDispatchToProps = {
   setCurrentAihe,
   setCurrentUser
 }
-
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))

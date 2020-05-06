@@ -5,36 +5,54 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {Menu} from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
+const logger = require('simple-console-logger').getLogger('Valikko')
 
+const ETUSIVU =  'etusivu'
+const FOORUMI =  'foorumi'
+const VAALI   =  'vaali'
+const USERS   =  'users'
+const LOGIN   =  'login'
+const LOGOUT  =  'logout'
+
+/// Valikko -komponentti
 class Valikko extends Component {
 
-  state = {}
-  handleItemClick = (e, {name}) => this.setState({activeItem: name})
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  handleItemClick = (event, {name}) => {
+    this.setState({activeItem: name})
+  }
 
   render () {
+
     const {activeItem} = this.state
+    logger.info('render.username', this.props.username)
     return (
       <Menu>
-        <Menu.Item as={Link} to='/' name='etusivu' active={activeItem==='etusivu'} onClick={this.handleItemClick}>Etusivu</Menu.Item>
-        <Menu.Item as={Link} to='foorumi' name='foorumi' active={activeItem==='foorumi'} onClick={this.handleItemClick}>Foorumi</Menu.Item>
-        <Menu.Item as={Link} to='vaali' name='vaali' active={activeItem==='vaali'} onClick={this.handleItemClick}>Äänestys</Menu.Item>
-        <Menu.Item as={Link} to='users' name='users' active={activeItem==='users'} onClick={this.handleItemClick}>Käyttäjät</Menu.Item>
-        {this.props.user.username
-          ? <Menu.Item as={Link} to='logout' position="right" name='logout' active={activeItem==='logout'} onClick={this.handleItemClick}>Uloskirjaus</Menu.Item>
-          : <Menu.Item as={Link} to='login' position="right" name='login' active={activeItem==='login'} onClick={this.handleItemClick}>Sisäänkirjaus</Menu.Item>
+        <Menu.Item as={Link} to='/' name={ETUSIVU} active={activeItem===ETUSIVU} onClick={this.handleItemClick}>Etusivu</Menu.Item>
+        <Menu.Item as={Link} to='foorumi' name={FOORUMI} active={activeItem===FOORUMI} onClick={this.handleItemClick}>Foorumi</Menu.Item>
+        <Menu.Item as={Link} to='vaali' name={VAALI} active={activeItem===VAALI} onClick={this.handleItemClick}>Äänestys</Menu.Item>
+        <Menu.Item as={Link} to='users' name={USERS} active={activeItem===USERS} onClick={this.handleItemClick}>Käyttäjät</Menu.Item>
+        {this.props.username
+          ? <Menu.Item as={Link} to='logout' position="right" name={LOGOUT} active={activeItem===LOGOUT} onClick={this.handleItemClick}>Uloskirjaus</Menu.Item>
+          : <Menu.Item as={Link} to='login' position="right" name={LOGIN} active={activeItem===LOGIN} onClick={this.handleItemClick}>Sisäänkirjaus</Menu.Item>
         }
       </Menu>
     )
   }
 }
 
+/// Valikko -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
+    logger.info('mapStateToProps.state', state)
   return {
-    user: state.user
+    username: state.username
   }
 }
-
-export default connect(mapStateToProps, null)(Valikko)
+export default withRouter(connect(mapStateToProps, null)(Valikko))

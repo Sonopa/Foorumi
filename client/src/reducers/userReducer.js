@@ -10,11 +10,11 @@ export const userAction = {
   CURRENT: 'currentUser'
 }
 
-export const setCurrentUser = user => {
+export const setCurrentUser = username => {
   return {
     type: userAction.CURRENT,
     data: {
-      user: user
+      username: username
     }
   }
 }
@@ -24,7 +24,7 @@ const userReducer = (state={}, action) => {
   switch(action.type) {
     case userAction.CURRENT:
       logger.info(userAction.CURRENT, action)
-      return action.data.user
+      return action.data.username
     default:
       return state
   }

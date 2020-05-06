@@ -5,6 +5,8 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React from 'react'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Segment, Menu, Label, Container} from 'semantic-ui-react'
 const logger = require('simple-console-logger').getLogger('UserRivit')
 
@@ -49,4 +51,11 @@ const UserRivi = (props) => {
     </Menu.Item>
   )
 }
-export default UserRivit
+/// Valikko -komponentti - Redux Tilankäsittely
+const mapStateToProps = state => {
+    logger.info('mapStateToProps.state', state)
+  return {
+    username: state.username
+  }
+}
+export default withRouter(connect(mapStateToProps, null)(UserRivit))

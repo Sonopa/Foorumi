@@ -35,8 +35,8 @@ class Keskustelu extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if(this.isLive) {
-      if(this.props.aihe !== prevProps.aihe) {
-        logger.info('componentDidUpdate.aihe:', this.props.aihe)
+      if(this.props.aiheId !== prevProps.aiheId) {
+        logger.info('componentDidUpdate.aiheId:', this.props.aiheId)
         this.setState({otsikko: '', kommentti: '', lisaaTila: false})
       }
     }
@@ -59,7 +59,7 @@ class Keskustelu extends Component {
         title:  this.state.otsikko,
         text:   this.state.kommentti
     }
-    keskusteluData.create(this.props.aihe, newKeskustelu)
+    keskusteluData.create(this.props.aiheId, newKeskustelu)
       .then(responseData => {
         logger.info('handleSave.responseData:', responseData)
         this.setState({lisaaTila: false, otsikko: '', kommentti: ''})

@@ -42,8 +42,9 @@ class Users extends Component {
       .then(responseData => {
           logger.info('Users.componentDidMount.responseData:', responseData)
           const currentUser = (responseData && responseData.length > 0) ? responseData[0].id : ''
+          this.setCurrentUser(currentUser)
           if(this.isLive) {
-            this.setState({users: responseData, currentUser: currentUser})
+            this.setState({users: responseData})
           }
       })
       .catch(exception => {
@@ -61,6 +62,13 @@ class Users extends Component {
       event.preventDefault()
       logger.info('Users.handleUserClick.currentUser:', parseInt(name))
       this.setState({currentUser: parseInt(name)})
+  }
+
+  setCurrentUser = (currentUser) => {
+    if(this.isLive) {
+      logger.trace('setCurrentUser', currentUser)
+      this.setState({currentUser: currentUser})
+    }
   }
 
   setMessage = (messu, tyyppi) => {

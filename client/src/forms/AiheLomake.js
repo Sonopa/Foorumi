@@ -51,6 +51,7 @@ class AiheLomake extends Component {
           title:        this.state.uusiAihe,
           description:  this.state.kuvaus
       }
+      logger.info('handleSave.newAihe:', newAihe)
       foorumiData.create(newAihe)
         .then(responseData => {
           logger.info('handleSave.create:', responseData)

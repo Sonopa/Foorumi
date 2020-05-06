@@ -22,7 +22,7 @@ const Aihe = (props) => {
   return (
     <Menu.Item
       name={props.id + ''}
-      active={props.aihe===props.id}
+      active={props.aiheId===props.id}
       onClick={props.handleSelect}
       >
       {props.title}
@@ -32,7 +32,7 @@ const Aihe = (props) => {
 
 /// FoorumiRivit komponentti
 const FoorumiRivit = (props) => {
-  logger.info('FoorumiRivit', props.aihe)
+  logger.info('FoorumiRivit', props.aiheId)
   return (
       <Grid columns={2} divided>
         <Grid.Row>
@@ -50,7 +50,7 @@ const FoorumiRivit = (props) => {
           </Grid.Column>
           <Grid.Column>
             <Segment>
-              <Keskustelut aihe={props.aihe} setMessage={props.setMessage} />
+              <Keskustelut aiheId={props.aiheId} setMessage={props.setMessage} />
             </Segment>
           </Grid.Column>
         </Grid.Row>
@@ -66,8 +66,8 @@ class Foorumi extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      aiheet:  [],
-      aihe: -1,
+      // aiheet:  [],
+      // aihe: -1,
       messu: '',
       messuTyyppi: messageTypes.CLOSE
     }
@@ -81,7 +81,7 @@ class Foorumi extends Component {
   }
 
   componentDidMount() {
-    logger.info('componentDidMount', this.aihe)
+    logger.info('componentDidMount', this.props.aihe)
     this.refresh()
   }
 
@@ -89,14 +89,8 @@ class Foorumi extends Component {
     foorumiData.getAll()
       .then(responseData => {
         logger.info('App.componentDidMount.responseData:', responseData)
-        if(this.isLive) {
-          this.setState({aiheet: responseData})
-        }
-        if(this.state.aihe < 1 && responseData && responseData.length > 0) {
-          if(this.isLive) {
-            this.setState({aihe: responseData[0].id})
-          }
-        }
+        this.props.loadAiheet(responseData)
+        this.props.setCurrentAihe(responseData[0])
       })
       .catch(exception => {
         logger.info('handleSave.catch:', exception)
@@ -119,16 +113,18 @@ class Foorumi extends Component {
   handleSelect = (event, {name}) => {
     event.preventDefault()
     const aiheId = parseInt(name)
-    this.setState((state) => { return {aihe: aiheId}})
-    // this.props.setAihe(name)
-    logger.info('handleSelect.aihe:', this.state.aihe, name)
-    const aihe = this.state.aiheet.find(ehdotus => ehdotus.id===aiheId)
+    logger.info('handleSelect.aihe:', this.props.aihe, name)
+    const aihe = this.props.aiheet.find(ehdotus => ehdotus.id===aiheId)
     this.props.setCurrentAihe(aihe ? aihe : {id:0})
+
+    // this.setState((state) => { return {aihe: aiheId}})
+    // this.props.setCurrentAihe(this.props.aiheet[0])
+    // this.props.setAihe(name)
   }
 
   handleDelete = (event, {name}) => {
     event.preventDefault()
-    foorumiData.remove(this.state.aihe)
+    foorumiData.remove(this.props.aihe.id)
       .then(responseData => {
         logger.info('handleDelete', responseData)
         this.setMessage(`Aihe ${''} on poistettu Foorumilta.`, messageTypes.INFO)
@@ -148,19 +144,19 @@ class Foorumi extends Component {
 
   render() {
 
-    const ehdotusSegmentit = this.state.aiheet.map(ehdotus => {
-      return (<Aihe key={ ehdotus.id}
-                        id={ehdotus.id}
-                        title={ehdotus.title}
-                        aihe={this.state.aihe}
-                        handleSelect={this.handleSelect}/>)
+    const ehdotusSegmentit = this.props.aiheet.map(ehdotus => {
+      return (<Aihe key={ehdotus.id}
+                    id={ehdotus.id}
+                    title={ehdotus.title}
+                    aiheId={this.props.aihe.id}
+                    handleSelect={this.handleSelect}/>)
     })
 
     return (
       <Segment>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <FoorumiRivit ehdotusSegmentit={ehdotusSegmentit}
-                      aihe={this.state.aihe}
+                      aiheId={this.props.aihe.id}
                       setMessage={this.setMessage}
                       refresh={this.refresh}
                       handleDelete={this.handleDelete}
@@ -170,6 +166,7 @@ class Foorumi extends Component {
   }
 }
 
+/// Valikko -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
   return {
     aiheet: state.aiheet,

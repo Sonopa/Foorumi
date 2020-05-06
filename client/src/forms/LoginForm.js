@@ -46,7 +46,7 @@ class LoginForm extends Component {
       usersData.login(newLogin)
         .then(responseData => {
           logger.info('LoginForm.render.login.responseData', responseData)
-          this.props.setCurrentUser({username:newLogin.username})
+          this.props.setCurrentUser(newLogin.username)
           this.props.setMessage(`Käyttäjä ${this.state.username} kirjautui Foorumiin.`, messageTypes.INFO)
           this.setState({username: '', password: ''})
         })
@@ -71,14 +71,8 @@ class LoginForm extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.user
-  }
-}
-
 const mapDispatchToProps = {
   setCurrentUser
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm))
+export default withRouter(connect(null, mapDispatchToProps)(LoginForm))

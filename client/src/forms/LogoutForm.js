@@ -28,7 +28,6 @@ class LogoutForm extends Component {
       usersData.logout(logoutUser)
         .then(responseData => {
           logger.info('LogoutForm.then.responseData', responseData)
-          this.props.setCurrentUser({username:''})
           this.props.setMessage(`Käyttäjä ${logoutUser.username} poistui Foorumista.`, messageTypes.INFO)
         })
         .catch(exception => {
@@ -36,6 +35,7 @@ class LogoutForm extends Component {
           this.props.setMessage(exception.message, messageTypes.WARNING)
         })
         .finally(() => {
+          this.props.setCurrentUser('')
           setTimeout(() => {
             this.props.setMessage('', messageTypes.CLOSE)
           }, messageTime.NORMAL)
@@ -52,7 +52,7 @@ class LogoutForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    username: state.username
   }
 }
 

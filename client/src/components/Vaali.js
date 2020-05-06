@@ -1,6 +1,6 @@
 /// ---------------------------------
 /// Foorumi Sovellus: Frontend
-/// Login -komponentti
+/// Vaali -komponentti
 /// Paul Kallio 18.4.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
@@ -64,7 +64,6 @@ class Vaali extends Component {
   constructor(props) {
     super(props)
     this.state = {
-//      aihe: null,
       omistajaNimi: '',
       messu: '',
       messuTyyppi: messageTypes.CLOSE
@@ -89,10 +88,9 @@ class Vaali extends Component {
   }
 
   componentDidMount() {
-    if(this.props.aihe !== this.state.aihe) {
-      foorumiData.getAihe(this.props.aihe)
+    // if(this.props.aihe !== this.state.aihe) {
+      foorumiData.getAihe(this.props.aihe.id)
         .then(responseData => {
-          this.setAihe(responseData)
           logger.info('componentDidMount.responseData:', responseData)
           this.setUserName(responseData.owner)
         })
@@ -105,7 +103,7 @@ class Vaali extends Component {
             this.setMessage('', messageTypes.CLOSE)
           }, messageTime.EXTRA)
       })
-    }
+    // }
     return true
   }
 
@@ -115,13 +113,6 @@ class Vaali extends Component {
       this.setState({messu: messu, messuTyyppi: messuTyyppi})
     }
   }
-/*
-  setAihe = (responseData) => {
-    if(this.isLive) {
-      logger.trace('setAihe:', responseData)
-      this.setState({aihe: responseData})
-    }
-  } */
 
   setOmistaja = (responseData) => {
     if(this.isLive) {
@@ -140,7 +131,7 @@ class Vaali extends Component {
                 <Segment stacked>
                   <h2>Äänestettävä asia</h2>
                 </Segment>
-                <Aihe aihe={this.props.aihe} aiheId={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
+                <Aihe aihe={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
               </Grid.Column>
               <Grid.Column>
                 <Tilasto aihe={this.props.aihe} />
@@ -152,10 +143,10 @@ class Vaali extends Component {
   }
 }
 
+/// Vaali -komponentti (Äänestys) - Redux Tilankäsittely
 const mapStateToProps = state => {
   return {
     aihe: state.aihe
   }
 }
-
 export default connect(mapStateToProps, null)(Vaali)

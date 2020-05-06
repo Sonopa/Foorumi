@@ -5,6 +5,8 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Feed, Icon, Divider} from 'semantic-ui-react'
 import KeskusteluValikko, {iMenuType} from './KeskusteluValikko'
 import {messageTypes, messageTime} from '../tools/Huomio'
@@ -108,9 +110,12 @@ class KeskusteluRivi extends Component {
           <Feed.Extra text>{this.props.kommentti}
           </Feed.Extra>
           <Divider horizontal hidden />
-          <KeskusteluValikko  isOwner={isOwner}
+          {this.props.username
+            ? <KeskusteluValikko  isOwner={isOwner}
                               like={this.props.like} disLike={this.props.disLike}
                               nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />
+            : ''
+          }
         </Feed.Content>
         <Feed>
         </Feed>
@@ -119,4 +124,10 @@ class KeskusteluRivi extends Component {
   }
 }
 
-export default KeskusteluRivi
+const mapStateToProps = state => {
+    logger.info('mapStateToProps.state', state)
+  return {
+    username: state.username
+  }
+}
+export default withRouter(connect(mapStateToProps, null)(KeskusteluRivi))

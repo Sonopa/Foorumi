@@ -17,6 +17,7 @@ import aiheReducer from './reducers/aiheReducer'
 import aiheetReducer from './reducers/aiheetReducer'
 import './index.scss'
 
+/// Simple Console Logger -lokittaja, oletus Info -tila
 var logger = require('simple-console-logger')
 // error
 // info
@@ -24,13 +25,13 @@ var logger = require('simple-console-logger')
 // debug
 logger.configure({level: 'info'})
 
+/// Redux Tilankäsittely Store
 const reducer = combineReducers({
   login: loginReducer,
-  user: userReducer,
+  username: userReducer,
   aihe: aiheReducer,
   aiheet: aiheetReducer
 })
-
 const store = createStore(reducer, applyMiddleware(thunk))
 
 /// React käyttöliittymä kytketään aloitus -sivulle
@@ -43,4 +44,4 @@ ReactDOM.render(
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
-);
+)
