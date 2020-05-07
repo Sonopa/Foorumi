@@ -4,3 +4,19 @@
   Paul Kallio 3.5.2020
   Opiframe FullStack 2020-1 Espoo
  --------------------------------- */
+body {
+  /* Taustaväri Jääkarhu
+  background-color: #cceeee;  */
+  /* background-color: #f0ffff; */
+  background-color: #efffff;
+}
+
+/* UiStatin alla olevat tekstielementit keskittyvät: Puolesta - Vastaan */
+.uiStat .ui.segment {
+  text-align: center;
+
+}
+/* Tekstielementit keskittyvät kaikilla näytöillä.
+.ui.segment {
+  text-align: center;
+}*/

@@ -4,9 +4,15 @@
 /// Paul Kallio 4.5.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
-import React from 'react'
+import React, {Component} from 'react'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Segment, Statistic, Grid, Button, Icon} from 'semantic-ui-react'
-// const logger = require('simple-console-logger').getLogger('PuolestaVastaan')
+import {setCurrentAihe} from '../reducers/aiheReducer'
+import {updateAiheet} from '../actions/aiheetAction'
+import {messageTypes, messageTime} from '../tools/Huomio'
+import * as cloneDeep from 'lodash/cloneDeep'
+const logger = require('simple-console-logger').getLogger('Tilasto')
 
 /// Aihe TilastoItem
 const TilastoItem = (props) => {
@@ -22,61 +28,31 @@ const PuolestaVastaan = (props) => (
   <Grid columns={2} padded grid>
     <Grid.Row>
       <Grid.Column>
-        <Segment>
-          <Grid columns={3}>
-            <Grid.Column>
-            </Grid.Column>
-            <Grid.Column>
-            <Statistic.Group>
-            <TilastoItem arvo="" otsikko=""/>
-              <TilastoItem arvo={props.puolesta} otsikko="Puolesta"/>
-            </Statistic.Group>
-            </Grid.Column>
-            <Grid.Column>
-            </Grid.Column>
-          </Grid>
-        </Segment>
+        <div className='uiStat'>
+          <Segment>
+            <TilastoItem arvo={props.puolesta} otsikko="Puolesta"/>
+          </Segment>
+        </div>
       </Grid.Column>
       <Grid.Column>
-        <Segment>
-          <Grid columns={3}>
-            <Grid.Column>
-            </Grid.Column>
-            <Grid.Column>
-              <Statistic.Group>
-                <TilastoItem arvo="" otsikko=""/>
-                <TilastoItem arvo={props.vastaan} otsikko="Vastaan"/>
-              </Statistic.Group>
-            </Grid.Column>
-            <Grid.Column>
-            </Grid.Column>
-          </Grid>
-        </Segment>
+        <div className='uiStat'>
+          <Segment>
+            <TilastoItem arvo={props.vastaan} otsikko="Vastaan"/>
+          </Segment>
+        </div>
       </Grid.Column>
     </Grid.Row>
     <Grid.Row>
       <Grid.Column>
-        <Button basic color='teal' size='massive'>
-          <Grid>
-            <Grid.Column width={1}>
-              <Icon name='heart' outlined />
-            </Grid.Column>
-            <Grid.Column width={2}>
-              <p>PUOLESTA</p>
-            </Grid.Column>
-          </Grid>
+        <Button basic color='teal' size='fluid' onClick={props.voteFor}>
+          <Icon name='heart' outlined />
+          PUOLESTA
         </Button>
       </Grid.Column>
       <Grid.Column>
-        <Button basic color='red' size='massive'>
-          <Grid>
-            <Grid.Column width={1}>
-              <Icon name='heartbeat' outlined />
-            </Grid.Column>
-            <Grid.Column width={2}>
-              <p>VASTAAN</p>
-            </Grid.Column>
-          </Grid>
+        <Button basic color='red' size='fluid' onClick={props.voteAgainst}>
+          <Icon name='heartbeat' outlined />
+          VASTAAN
         </Button>
       </Grid.Column>
     </Grid.Row>
@@ -84,20 +60,55 @@ const PuolestaVastaan = (props) => (
 )
 
 /// Tilasto komponentti
-const Tilasto = (props) => {
-  const puolesta =  props.aihe ? props.aihe.votesFor: 0
-  const vastaan =   props.aihe ? props.aihe.votesAgainst: 0
+class Tilasto extends Component {
 
-  return (
+  voteFor = (event, {name}) => {
+    event.preventDefault()
+    logger.info('handleVoteFor:', this.props.aihe)
+    const newAihe = cloneDeep(this.props.aihe)
+    newAihe.votesFor++
+    this.props.setCurrentAihe(cloneDeep(newAihe))
+    this.props.updateAiheet(newAihe)
+    this.props.setMessage(`${this.props.omistajaNimi} kannatti: ${newAihe.title}`, messageTypes.INFO)
+    setTimeout(() => {
+        this.props.setMessage('', messageTypes.CLOSE)
+    }, messageTime.NORMAL)
+  }
+
+  voteAgainst = (event, {name}) => {
+    event.preventDefault()
+    logger.info('handleVoteAgainst:', this.props.aihe)
+    const newAihe = cloneDeep(this.props.aihe)
+    newAihe.votesAgainst++
+    this.props.setCurrentAihe(cloneDeep(newAihe))
+    this.props.updateAiheet(newAihe)
+    this.props.setMessage(`${this.props.omistajaNimi} vastusti: ${newAihe.title}`, messageTypes.INFO)
+    setTimeout(() => {
+        this.props.setMessage('', messageTypes.CLOSE)
+    }, messageTime.NORMAL)
+  }
+
+  render() {
+    logger.info('Äänestystulos.aihe', this.props.aihe)
+    return (
       <>
-      <Segment stacked>
-        <h2>Äänestystulos</h2>
-      </Segment>
-    <Segment>
-      <PuolestaVastaan puolesta={puolesta} vastaan={vastaan}/>
-    </Segment>
-    </>
-  )
+        <Segment stacked>
+          <h2>Äänestystulos</h2>
+        </Segment>
+        <Segment>
+          <PuolestaVastaan  puolesta={this.props.aihe.votesFor}
+                            vastaan={this.props.aihe.votesAgainst}
+                            voteFor={this.voteFor}
+                            voteAgainst={this.voteAgainst}/>
+        </Segment>
+      </>
+    )
+  }
 }
 
-export default Tilasto
+/// Tilasto -komponentti - Redux Tilankäsittely
+const mapDispatchToProps = {
+  setCurrentAihe,
+  updateAiheet
+}
+export default withRouter(connect(null, mapDispatchToProps)(Tilasto))

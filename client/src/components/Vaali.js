@@ -6,11 +6,11 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
+import {withRouter} from 'react-router-dom'
 import {Segment, List, Grid, Divider} from 'semantic-ui-react'
-import Huomio, {messageTypes, messageTime} from '../tools/Huomio'
+import Huomio, {messageTypes} from '../tools/Huomio'
 import {finnishDate} from '../tools/aika'
 import Tilasto from '../components/Tilasto'
-import foorumiData from '../services/foorumi'
 import usersData from '../services/users'
 
 const logger = require('simple-console-logger').getLogger('Vaali')
@@ -88,28 +88,22 @@ class Vaali extends Component {
   }
 
   componentDidMount() {
-    // if(this.props.aihe !== this.state.aihe) {
-      foorumiData.getAihe(this.props.aihe.id)
-        .then(responseData => {
-          logger.info('componentDidMount.responseData:', responseData)
-          this.setUserName(responseData.owner)
-        })
-        .catch(exception => {
-          logger.info('componentDidMount.catch:', exception)
-          this.setMessage(exception.message, messageTypes.ERROR)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.setMessage('', messageTypes.CLOSE)
-          }, messageTime.EXTRA)
-      })
-    // }
-    return true
+    if(this.isLive) {
+      this.setUserName(this.props.aihe.owner)
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.isLive) {
+      if(this.props.aihe !== prevProps.aihe) {
+          this.setUserName(this.props.aihe.owner)
+      }
+    }
   }
 
   setMessage = (messu, messuTyyppi) => {
     if(this.isLive) {
-      logger.trace('setMessage:', messu, messuTyyppi)
+      logger.info('setMessage:', messu, messuTyyppi)
       this.setState({messu: messu, messuTyyppi: messuTyyppi})
     }
   }
@@ -134,7 +128,7 @@ class Vaali extends Component {
                 <Aihe aihe={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
               </Grid.Column>
               <Grid.Column>
-                <Tilasto aihe={this.props.aihe} />
+                <Tilasto aihe={this.props.aihe} omistajaNimi={this.state.omistajaNimi} setMessage={this.setMessage} />
               </Grid.Column>
           </Grid>
         </Segment>
@@ -149,4 +143,4 @@ const mapStateToProps = state => {
     aihe: state.aihe
   }
 }
-export default connect(mapStateToProps, null)(Vaali)
+export default withRouter(connect(mapStateToProps, null)(Vaali))

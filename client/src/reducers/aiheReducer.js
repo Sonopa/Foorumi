@@ -6,7 +6,7 @@
 /// ---------------------------------
 const logger = require('simple-console-logger').getLogger('aiheReducer')
 
-export const aiheAction = {
+const aiheAction = {
   CURRENT: 'currentAihe'
 }
 

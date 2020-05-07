@@ -14,6 +14,7 @@ import App from './App'
 import loginReducer from './reducers/loginReducer'
 import userReducer from './reducers/userReducer'
 import aiheReducer from './reducers/aiheReducer'
+import usersReducer from './reducers/usersReducer'
 import aiheetReducer from './reducers/aiheetReducer'
 import './index.scss'
 
@@ -29,6 +30,7 @@ logger.configure({level: 'info'})
 const reducer = combineReducers({
   login: loginReducer,
   username: userReducer,
+  users: usersReducer,
   aihe: aiheReducer,
   aiheet: aiheetReducer
 })

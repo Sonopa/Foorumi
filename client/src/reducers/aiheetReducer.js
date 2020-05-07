@@ -4,23 +4,8 @@
 /// Paul Kallio 5.5.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
+import * as aAct from '../actions/aiheetAction'
 const logger = require('simple-console-logger').getLogger('aiheetReducer')
-
-export const aiheetAction = {
-  LOAD: 'loadAiheet',
-  ADD: 'addAiheet',
-  DELETE: 'deleteAiheet',
-  UPDATE: 'updateAiheet'
-}
-
-export function loadAiheet(aiheet) {
-  return {
-    type: aiheetAction.LOAD,
-    data: {
-      aiheet: aiheet
-    }
-  }
-}
 
 const aiheetReducer = (state=[], action) => {
   logger.info('aiheetReducer.state', state, 'action', action)
@@ -28,20 +13,42 @@ const aiheetReducer = (state=[], action) => {
       return state
   }
   switch(action.type) {
-    case aiheetAction.ADD:
-      logger.info(aiheetAction.ADD, action)
-      return state
-    case aiheetAction.UPDATE:
-      logger.info(aiheetAction.UPDATE, action)
-      return state
-    case aiheetAction.DELETE:
-      logger.info(aiheetAction.DELETE, action)
-      return state
-    case aiheetAction.LOAD:
-      logger.info(aiheetAction.LOAD, action)
+
+    case aAct.aiheetAction.ADD:
+      logger.info(aAct.aiheetAction.ADD, action)
+      return doAdd(state, action.data.aihe)
+
+    case aAct.aiheetAction.UPDATE:
+      logger.info(aAct.aiheetAction.UPDATE, action, state)
+      return doUpdate(state, action.data.aihe)
+
+    case aAct.aiheetAction.DELETE:
+      logger.info(aAct.aiheetAction.DELETE, action)
+      return doDelete(state, action.data.aihe)
+
+    case aAct.aiheetAction.LOAD:
+      logger.info(aAct.aiheetAction.LOAD, action)
       return action.data.aiheet
+
     default:
       return state
   }
 }
+
+const doAdd = (aiheet, aihe) => {
+  return aiheet.slice(0, aiheet.length).apply(aihe)
+}
+
+const doUpdate = (aiheet, aihe) => {
+  const index = aiheet.findIndex(item => item.id === aihe.id)
+  return  [aiheet.slice(0, index),aihe,aiheet.slice(index+1, aiheet.length)]
+}
+
+const doDelete = (aiheet, aihe) => {
+
+  const index = aiheet.findIndex(item => item.id === aihe.id)
+  return  aiheet.slice(0, index)
+                .concat(aiheet.slice(index+1, aiheet.length))
+}
+
 export default aiheetReducer
