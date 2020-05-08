@@ -11,6 +11,6 @@ var UserSchema = new Schema({
     discussions: [{type: Schema.Types.ObjectId, ref: 'Discussion'}],
     topics: [{type: Schema.Types.ObjectId, ref: 'Topic'}],
     votes: [{type: Schema.Types.ObjectId, ref: 'Vote'}],
-});
+}, { timestamps: true });
 
-module.export = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

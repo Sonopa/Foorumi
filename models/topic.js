@@ -8,8 +8,9 @@ var TopicSchema = new Schema({
     description: {type: String, required: true},
     discussions: [{type: Schema.Types.ObjectId, ref: 'Discussion'}],
     votes: [{type: Schema.Types.ObjectId, ref: 'Vote'}],
-    creationTime: {type: Date, required: true},
-    choices: [String]
-});
+    voters: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    voteEndTime: {type: Date, required: true}
+}, { timestamps: true });
+
 
 module.exports = mongoose.model('Topic', TopicSchema);
