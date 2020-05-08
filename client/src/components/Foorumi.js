@@ -19,9 +19,10 @@ const logger = require('simple-console-logger').getLogger('Foorumi')
 
 /// Aihe komponentti
 const Aihe = (props) => {
+  logger.info('Aihe', props)
   return (
     <Menu.Item
-      name={props.id + ''}
+      name={props.id+''}
       active={props.aiheId===props.id}
       onClick={props.handleSelect}
       >
@@ -112,10 +113,11 @@ class Foorumi extends Component {
 
   handleSelect = (event, {name}) => {
     event.preventDefault()
-    const aiheId = parseInt(name)
-    logger.info('handleSelect.aihe:', this.props.aihe, name)
-    const aihe = this.props.aiheet.find(ehdotus => ehdotus.id===aiheId)
-    this.props.setCurrentAihe(aihe ? aihe : {id:0})
+    logger.info('handleSelect.name:', name)
+    const aiheId = name // parseInt(name)
+    logger.info('handleSelect.aihe:', this.props.aihe, name, aiheId)
+    const aihe = this.props.aiheet.find(ehdotus => ehdotus._id===aiheId)
+    this.props.setCurrentAihe(aihe ? aihe : {_id:0})
 
     // this.setState((state) => { return {aihe: aiheId}})
     // this.props.setCurrentAihe(this.props.aiheet[0])
@@ -124,7 +126,7 @@ class Foorumi extends Component {
 
   handleDelete = (event, {name}) => {
     event.preventDefault()
-    foorumiData.remove(this.props.aihe.id)
+    foorumiData.remove(this.props.aihe._id)
       .then(responseData => {
         logger.info('handleDelete', responseData)
         this.setMessage(`Aihe ${''} on poistettu Foorumilta.`, messageTypes.INFO)
@@ -142,21 +144,31 @@ class Foorumi extends Component {
     })
   }
 
-  render() {
+  aiheRivit = () => {
 
-    const ehdotusSegmentit = this.props.aiheet.map(ehdotus => {
-      return (<Aihe key={ehdotus.id}
-                    id={ehdotus.id}
+    if(!this.props.aiheet || this.props.aiheet.length === 0) {
+      return null
+    }
+    logger.info('aiheRivit', this.props.aiheet)
+    return this.props.aiheet.map(ehdotus => {
+      return (<Aihe key={ehdotus._id}
+                    id={ehdotus._id}
                     title={ehdotus.title}
-                    aiheId={this.props.aihe.id}
+                    aiheId={this.props.aihe._id}
                     handleSelect={this.handleSelect}/>)
     })
+
+  }
+
+  render() {
+
+    const ehdotusSegmentit = this.aiheRivit()
 
     return (
       <Segment>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <FoorumiRivit ehdotusSegmentit={ehdotusSegmentit}
-                      aiheId={this.props.aihe.id}
+                      aiheId={this.props.aihe._id}
                       setMessage={this.setMessage}
                       refresh={this.refresh}
                       handleDelete={this.handleDelete}

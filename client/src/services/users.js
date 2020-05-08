@@ -6,23 +6,27 @@
 /// ---------------------------------
 import axios from 'axios'
 import {storeSession, removeSession, getAuth} from '../tools/session'
+const logger = require('simple-console-logger').getLogger('users')
 
-const userUrl = '/users'
+const userUrl = '/user'
+const usersUrl = '/users'
 const registerUrl = '/register'
 const loginUrl = '/login'
 const logoutUrl = '/logout'
-const logger = require('simple-console-logger').getLogger('users')
 
 /// GetAll - Hae kaikki käyttäjät
 const getAll = () => {
-  const request = axios.get(userUrl)
-  return request.then(response => response.data)
+  logger.info('axios.getAll', usersUrl)
+  const request = axios.get(usersUrl)
+  return request.then(response => {
+    logger.info('axios.getAll', response.data)
+    return response.data})
 }
 
 /// GetUser - Hae käyttäjä tunniste -numerolla
 const getUser = (id) => {
-  const request = axios.get(`${userUrl}/${id}`)
-  logger.info('axios.getUser', `${userUrl}/${id}`)
+  const request = axios.get(`${usersUrl}/${id}`)
+  logger.info('axios.getUser', `${usersUrl}/${id}`)
   return request.then(response => response.data)
 }
 
@@ -35,15 +39,15 @@ const create = async (newObject) => {
 
 /// Update - päivitä käyttäjän tiedot
 const update = async (userId, newObject) => {
-  const response = await axios.post(`${userUrl}/${userId}`, newObject, getAuth())
-  logger.info('axios.update', `${userUrl}/${userId}`, newObject, response)
+  const response = await axios.put(`${userUrl}/${userId}`, newObject, getAuth())
+  logger.info('axios.update', `${usersUrl}/${userId}`, newObject, response)
   return response.data
 }
 
 /// Remove - poista käyttäjä Foorumilta
 const remove = async (userId) => {
-  const response = await axios.delete(`${userUrl}/${userId}`, getAuth())
-  logger.info('axios.delete:', `${userUrl}/${userId}`, response)
+  const response = await axios.delete(`${usersUrl}/${userId}`, getAuth())
+  logger.info('axios.delete:', `${usersUrl}/${userId}`, response)
   return response.data
 }
 
@@ -52,11 +56,11 @@ const login = async (newObject) => {
   const response = await axios.post(`${loginUrl}`, newObject)
   logger.info('axios.login', `${loginUrl}`, newObject, response)
   const user = {
-    token: response.data.token,
-    username: newObject.username
+    token: response.data.session.token,
+    username: response.data.session.username
   }
-  logger.info('axios.login.user', user, response.data.id)
-  storeSession(user, response.data.id)
+  logger.info('axios.login.user', user, response.data.session.user_id)
+  storeSession(user, response.data.session.user_id)
   return response.data
 }
 

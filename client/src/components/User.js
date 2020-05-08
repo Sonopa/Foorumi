@@ -18,7 +18,7 @@ class User extends Component {
     constructor(props) {
       super(props)
       this.state = {
-        id: 0,
+        _id: '',
         username: '',
         name: '',
         email: ''
@@ -31,12 +31,14 @@ class User extends Component {
 
     componentDidUpdate(prevProps, prevState) {
       if(this.isLive) {
+          logger.info('componentDidUpdate.this.props', this.props, prevProps.user)
           if(this.props.user !== prevProps.user) {
-            if(this.props.user > 0) {
+            if(this.props.user) {
+              logger.info('usersData.getUser.props', this.props.user)
               usersData.getUser(this.props.user)
                 .then(responseData => {
                   logger.info('componentDidMount.usersData.then:', responseData)
-                  this.setState({id: responseData.id, username: responseData.username, name: responseData.name})
+                  this.setState({_id: responseData._id, username: responseData.username, name: responseData.name})
                 })
                 .catch(error => {
                   logger.error('handleSave.catch:', error)
@@ -53,7 +55,7 @@ class User extends Component {
     }
 
     componentDidMount() {
-      if(this.props.user > 0) {
+      if(this.props.user) {
         usersData.getUser(this.props.user)
           .then(responseData => {
             logger.info('componentDidMount.usersData.then:', responseData)
@@ -77,17 +79,18 @@ class User extends Component {
     }
 
     render() {
+      logger.info('render.state', this.state)
       const updateUser = (e, {name}) => {
         const newUser = {
-          id: this.state.id ,
+          _id: this.state._id ,
           username: this.state.username ,
           name: this.state.name ,
           email: this.state.email
         }
         logger.info('updateUser', newUser)
-        usersData.update(newUser.id, newUser)
+        usersData.update(newUser._id, newUser)
           .then(responseData => {
-            logger.info('updateUser.response:', responseData)
+            logger.info('updateUser.response', responseData)
             this.props.setMessage(`Käyttäjän ${newUser.username} tiedot on päivitetty Foorumille.`, messageTypes.INFO)
           })
           .catch(error => {

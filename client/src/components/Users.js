@@ -41,7 +41,7 @@ class Users extends Component {
     usersData.getAll()
       .then(responseData => {
           logger.info('Users.componentDidMount.responseData:', responseData)
-          const currentUser = (responseData && responseData.length > 0) ? responseData[0].id : ''
+          const currentUser = (responseData && responseData.length > 0) ? responseData[0]._id : ''
           this.setCurrentUser(currentUser)
           if(this.isLive) {
             this.setState({users: responseData})
@@ -60,8 +60,8 @@ class Users extends Component {
 
   handleUserClick = (event, {name}) =>  {
       event.preventDefault()
-      logger.info('Users.handleUserClick.currentUser:', parseInt(name))
-      this.setState({currentUser: parseInt(name)})
+      logger.info('Users.handleUserClick.currentUser:', name)
+      this.setState({currentUser: name})
   }
 
   setCurrentUser = (currentUser) => {

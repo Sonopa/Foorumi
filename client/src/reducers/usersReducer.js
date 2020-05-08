@@ -38,7 +38,7 @@ const doAdd = (users, user) => {
 }
 
 const doUpdate = (users, user) => {
-  const index = users.findIndex(item => item.id === user.id)
+  const index = users.findIndex(item => item._id === user._id)
   return  users.slice(0, index)
                 .apply(user)
                 .concat(users.slice(index+1, users.length))
@@ -46,7 +46,7 @@ const doUpdate = (users, user) => {
 
 const doDelete = (users, user) => {
 
-  const index = users.findIndex(item => item.id === user.id)
+  const index = users.findIndex(item => item._id === user._id)
   return  users.slice(0, index)
                 .concat(users.slice(index+1, users.length))
 }

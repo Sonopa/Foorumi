@@ -46,10 +46,14 @@ class AiheLomake extends Component {
 
     const handleSave = (event, {name}) => {
       event.preventDefault()
+      let voteEndTime = new Date()
+      voteEndTime = new Date(voteEndTime.getTime() + (24 * 60 * 60 * 1000))
+      logger.info('voteEndTime', voteEndTime)
       const newAihe = {
           owner:        getUserId(),
           title:        this.state.uusiAihe,
-          description:  this.state.kuvaus
+          description:  this.state.kuvaus,
+          voteEndTime:  voteEndTime
       }
       logger.info('handleSave.newAihe:', newAihe)
       foorumiData.create(newAihe)

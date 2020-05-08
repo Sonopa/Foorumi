@@ -41,13 +41,18 @@ class Keskustelut extends Component {
 
   refresh = () => {
     if(this.isLive ) {
+      logger.info('refresh.this.props', this.props)
+      if(this.props.aiheId === 0) {
+          this.setState({keskustelut: [], lisaaTila: false})
+          return
+      }
       keskusteluData.getAll(this.props.aiheId)
         .then(responseData => {
           logger.info('updateKeskustelut.responseData:', responseData)
           this.setState({keskustelut: responseData, lisaaTila: false})
         })
         .catch(exception => {
-          logger.info('handleSave.catch:', exception)
+          logger.info('refresh.catch:', exception)
           this.props.setMessage(exception.message, messageTypes.ERROR)
         })
         .finally(() => {
@@ -60,6 +65,7 @@ class Keskustelut extends Component {
 
   render() {
     const keskusteluRivit = this.state.keskustelut.map(keskustelu => {
+      logger.info('keskusteluRivit', keskustelu)
       return (<KeskusteluRivi key={keskustelu.id}
                               id={keskustelu.id}
                               aihe={keskustelu.topic}

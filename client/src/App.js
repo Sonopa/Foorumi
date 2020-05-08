@@ -30,7 +30,7 @@ class App extends Component  {
 
     usersData.getAll()
       .then(usersList => {
-        logger.info('constructor.usersList.getAll', usersList)
+        logger.info('constructor.usersList.getAll', usersList, getUser())
         this.props.loadUsers(usersList)
         this.props.setCurrentUser(getUser())
       })

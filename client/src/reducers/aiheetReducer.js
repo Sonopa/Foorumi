@@ -40,13 +40,13 @@ const doAdd = (aiheet, aihe) => {
 }
 
 const doUpdate = (aiheet, aihe) => {
-  const index = aiheet.findIndex(item => item.id === aihe.id)
+  const index = aiheet.findIndex(item => item._id === aihe._id)
   return  [aiheet.slice(0, index),aihe,aiheet.slice(index+1, aiheet.length)]
 }
 
 const doDelete = (aiheet, aihe) => {
 
-  const index = aiheet.findIndex(item => item.id === aihe.id)
+  const index = aiheet.findIndex(item => item._id === aihe._id)
   return  aiheet.slice(0, index)
                 .concat(aiheet.slice(index+1, aiheet.length))
 }

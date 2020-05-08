@@ -14,6 +14,13 @@ import {messageTypes, messageTime} from '../tools/Huomio'
 import * as cloneDeep from 'lodash/cloneDeep'
 const logger = require('simple-console-logger').getLogger('Tilasto')
 
+const VOTES_ARRAY = 0
+const ckeckArray = (aihe) => {
+    if(aihe.votes.length == 0) {
+      aihe.votes.push({VOTE_FOR:0, VOTE_AGAINST:0})
+    }
+}
+
 /// Aihe TilastoItem
 const TilastoItem = (props) => {
   return (
@@ -66,7 +73,8 @@ class Tilasto extends Component {
     event.preventDefault()
     logger.info('handleVoteFor:', this.props.aihe)
     const newAihe = cloneDeep(this.props.aihe)
-    newAihe.votesFor++
+    ckeckArray(newAihe)
+    newAihe.votes[VOTES_ARRAY].VOTE_FOR++
     this.props.setCurrentAihe(cloneDeep(newAihe))
     this.props.updateAiheet(newAihe)
     this.props.setMessage(`${this.props.omistajaNimi} kannatti: ${newAihe.title}`, messageTypes.INFO)
@@ -79,7 +87,8 @@ class Tilasto extends Component {
     event.preventDefault()
     logger.info('handleVoteAgainst:', this.props.aihe)
     const newAihe = cloneDeep(this.props.aihe)
-    newAihe.votesAgainst++
+    ckeckArray(newAihe)
+    newAihe.votes[VOTES_ARRAY].VOTE_AGAINST++
     this.props.setCurrentAihe(cloneDeep(newAihe))
     this.props.updateAiheet(newAihe)
     this.props.setMessage(`${this.props.omistajaNimi} vastusti: ${newAihe.title}`, messageTypes.INFO)
@@ -88,16 +97,29 @@ class Tilasto extends Component {
     }, messageTime.NORMAL)
   }
 
+  getPuolesta = (aihe) => {
+      if(aihe.votes && aihe.votes.length > 0) {
+        return aihe.votes[VOTES_ARRAY].VOTE_FOR
+      }
+      return 0
+  }
+
+  getVastaan = (aihe) => {
+      if(aihe.votes && aihe.votes.length > 0) {
+        return aihe.votes[VOTES_ARRAY].VOTE_AGAINST
+      }
+      return 0
+  }
+
   render() {
-    logger.info('Äänestystulos.aihe', this.props.aihe)
     return (
       <>
         <Segment stacked>
           <h2>Äänestystulos</h2>
         </Segment>
         <Segment>
-          <PuolestaVastaan  puolesta={this.props.aihe.votesFor}
-                            vastaan={this.props.aihe.votesAgainst}
+          <PuolestaVastaan  puolesta={this.getPuolesta(this.props.aihe)}
+                            vastaan={this.getVastaan(this.props.aihe)}
                             voteFor={this.voteFor}
                             voteAgainst={this.voteAgainst}/>
         </Segment>

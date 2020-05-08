@@ -1,6 +1,6 @@
 /// ---------------------------------
 /// Foorumi Sovellus: Frontend
-/// Tukipalvelut: aika -komponentti
+/// Tukipalvelut: kit -komponentti
 /// Paul Kallio 29.4.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------

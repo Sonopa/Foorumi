@@ -21,8 +21,8 @@ const Aihe = (props) => {
   logger.info('Aihe.props', props)
   const otsikko   = props.aihe ? props.aihe.title: ''
   const ehdotus   = props.aihe ? props.aihe.description: ''
-  const omistajaNimi  = props.aihe ? props.omistajaNimi: ''
-  const aika      = props.aihe ? props.aihe.creationTime: ''
+  const omistajaNimi  = (props.aihe && props.aihe.owner) ? props.aihe.owner.name: ''
+  const aika      = props.aihe ? props.aihe.createdAt: ''
   return (
       <Grid>
           <Grid.Column>

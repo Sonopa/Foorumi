@@ -15,7 +15,7 @@ const addUrl = '/keskustelut'
 const getAll = (id) => {
   logger.info('axios.getAll:', `${baseUrl}/${id}${addUrl}`)
   const request = axios.get(`${baseUrl}/${id}${addUrl}`)
-  return request.then(response => response.data)
+  return request.then(response => response.data.discussion_list)
 }
 
 /// Create - luo uusi keskustelu aiheen alle

@@ -12,11 +12,10 @@ const logger = require('simple-console-logger').getLogger('UserRivit')
 
 const UserRivit = (props) => {
     if(props.users.length > 0) {
-      logger.info('activeUser', props.activeUser)
+      logger.info('users', props)
       const userRivit = props.users.map(user => {
-        logger.info('activeUser.map', props.activeUser)
-        return (<UserRivi key={user.id}
-                          id={user.id}
+        return (<UserRivi key={user._id}
+                          id={user._id}
                           nimi={user.name}
                           tunnus={user.username}
                           email={user.email}

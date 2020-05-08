@@ -14,7 +14,7 @@ const baseUrl = '/api/aiheet'
 const getAll = () => {
   logger.info('axios.getAll:', `${baseUrl}`)
   const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+  return request.then(response => response.data.topic_list)
 }
 
 /// GetAihe - Hae aihe tunnisteella
