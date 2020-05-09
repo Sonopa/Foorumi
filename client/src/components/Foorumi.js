@@ -13,7 +13,7 @@ import AiheLomake from './forms/AiheLomake'
 import {isLoggedIn, checkAuth} from '../tools/session'
 import Huomio, {messageTypes, messageTime} from './common/Huomio'
 import {loadAiheet} from '../actions/aiheetAction'
-import {setCurrentAihe} from '../reducers/aiheReducer'
+import {setCurrentAihe} from '../actions/aiheAction'
 import foorumiData from '../services/foorumi'
 const logger = require('simple-console-logger').getLogger('Foorumi')
 
@@ -64,6 +64,7 @@ class Foorumi extends Component {
 
   isLive = true
 
+  /// constructor
   constructor(props) {
     super(props)
     this.state = {
@@ -77,33 +78,39 @@ class Foorumi extends Component {
     this.handleDelete = this.handleDelete.bind(this)
   }
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// componentDidMount
   componentDidMount() {
     logger.info('componentDidMount', this.props.aihe)
     this.refresh()
   }
 
+  /// refresh
   refresh = () => {
-    foorumiData.getAll()
-      .then(responseData => {
-        logger.info('App.componentDidMount.responseData:', responseData)
-        this.props.loadAiheet(responseData)
-        this.props.setCurrentAihe(responseData[0])
+    if(this.isLive) {
+      foorumiData.getAll()
+        .then(responseData => {
+          logger.info('App.componentDidMount.responseData:', responseData)
+          this.props.loadAiheet(responseData)
+          this.props.setCurrentAihe(responseData[0])
+        })
+        .catch(exception => {
+          logger.info('handleSave.catch:', exception)
+          this.setMessage(exception.message, messageTypes.ERROR)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.setMessage('', messageTypes.CLOSE)
+        }, messageTime.EXTRA)
       })
-      .catch(exception => {
-        logger.info('handleSave.catch:', exception)
-        this.setMessage(exception.message, messageTypes.ERROR)
-      })
-      .finally(() => {
-        setTimeout(() => {
-          this.setMessage('', messageTypes.CLOSE)
-      }, messageTime.EXTRA)
-    })
+    }
   }
 
+  /// setMessage
   setMessage = (messu, messuTyyppi) => {
     if(this.isLive) {
       logger.trace('setMessage:', messu, messuTyyppi)
@@ -111,6 +118,7 @@ class Foorumi extends Component {
     }
   }
 
+  /// handleSelect
   handleSelect = (event, {name}) => {
     event.preventDefault()
     logger.info('handleSelect.name:', name)
@@ -124,6 +132,7 @@ class Foorumi extends Component {
     // this.props.setAihe(name)
   }
 
+  /// handleDelete
   handleDelete = (event, {name}) => {
     event.preventDefault()
     foorumiData.remove(this.props.aihe._id)
@@ -144,6 +153,7 @@ class Foorumi extends Component {
     })
   }
 
+  /// aiheRivit
   aiheRivit = () => {
 
     if(!this.props.aiheet || this.props.aiheet.length === 0) {
@@ -160,6 +170,7 @@ class Foorumi extends Component {
 
   }
 
+  /// render
   render() {
 
     const ehdotusSegmentit = this.aiheRivit()

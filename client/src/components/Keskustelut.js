@@ -5,17 +5,19 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import KeskusteluRivi from './KeskusteluRivi'
-import Keskustelu from './Keskustelu'
+import KeskusteluRivi from './keskustelu/KeskusteluRivi'
+import Keskustelu from './keskustelu/Keskustelu'
 import {messageTypes, messageTime} from './common/Huomio'
 import keskusteluData from '../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('Keskustelut')
 
+/// Keskustelut
 class Keskustelut extends Component {
 
   isLive = true
 
+  /// constructor
   constructor(props) {
     super(props)
     this.state = {
@@ -23,10 +25,12 @@ class Keskustelut extends Component {
     }
   }
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// componentDidUpdate
   componentDidUpdate(prevProps, prevState) {
     if(this.props.aiheId !== prevProps.aiheId) {
       logger.info('componentDidUpdate.aiheId', this.props.aiheId)
@@ -34,11 +38,13 @@ class Keskustelut extends Component {
     }
   }
 
+  /// componentDidMount
   componentDidMount() {
     logger.info('componentDidMount.keskustelut', this.keskustelut)
     this.refresh()
   }
 
+  /// refresh
   refresh = () => {
     if(this.isLive ) {
       logger.info('refresh.this.props', this.props)
@@ -63,6 +69,7 @@ class Keskustelut extends Component {
     }
   }
 
+  /// render
   render() {
     const keskusteluRivit = this.state.keskustelut.map(keskustelu => {
       logger.info('keskusteluRivit', keskustelu)

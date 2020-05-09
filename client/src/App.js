@@ -14,13 +14,10 @@ import Etusivu from './components/Etusivu'
 import Vaali from './components/Vaali'
 import Users from './components/Users'
 import Login, {Logout} from './components/Login'
-import {loadAiheet} from './actions/aiheetAction'
-import {loadUsers} from './actions/usersAction'
-import {setCurrentAihe} from './reducers/aiheReducer'
-import {setCurrentUser} from './reducers/userReducer'
+import {loadAiheetMWare} from './actions/aiheetAction'
+import {loadUsersMWare} from './actions/usersAction'
+import {setCurrentUser} from './actions/userAction'
 import {getUser} from './tools/session'
-import foorumiData from './services/foorumi'
-import usersData from './services/users'
 
 const logger = require('simple-console-logger').getLogger('App')
 
@@ -35,20 +32,11 @@ class App extends Component  {
 
   componentDidMount() {
     if(this.isLive) {
-      usersData.getAll()
-        .then(usersList => {
-          logger.info('constructor.usersList.getAll', usersList, getUser())
-          this.props.loadUsers(usersList)
-          this.props.setCurrentUser(getUser())
-        })
-
-      foorumiData.getAll()
-        .then(aiheetList => {
-          logger.info('constructor.loadAiheet.getAll', aiheetList, typeof aiheetList)
-          this.props.setCurrentAihe(aiheetList[0])
-          this.props.loadAiheet(aiheetList)
-        })
-      }
+      logger.trace('componentDidMount')
+      this.props.setCurrentUser(getUser())
+      this.props.loadAiheetMWare()
+      this.props.loadAiheetMWare()
+    }
   }
 
   render () {
@@ -82,9 +70,8 @@ class App extends Component  {
 }
 /// App -aloitus komponentti - Redux Tilankäsittely
 const mapDispatchToProps = {
-  loadAiheet,
-  setCurrentAihe,
-  setCurrentUser,
-  loadUsers
+  loadAiheetMWare,
+  loadUsersMWare,
+  setCurrentUser
 }
 export default withRouter(connect(null, mapDispatchToProps)(App))

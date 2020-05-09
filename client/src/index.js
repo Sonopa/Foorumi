@@ -28,10 +28,10 @@ logger.configure({level: 'info'})
 
 /// Redux Tilankäsittely Store
 const reducer = combineReducers({
-  login: loginReducer,
-  username: userReducer,
-  users: usersReducer,
-  aihe: aiheReducer,
+  login:  loginReducer,
+  user:   userReducer,
+  users:  usersReducer,
+  aihe:   aiheReducer,
   aiheet: aiheetReducer
 })
 const store = createStore(reducer, applyMiddleware(thunk))

@@ -15,30 +15,30 @@ const usersReducer = (state=[], action) => {
   switch(action.type) {
     case uAct.usersAction.ADD:
       logger.info(uAct.usersAction.ADD, action)
-      return doAdd(state.users, action.data.user)
+      return doAdd(state, action.data)
 
     case uAct.usersAction.UPDATE:
       logger.info(uAct.usersAction.UPDATE, action)
-      return doUpdate(state.users, action.data.user)
+      return doUpdate(state, action.data)
 
     case uAct.usersAction.DELETE:
       logger.info(uAct.usersAction.DELETE, action)
-      return doDelete(state.users, action.data.user)
+      return doDelete(state, action.data)
 
     case uAct.usersAction.LOAD:
       logger.info(uAct.usersAction.LOAD, action)
-      return action.data.users
+      return action.data
     default:
       return state
   }
 }
 
-/// User
+/// doAdd
 const doAdd = (users, user) => {
   return users.slice(0, users.length).apply(user)
 }
 
-/// User
+/// doUpdate
 const doUpdate = (users, user) => {
   const index = users.findIndex(item => item._id === user._id)
   return  users.slice(0, index)
@@ -46,7 +46,7 @@ const doUpdate = (users, user) => {
                 .concat(users.slice(index+1, users.length))
 }
 
-/// User
+/// doDelete
 const doDelete = (users, user) => {
 
   const index = users.findIndex(item => item._id === user._id)

@@ -6,8 +6,8 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Grid} from 'semantic-ui-react'
-import UserRivit from './UserRivit'
-import User from './User'
+import UserRivit from './user/UserRivit'
+import User from './user/User'
 import UserLomake from './forms/UserLomake'
 import Huomio, {messageTypes, messageTime} from './common/Huomio'
 import {isLoggedIn, getUser} from '../tools/session'
@@ -15,10 +15,12 @@ import usersData from '../services/users'
 
 const logger = require('simple-console-logger').getLogger('Users')
 
+/// Users
 class Users extends Component {
 
   isLive = true
 
+  /// constructor
   constructor(props) {
     super(props)
     this.state = {
@@ -29,14 +31,17 @@ class Users extends Component {
     }
   }
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// componentDidMount
   componentDidMount() {
     this.refresh()
   }
 
+  /// refresh
   refresh = () => {
     usersData.getAll()
       .then(responseData => {
@@ -58,12 +63,14 @@ class Users extends Component {
     })
   }
 
+  /// handleUserClick
   handleUserClick = (event, {name}) =>  {
       event.preventDefault()
       logger.info('Users.handleUserClick.currentUser:', name)
       this.setState({currentUser: name})
   }
 
+  /// setCurrentUser
   setCurrentUser = (currentUser) => {
     if(this.isLive) {
       logger.trace('setCurrentUser', currentUser)
@@ -71,6 +78,7 @@ class Users extends Component {
     }
   }
 
+  /// setMessage
   setMessage = (messu, tyyppi) => {
     if(this.isLive) {
       logger.trace('setMessage:', messu, tyyppi)
@@ -78,8 +86,8 @@ class Users extends Component {
     }
   }
 
+  /// render
   render () {
-
     return (
       <>
         <Segment raised>

@@ -12,10 +12,12 @@ import Huomio, {messageTypes} from './common/Huomio'
 
 const logger = require('simple-console-logger').getLogger('Login')
 
+/// Login
 export default class Login extends Component {
 
   isLive = true
 
+  /// constructor
   constructor(props) {
     super(props)
     this.state = {
@@ -24,10 +26,12 @@ export default class Login extends Component {
     }
   }
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// render
   render() {
     const setMessage = (messu, tyyppi) => {
       if(this.isLive) {
@@ -35,7 +39,6 @@ export default class Login extends Component {
         this.setState({messu: messu, messuTyyppi: tyyppi})
       }
     }
-
     return (
       <>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
@@ -50,10 +53,12 @@ export default class Login extends Component {
   }
 }
 
+/// Logout
 export class Logout extends Component {
 
   isLive = true
 
+  /// constructor
   constructor(props) {
     super(props)
     this.state = {
@@ -62,10 +67,12 @@ export class Logout extends Component {
     }
   }
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// setMessage
   setMessage = (messu, messuTyyppi) => {
     if(this.isLive) {
       logger.trace('setMessage', messu, messuTyyppi)
@@ -73,10 +80,11 @@ export class Logout extends Component {
     }
   }
 
+  /// render
   render() {
     return (
       <>
-      <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
+        <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
         <Container>
           <Segment compact raised>
             <h1>Kirjaudu Ulos</h1>

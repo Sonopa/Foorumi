@@ -9,10 +9,10 @@ import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Feed, Icon, Divider} from 'semantic-ui-react'
 import KeskusteluValikko, {iMenuType} from './KeskusteluValikko'
-import {messageTypes, messageTime} from './common/Huomio'
-import {finnishDate} from '../tools/aika'
-import {isUserOwner} from '../tools/session'
-import keskusteluData from '../services/keskustelu'
+import {messageTypes, messageTime} from '../common/Huomio'
+import {finnishDate} from '../../tools/aika'
+import {isUserOwner} from '../../tools/session'
+import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
 

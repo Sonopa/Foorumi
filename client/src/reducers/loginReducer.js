@@ -6,6 +6,7 @@
 /// ---------------------------------
 const logger = require('simple-console-logger').getLogger('userReducer')
 
+/// User Action 
 const userAction = {
   INIT: 'initUser',
   ADD: 'addUser',

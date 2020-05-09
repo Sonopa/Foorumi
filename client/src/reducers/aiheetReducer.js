@@ -16,19 +16,19 @@ const aiheetReducer = (state=[], action) => {
 
     case aAct.aiheetAction.ADD:
       logger.info(aAct.aiheetAction.ADD, action)
-      return doAdd(state, action.data.aihe)
+      return doAdd(state, action.data)
 
     case aAct.aiheetAction.UPDATE:
       logger.info(aAct.aiheetAction.UPDATE, action, state)
-      return doUpdate(state, action.data.aihe)
+      return doUpdate(state, action.data)
 
     case aAct.aiheetAction.DELETE:
       logger.info(aAct.aiheetAction.DELETE, action)
-      return doDelete(state, action.data.aihe)
+      return doDelete(state, action.data)
 
     case aAct.aiheetAction.LOAD:
       logger.info(aAct.aiheetAction.LOAD, action)
-      return action.data.aiheet
+      return action.data
 
     default:
       return state

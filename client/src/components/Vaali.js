@@ -10,7 +10,7 @@ import {withRouter} from 'react-router-dom'
 import {Segment, List, Grid, Divider} from 'semantic-ui-react'
 import Huomio, {messageTypes} from './common/Huomio'
 import {finnishDate} from '../tools/aika'
-import Tilasto from '../components/Tilasto'
+import Tilasto from './vaali/Tilasto'
 import usersData from '../services/users'
 
 const logger = require('simple-console-logger').getLogger('Vaali')
@@ -61,6 +61,7 @@ class Vaali extends Component {
 
   isLive = true
 
+  /// constructor
   constructor(props) {
     super(props)
     this.state = {
@@ -70,10 +71,12 @@ class Vaali extends Component {
     }
   }
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// setUserName
   setUserName = (userId) => {
       if(userId > 0) {
         usersData.getUser(userId)
@@ -87,12 +90,14 @@ class Vaali extends Component {
       }
   }
 
+  /// componentDidMount
   componentDidMount() {
     if(this.isLive) {
       this.setUserName(this.props.aihe.owner)
     }
   }
 
+  /// componentDidUpdate
   componentDidUpdate(prevProps, prevState) {
     if(this.isLive) {
       if(this.props.aihe !== prevProps.aihe) {
@@ -101,6 +106,7 @@ class Vaali extends Component {
     }
   }
 
+  /// setMessage
   setMessage = (messu, messuTyyppi) => {
     if(this.isLive) {
       logger.info('setMessage:', messu, messuTyyppi)
@@ -108,6 +114,7 @@ class Vaali extends Component {
     }
   }
 
+  /// setOmistaja
   setOmistaja = (responseData) => {
     if(this.isLive) {
       logger.info('setOmistaja:', responseData)
@@ -115,6 +122,7 @@ class Vaali extends Component {
     }
   }
 
+  /// render
   render() {
     return (
       <>

@@ -8,9 +8,9 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Segment, Statistic, Grid, Button, Icon} from 'semantic-ui-react'
-import {setCurrentAihe} from '../reducers/aiheReducer'
-import {updateAiheet} from '../actions/aiheetAction'
-import {messageTypes, messageTime} from './common/Huomio'
+import {setCurrentAihe} from '../../actions/aiheAction'
+import {updateAiheet} from '../../actions/aiheetAction'
+import {messageTypes, messageTime} from '../common/Huomio'
 import * as cloneDeep from 'lodash/cloneDeep'
 const logger = require('simple-console-logger').getLogger('Tilasto')
 
@@ -21,7 +21,7 @@ const ckeckArray = (aihe) => {
     }
 }
 
-/// Aihe TilastoItem
+/// Tilasto Item komponentti
 const TilastoItem = (props) => {
   return (
     <Statistic>
@@ -31,8 +31,9 @@ const TilastoItem = (props) => {
   )
 }
 
+/// Puolesta Vastaan komponentti
 const PuolestaVastaan = (props) => (
-  <Grid columns={2} padded grid>
+  <Grid columns={2} padded>
     <Grid.Row>
       <Grid.Column>
         <div className='uiStat'>
@@ -51,14 +52,14 @@ const PuolestaVastaan = (props) => (
     </Grid.Row>
     <Grid.Row>
       <Grid.Column>
-        <Button basic color='teal' size='fluid' onClick={props.voteFor}>
-          <Icon name='heart' outlined />
+        <Button basic color='teal' fluid onClick={props.voteFor}>
+          <Icon name='heart'/>
           PUOLESTA
         </Button>
       </Grid.Column>
       <Grid.Column>
-        <Button basic color='red' size='fluid' onClick={props.voteAgainst}>
-          <Icon name='heartbeat' outlined />
+        <Button basic color='red' fluid onClick={props.voteAgainst}>
+          <Icon name='heartbeat'/>
           VASTAAN
         </Button>
       </Grid.Column>
@@ -69,6 +70,7 @@ const PuolestaVastaan = (props) => (
 /// Tilasto komponentti
 class Tilasto extends Component {
 
+  /// voteFor
   voteFor = (event, {name}) => {
     event.preventDefault()
     logger.info('handleVoteFor:', this.props.aihe)
@@ -83,6 +85,7 @@ class Tilasto extends Component {
     }, messageTime.NORMAL)
   }
 
+  /// voteAgainst
   voteAgainst = (event, {name}) => {
     event.preventDefault()
     logger.info('handleVoteAgainst:', this.props.aihe)
@@ -97,6 +100,7 @@ class Tilasto extends Component {
     }, messageTime.NORMAL)
   }
 
+  /// getPuolesta
   getPuolesta = (aihe) => {
       if(aihe.votes && aihe.votes.length > 0) {
         return aihe.votes[VOTES_ARRAY].VOTE_FOR
@@ -104,6 +108,7 @@ class Tilasto extends Component {
       return 0
   }
 
+  /// getVastaan
   getVastaan = (aihe) => {
       if(aihe.votes && aihe.votes.length > 0) {
         return aihe.votes[VOTES_ARRAY].VOTE_AGAINST
@@ -111,6 +116,7 @@ class Tilasto extends Component {
       return 0
   }
 
+  /// render
   render() {
     return (
       <>

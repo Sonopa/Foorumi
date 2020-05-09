@@ -16,14 +16,17 @@ class Valikko extends Component {
 
   isLive = true
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// componentDidMount
   componentDidMount() {
 	  logger.info("Current Path", this.props.history.location.pathname)
   }
 
+  /// render
   render () {
     const activeItem = this.props.history.location.pathname
     return (
