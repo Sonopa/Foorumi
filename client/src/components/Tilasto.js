@@ -16,7 +16,7 @@ const logger = require('simple-console-logger').getLogger('Tilasto')
 
 const VOTES_ARRAY = 0
 const ckeckArray = (aihe) => {
-    if(aihe.votes.length == 0) {
+    if(aihe.votes.length === 0) {
       aihe.votes.push({VOTE_FOR:0, VOTE_AGAINST:0})
     }
 }

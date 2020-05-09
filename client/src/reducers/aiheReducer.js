@@ -6,10 +6,12 @@
 /// ---------------------------------
 const logger = require('simple-console-logger').getLogger('aiheReducer')
 
+/// User
 const aiheAction = {
   CURRENT: 'currentAihe'
 }
 
+/// User
 export const setCurrentAihe = aihe => {
   return {
     type: aiheAction.CURRENT,
@@ -19,6 +21,7 @@ export const setCurrentAihe = aihe => {
   }
 }
 
+/// User
 const aiheReducer = (state={}, action) => {
 
   switch(action.type) {

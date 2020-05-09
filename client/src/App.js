@@ -24,24 +24,31 @@ import usersData from './services/users'
 
 const logger = require('simple-console-logger').getLogger('App')
 
+/// App -React käyttöliittymä
 class App extends Component  {
 
+  isLive = true
+
+  componentWillUnmount() {
+    this.isLive = false
+  }
+
   componentDidMount() {
+    if(this.isLive) {
+      usersData.getAll()
+        .then(usersList => {
+          logger.info('constructor.usersList.getAll', usersList, getUser())
+          this.props.loadUsers(usersList)
+          this.props.setCurrentUser(getUser())
+        })
 
-    usersData.getAll()
-      .then(usersList => {
-        logger.info('constructor.usersList.getAll', usersList, getUser())
-        this.props.loadUsers(usersList)
-        this.props.setCurrentUser(getUser())
-      })
-
-    foorumiData.getAll()
-      .then(aiheetList => {
-        logger.info('constructor.loadAiheet.getAll', aiheetList, typeof aiheetList)
-        logger.info('constructor.loadAiheet.getAll', aiheetList[0], typeof aiheetList[0])
-        this.props.setCurrentAihe(aiheetList[0])
-        this.props.loadAiheet(aiheetList)
-      })
+      foorumiData.getAll()
+        .then(aiheetList => {
+          logger.info('constructor.loadAiheet.getAll', aiheetList, typeof aiheetList)
+          this.props.setCurrentAihe(aiheetList[0])
+          this.props.loadAiheet(aiheetList)
+        })
+      }
   }
 
   render () {
@@ -51,7 +58,7 @@ class App extends Component  {
           <h1>FOORUMI Mielipidesivusto</h1>
         </Segment>
         <Router>
-          <Valikko />
+          <Valikko/>
 			    <Switch>
             <Route exact path='/' component={Etusivu}/>
             <Route path='/foorumi'
@@ -74,12 +81,6 @@ class App extends Component  {
   }
 }
 /// App -aloitus komponentti - Redux Tilankäsittely
-/* const mapStateToProps = state => {
-  return {
-    username: state.username
-  }
-} */
-
 const mapDispatchToProps = {
   loadAiheet,
   setCurrentAihe,

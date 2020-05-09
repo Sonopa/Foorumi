@@ -6,10 +6,12 @@
 /// ---------------------------------
 const logger = require('simple-console-logger').getLogger('userReducer')
 
+/// User Action Name
 export const userAction = {
   CURRENT: 'currentUser'
 }
 
+/// set Current User Action
 export const setCurrentUser = username => {
   return {
     type: userAction.CURRENT,
@@ -19,6 +21,7 @@ export const setCurrentUser = username => {
   }
 }
 
+/// User Reducer
 const userReducer = (state={}, action) => {
 
   switch(action.type) {

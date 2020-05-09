@@ -12,15 +12,8 @@ const userAction = {
   DELETE: 'deleteUser',
   UPDATE: 'updateUser'
 }
-/*
-const getInitialStateFromStorage = () => {
 
-}
-
-const saveToStorage = (state) => {
-    sessionStorage.setItem("loginState")
-}
-*/
+/// Login Reducer
 const loginReducer = (state={}, action) => {
 
   switch(action.type) {

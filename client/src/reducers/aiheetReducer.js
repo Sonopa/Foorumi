@@ -7,8 +7,8 @@
 import * as aAct from '../actions/aiheetAction'
 const logger = require('simple-console-logger').getLogger('aiheetReducer')
 
+/// Aiheet Reducer
 const aiheetReducer = (state=[], action) => {
-  logger.info('aiheetReducer.state', state, 'action', action)
   if(!action || !state) {
       return state
   }
@@ -35,15 +35,18 @@ const aiheetReducer = (state=[], action) => {
   }
 }
 
+/// Add reducer -method
 const doAdd = (aiheet, aihe) => {
   return aiheet.slice(0, aiheet.length).apply(aihe)
 }
 
+/// Update reducer -method
 const doUpdate = (aiheet, aihe) => {
   const index = aiheet.findIndex(item => item._id === aihe._id)
   return  [aiheet.slice(0, index),aihe,aiheet.slice(index+1, aiheet.length)]
 }
 
+/// Delete reducer -method
 const doDelete = (aiheet, aihe) => {
 
   const index = aiheet.findIndex(item => item._id === aihe._id)

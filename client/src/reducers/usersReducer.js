@@ -8,7 +8,7 @@ import * as uAct from '../actions/usersAction'
 const logger = require('simple-console-logger').getLogger('usersReducer')
 
 const usersReducer = (state=[], action) => {
-  logger.info('usersReducer.state', state, 'action', action)
+  /// User
   if(!action || !state) {
       return state
   }
@@ -33,10 +33,12 @@ const usersReducer = (state=[], action) => {
   }
 }
 
+/// User
 const doAdd = (users, user) => {
   return users.slice(0, users.length).apply(user)
 }
 
+/// User
 const doUpdate = (users, user) => {
   const index = users.findIndex(item => item._id === user._id)
   return  users.slice(0, index)
@@ -44,6 +46,7 @@ const doUpdate = (users, user) => {
                 .concat(users.slice(index+1, users.length))
 }
 
+/// User
 const doDelete = (users, user) => {
 
   const index = users.findIndex(item => item._id === user._id)

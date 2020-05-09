@@ -22,40 +22,25 @@ class Valikko extends Component {
 
   isLive = true
 
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-
-  setActiveItem = (item) => {
-    if(this.isLive) {
-      this.setState({activeItem: item})
-    }
+  componentWillUnmount() {
+    this.isLive = false
   }
 
   componentDidMount() {
 	  logger.info("Current Path", this.props.history.location.pathname)
-    this.setActiveItem(this.props.history.location.pathname)
-  }
-
-  handleItemClick = (event, {name}) => {
-    // event.preventDefault()
-    this.setActiveItem(name)
   }
 
   render () {
-
-    const {activeItem} = this.state
-    logger.info('render.username', this.props.username)
+    const activeItem = this.props.history.location.pathname
     return (
       <Menu>
-        <Menu.Item as={Link} to='/' name={ETUSIVU} active={activeItem===ETUSIVU} onClick={this.handleItemClick}>Etusivu</Menu.Item>
-        <Menu.Item as={Link} to='/foorumi' name={FOORUMI} active={activeItem===FOORUMI} onClick={this.handleItemClick}>Foorumi</Menu.Item>
-        <Menu.Item as={Link} to='/vaali' name={VAALI} active={activeItem===VAALI} onClick={this.handleItemClick}>Äänestys</Menu.Item>
-        <Menu.Item as={Link} to='/users' name={USERS} active={activeItem===USERS} onClick={this.handleItemClick}>Käyttäjät</Menu.Item>
+        <Menu.Item as={Link} to='/' name={ETUSIVU} active={activeItem===ETUSIVU}>Etusivu</Menu.Item>
+        <Menu.Item as={Link} to='/foorumi' name={FOORUMI} active={activeItem===FOORUMI}>Foorumi</Menu.Item>
+        <Menu.Item as={Link} to='/vaali' name={VAALI} active={activeItem===VAALI}>Äänestys</Menu.Item>
+        <Menu.Item as={Link} to='/users' name={USERS} active={activeItem===USERS}>Käyttäjät</Menu.Item>
         {this.props.username
-          ? <Menu.Item as={Link} to='/logout' position="right" name={LOGOUT} active={activeItem===LOGOUT} onClick={this.handleItemClick}>Uloskirjaus</Menu.Item>
-          : <Menu.Item as={Link} to='/login' position="right" name={LOGIN} active={activeItem===LOGIN} onClick={this.handleItemClick}>Sisäänkirjaus</Menu.Item>
+          ? <Menu.Item as={Link} to='/logout' position="right" name={LOGOUT} active={activeItem===LOGOUT}>Uloskirjaus</Menu.Item>
+          : <Menu.Item as={Link} to='/login' position="right" name={LOGIN} active={activeItem===LOGIN}>Sisäänkirjaus</Menu.Item>
         }
       </Menu>
     )
@@ -64,7 +49,6 @@ class Valikko extends Component {
 
 /// Valikko -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
-    logger.info('mapStateToProps.state', state)
   return {
     username: state.username
   }
