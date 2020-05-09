@@ -8,14 +8,8 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Menu} from 'semantic-ui-react'
 import {Link, withRouter} from 'react-router-dom'
+import * as item from './common/valikko'
 const logger = require('simple-console-logger').getLogger('Valikko')
-
-const ETUSIVU =  '/'
-const FOORUMI =  '/foorumi'
-const VAALI   =  '/vaali'
-const USERS   =  '/users'
-const LOGIN   =  '/login'
-const LOGOUT  =  '/logout'
 
 /// Valikko -komponentti
 class Valikko extends Component {
@@ -34,13 +28,13 @@ class Valikko extends Component {
     const activeItem = this.props.history.location.pathname
     return (
       <Menu>
-        <Menu.Item as={Link} to='/' name={ETUSIVU} active={activeItem===ETUSIVU}>Etusivu</Menu.Item>
-        <Menu.Item as={Link} to='/foorumi' name={FOORUMI} active={activeItem===FOORUMI}>Foorumi</Menu.Item>
-        <Menu.Item as={Link} to='/vaali' name={VAALI} active={activeItem===VAALI}>Äänestys</Menu.Item>
-        <Menu.Item as={Link} to='/users' name={USERS} active={activeItem===USERS}>Käyttäjät</Menu.Item>
+        <Menu.Item as={Link} to='/' name={item.ETUSIVU} active={activeItem===item.ETUSIVU}>Etusivu</Menu.Item>
+        <Menu.Item as={Link} to='/foorumi' name={item.FOORUMI} active={activeItem===item.FOORUMI}>Foorumi</Menu.Item>
+        <Menu.Item as={Link} to='/vaali' name={item.VAALI} active={activeItem===item.VAALI}>Äänestys</Menu.Item>
+        <Menu.Item as={Link} to='/users' name={item.USERS} active={activeItem===item.USERS}>Käyttäjät</Menu.Item>
         {this.props.username
-          ? <Menu.Item as={Link} to='/logout' position="right" name={LOGOUT} active={activeItem===LOGOUT}>Uloskirjaus</Menu.Item>
-          : <Menu.Item as={Link} to='/login' position="right" name={LOGIN} active={activeItem===LOGIN}>Sisäänkirjaus</Menu.Item>
+          ? <Menu.Item as={Link} to='/logout' position="right" name={item.LOGOUT} active={activeItem===item.LOGOUT}>Uloskirjaus</Menu.Item>
+          : <Menu.Item as={Link} to='/login' position="right" name={item.LOGIN} active={activeItem===item.LOGIN}>Sisäänkirjaus</Menu.Item>
         }
       </Menu>
     )

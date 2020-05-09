@@ -8,10 +8,11 @@ import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Form, Button} from 'semantic-ui-react'
-import {setCurrentUser} from '../reducers/userReducer'
-import {messageTypes, messageTime} from '../tools/Huomio'
-import {getUser} from '../tools/session'
-import usersData from '../services/users'
+import {setCurrentUser} from '../../reducers/userReducer'
+import {messageTypes, messageTime} from '../common/Huomio'
+import {getUser} from '../../tools/session'
+import usersData from '../../services/users'
+import {ETUSIVU} from '../common/valikko'
 const logger = require('simple-console-logger').getLogger('LogoutForm')
 
 class LogoutForm extends Component {
@@ -29,6 +30,7 @@ class LogoutForm extends Component {
         .then(responseData => {
           logger.info('LogoutForm.then.responseData', responseData)
           this.props.setMessage(`Käyttäjä ${logoutUser.username} poistui Foorumista.`, messageTypes.INFO)
+          this.props.history.push(ETUSIVU)
         })
         .catch(exception => {
           logger.info('LogoutForm.catch:', exception)
@@ -38,6 +40,7 @@ class LogoutForm extends Component {
           this.props.setCurrentUser('')
           setTimeout(() => {
             this.props.setMessage('', messageTypes.CLOSE)
+            this.props.history.push(ETUSIVU) // *** REMOVE THIS ***
           }, messageTime.NORMAL)
       })
     }

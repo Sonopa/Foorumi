@@ -6,9 +6,9 @@
 /// ---------------------------------
 import React, { Component } from 'react'
 import {Segment, Container} from 'semantic-ui-react'
-import LoginForm from '../forms/LoginForm'
-import LogoutForm from '../forms/LogoutForm'
-import Huomio, {messageTypes} from '../tools/Huomio'
+import LoginForm from './forms/LoginForm'
+import LogoutForm from './forms/LogoutForm'
+import Huomio, {messageTypes} from './common/Huomio'
 
 const logger = require('simple-console-logger').getLogger('Login')
 

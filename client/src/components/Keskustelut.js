@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import KeskusteluRivi from './KeskusteluRivi'
 import Keskustelu from './Keskustelu'
-import {messageTypes, messageTime} from '../tools/Huomio'
+import {messageTypes, messageTime} from './common/Huomio'
 import keskusteluData from '../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('Keskustelut')

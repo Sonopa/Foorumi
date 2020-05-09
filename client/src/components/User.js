@@ -6,7 +6,7 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Form, Button} from 'semantic-ui-react'
-import {messageTypes, messageTime} from '../tools/Huomio'
+import {messageTypes, messageTime} from './common/Huomio'
 import {isLoggedIn, checkAuth} from '../tools/session'
 import usersData from '../services/users'
 const logger = require('simple-console-logger').getLogger('User')

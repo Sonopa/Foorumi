@@ -6,7 +6,7 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Form, TextArea, Button, Segment, Divider} from 'semantic-ui-react'
-import {messageTypes, messageTime} from '../tools/Huomio'
+import {messageTypes, messageTime} from './common/Huomio'
 import {isLoggedIn, checkAuth, getUser} from '../tools/session'
 import keskusteluData from '../services/keskustelu'
 

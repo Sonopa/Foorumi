@@ -10,7 +10,7 @@ import {connect} from 'react-redux'
 import {Segment, Statistic, Grid, Button, Icon} from 'semantic-ui-react'
 import {setCurrentAihe} from '../reducers/aiheReducer'
 import {updateAiheet} from '../actions/aiheetAction'
-import {messageTypes, messageTime} from '../tools/Huomio'
+import {messageTypes, messageTime} from './common/Huomio'
 import * as cloneDeep from 'lodash/cloneDeep'
 const logger = require('simple-console-logger').getLogger('Tilasto')
 

@@ -8,9 +8,10 @@ import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Form, Button} from 'semantic-ui-react'
-import {setCurrentUser} from '../reducers/userReducer'
-import {messageTypes, messageTime} from '../tools/Huomio'
-import usersData from '../services/users'
+import {setCurrentUser} from '../../reducers/userReducer'
+import {messageTypes, messageTime} from '../common/Huomio'
+import usersData from '../../services/users'
+import {FOORUMI} from '../common/valikko'
 const logger = require('simple-console-logger').getLogger('LoginForm')
 
 class LoginForm extends Component {
@@ -49,6 +50,7 @@ class LoginForm extends Component {
           this.props.setCurrentUser(newLogin.username)
           this.props.setMessage(`Käyttäjä ${this.state.username} kirjautui Foorumiin.`, messageTypes.INFO)
           this.setState({username: '', password: ''})
+          this.props.history.push(FOORUMI)
         })
         .catch(exception => {
           logger.info('LogoutForm.catch:', exception)

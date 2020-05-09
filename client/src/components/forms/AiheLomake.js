@@ -6,9 +6,9 @@
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Button, Form, TextArea, Divider} from 'semantic-ui-react'
-import {messageTypes, messageTime} from '../tools/Huomio'
-import {checkAuth, getUserId} from '../tools/session'
-import foorumiData from '../services/foorumi'
+import {messageTypes, messageTime} from '../common/Huomio'
+import {checkAuth, getUserId} from '../../tools/session'
+import foorumiData from '../../services/foorumi'
 const logger = require('simple-console-logger').getLogger('AiheLomake')
 
 /// AiheLomake komponentti
