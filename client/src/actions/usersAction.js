@@ -5,6 +5,8 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import usersData from '../services/users'
+import {getUser} from '../tools/session'
+import {userAction} from './userAction'
 const logger = require('simple-console-logger').getLogger('usersAction')
 
 /// usersAction
@@ -17,13 +19,25 @@ export const usersAction = {
 
 /// loadUsersMWare
 export function loadUsersMWare() {
-  return async dispatch => {
+  return async (dispatch) => {
     const users = await usersData.getAll()
     logger.info('loadUsersMWare.users', users)
+    const username = getUser()
+    let user = {_id:0}
+    if(username) {
+      const index = users.findIndex(item => item.username === username)
+      user = (index > -1) ? users.slice(index, index + 1)[0] : {_id:0}
+      logger.info('setActiveUserMWare.users', username, user)
+    }
 
     dispatch({
       type: usersAction.LOAD,
       data: users
+    })
+
+    dispatch({
+      type: userAction.CURRENT,
+      data: user
     })
   }
 }

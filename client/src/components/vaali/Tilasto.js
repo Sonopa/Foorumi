@@ -73,7 +73,7 @@ class Tilasto extends Component {
   /// voteFor
   voteFor = (event, {name}) => {
     event.preventDefault()
-    logger.info('handleVoteFor:', this.props.aihe)
+    logger.info('handleVoteFor:', this.props)
     const newAihe = cloneDeep(this.props.aihe)
     ckeckArray(newAihe)
     newAihe.votes[VOTES_ARRAY].VOTE_FOR++
@@ -88,7 +88,7 @@ class Tilasto extends Component {
   /// voteAgainst
   voteAgainst = (event, {name}) => {
     event.preventDefault()
-    logger.info('handleVoteAgainst:', this.props.aihe)
+    logger.info('handleVoteAgainst:', this.props)
     const newAihe = cloneDeep(this.props.aihe)
     ckeckArray(newAihe)
     newAihe.votes[VOTES_ARRAY].VOTE_AGAINST++

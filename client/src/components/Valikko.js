@@ -35,7 +35,7 @@ class Valikko extends Component {
         <Menu.Item as={Link} to='/foorumi' name={item.FOORUMI} active={activeItem===item.FOORUMI}>Foorumi</Menu.Item>
         <Menu.Item as={Link} to='/vaali' name={item.VAALI} active={activeItem===item.VAALI}>Äänestys</Menu.Item>
         <Menu.Item as={Link} to='/users' name={item.USERS} active={activeItem===item.USERS}>Käyttäjät</Menu.Item>
-        {this.props.username
+        {this.props.user.username
           ? <Menu.Item as={Link} to='/logout' position="right" name={item.LOGOUT} active={activeItem===item.LOGOUT}>Uloskirjaus</Menu.Item>
           : <Menu.Item as={Link} to='/login' position="right" name={item.LOGIN} active={activeItem===item.LOGIN}>Sisäänkirjaus</Menu.Item>
         }
@@ -47,7 +47,7 @@ class Valikko extends Component {
 /// Valikko -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
   return {
-    username: state.username
+    user: state.user
   }
 }
 export default withRouter(connect(mapStateToProps, null)(Valikko))

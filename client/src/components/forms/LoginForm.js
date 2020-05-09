@@ -12,6 +12,8 @@ import {setCurrentUser} from '../../actions/userAction'
 import {messageTypes, messageTime} from '../common/Huomio'
 import usersData from '../../services/users'
 import {FOORUMI} from '../common/valikko'
+import {setActiveUserMWare} from '../../actions/userAction'
+
 const logger = require('simple-console-logger').getLogger('LoginForm')
 
 class LoginForm extends Component {
@@ -48,6 +50,7 @@ class LoginForm extends Component {
         .then(responseData => {
           logger.info('LoginForm.render.login.responseData', responseData)
           this.props.setCurrentUser(newLogin.username)
+          this.props.setActiveUserMWare()
           this.props.setMessage(`Käyttäjä ${this.state.username} kirjautui Foorumiin.`, messageTypes.INFO)
           this.setState({username: '', password: ''})
           this.props.history.push(FOORUMI)
@@ -74,7 +77,8 @@ class LoginForm extends Component {
 }
 
 const mapDispatchToProps = {
-  setCurrentUser
+  setCurrentUser,
+  setActiveUserMWare
 }
 
 export default withRouter(connect(null, mapDispatchToProps)(LoginForm))

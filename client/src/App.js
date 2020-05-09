@@ -16,29 +16,28 @@ import Users from './components/Users'
 import Login, {Logout} from './components/Login'
 import {loadAiheetMWare} from './actions/aiheetAction'
 import {loadUsersMWare} from './actions/usersAction'
-import {setCurrentUser} from './actions/userAction'
-import {getUser} from './tools/session'
 
-const logger = require('simple-console-logger').getLogger('App')
+// const logger = require('simple-console-logger').getLogger('App')
 
 /// App -React käyttöliittymä
 class App extends Component  {
 
   isLive = true
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// componentDidMount
   componentDidMount() {
     if(this.isLive) {
-      logger.trace('componentDidMount')
-      this.props.setCurrentUser(getUser())
-      this.props.loadAiheetMWare()
+      this.props.loadUsersMWare()
       this.props.loadAiheetMWare()
     }
   }
 
+  /// render
   render () {
     return (
       <>
@@ -71,7 +70,6 @@ class App extends Component  {
 /// App -aloitus komponentti - Redux Tilankäsittely
 const mapDispatchToProps = {
   loadAiheetMWare,
-  loadUsersMWare,
-  setCurrentUser
+  loadUsersMWare
 }
 export default withRouter(connect(null, mapDispatchToProps)(App))
