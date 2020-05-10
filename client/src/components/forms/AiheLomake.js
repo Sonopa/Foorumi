@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Button, Form, TextArea, Divider} from 'semantic-ui-react'
+import {Button, Form, TextArea, Divider, Segment, Label, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {checkAuth, getUserId} from '../../services/local/session'
 import foorumiData from '../../services/foorumi'
@@ -144,14 +144,16 @@ class AiheLomake extends Component {
 
   // render
   render() {
-
-    logger.info("render.tila", this.state.tila, tila.SELAUS)
     switch(this.state.tila) {
       case tila.SELAUS:
         return(
           <>
             <Button onClick={this.willAdd} primary>Lisää</Button>
-            <Button onClick={this.willDelete} primary>Poista</Button>
+            {
+              this.props.isUserOwner ?
+                <Button onClick={this.willDelete} primary>Poista</Button>
+                : null
+            }
           </>
         )
       case tila.LISAYS:
@@ -172,7 +174,10 @@ class AiheLomake extends Component {
       case tila.POISTO:
         return(
           <div>
-            <p>Haluatko varmasti poistaa?</p>
+            <Message warning>
+              <Message.Header>Haluatko varmasti poistaa?</Message.Header>
+            </Message>
+            <Divider horizontal hidden />
             <Button onClick={this.doDelete} primary>Poista</Button>
             <Button onClick={this.restore} secondary>Peruuta</Button>
           </div>

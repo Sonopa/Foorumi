@@ -45,7 +45,8 @@ const FoorumiRivit = (props) => {
             </Menu>
             <Divider horizontal hidden />
             {isLoggedIn()
-            ? <AiheLomake aiheId={props.aiheId} setMessage={props.setMessage} refresh={props.refresh} handleDelete={props.handleDelete} />
+            ? <AiheLomake aiheId={props.aiheId} isUserOwner={props.isUserOwner}
+                          setMessage={props.setMessage} refresh={props.refresh} handleDelete={props.handleDelete} />
             : ''}
             </Segment>
           </Grid.Column>
@@ -126,10 +127,6 @@ class Foorumi extends Component {
     logger.info('handleSelect.aihe:', this.props.aihe, name, aiheId)
     const aihe = this.props.aiheet.find(ehdotus => ehdotus._id===aiheId)
     this.props.setCurrentAihe(aihe ? aihe : {_id:0})
-
-    // this.setState((state) => { return {aihe: aiheId}})
-    // this.props.setCurrentAihe(this.props.aiheet[0])
-    // this.props.setAihe(name)
   }
 
   /// handleDelete
@@ -163,14 +160,17 @@ class Foorumi extends Component {
       return (<Aihe key={ehdotus._id}
                     id={ehdotus._id}
                     title={ehdotus.title}
+                    userId={this.props.userId}
                     aiheId={this.props.aihe._id}
                     handleSelect={this.handleSelect}/>)
     })
-
   }
 
   /// render
   render() {
+
+    const isUserOwner = (this.props.user && this.props.aihe.owner ) ?
+                        (this.props.user._id === this.props.aihe.owner._id) : false
 
     const ehdotusSegmentit = this.aiheRivit()
 
@@ -182,6 +182,7 @@ class Foorumi extends Component {
                       setMessage={this.setMessage}
                       refresh={this.refresh}
                       handleDelete={this.handleDelete}
+                      isUserOwner={isUserOwner}
         />
       </Segment>
     )
@@ -192,7 +193,8 @@ class Foorumi extends Component {
 const mapStateToProps = state => {
   return {
     aiheet: state.aiheet,
-    aihe: state.aihe
+    aihe: state.aihe,
+    user: state.user
   }
 }
 
