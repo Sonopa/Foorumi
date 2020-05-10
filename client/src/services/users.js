@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import axios from 'axios'
-import {storeSession, removeSession, getAuth} from '../tools/session'
+import {storeSession, removeSession, getAuth} from '../services/local/session'
 const logger = require('simple-console-logger').getLogger('users')
 
 const userUrl = '/user'

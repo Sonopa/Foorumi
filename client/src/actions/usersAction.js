@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import usersData from '../services/users'
-import {getUser} from '../tools/session'
+import {getUser} from '../services/local/session'
 import {userAction} from './userAction'
 const logger = require('simple-console-logger').getLogger('usersAction')
 

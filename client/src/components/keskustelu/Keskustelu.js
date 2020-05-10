@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Form, TextArea, Button, Segment, Divider} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
-import {isLoggedIn, checkAuth, getUser} from '../../tools/session'
+import {isLoggedIn, checkAuth, getUser} from '../../services/local/session'
 import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('Keskustelu')

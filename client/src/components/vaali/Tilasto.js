@@ -11,7 +11,7 @@ import {Segment, Statistic, Grid, Button, Icon} from 'semantic-ui-react'
 import {setCurrentAihe} from '../../actions/aiheAction'
 import {updateAiheet} from '../../actions/aiheetAction'
 import {messageTypes, messageTime} from '../common/Huomio'
-import {isLoggedIn} from '../../tools/session'
+import {isLoggedIn} from '../../services/local/session'
 import * as cloneDeep from 'lodash/cloneDeep'
 const logger = require('simple-console-logger').getLogger('Tilasto')
 

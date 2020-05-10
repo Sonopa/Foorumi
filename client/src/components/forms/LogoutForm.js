@@ -10,7 +10,7 @@ import {connect} from 'react-redux'
 import {Form, Button} from 'semantic-ui-react'
 import {setCurrentUser} from '../../actions/userAction'
 import {messageTypes, messageTime} from '../common/Huomio'
-import {getUser} from '../../tools/session'
+import {getUser} from '../../services/local/session'
 import usersData from '../../services/users'
 import {ETUSIVU} from '../common/valikko'
 const logger = require('simple-console-logger').getLogger('LogoutForm')

@@ -23,36 +23,37 @@ const Aihe = (props) => {
   const ehdotus   = props.aihe ? props.aihe.description: ''
   const omistajaNimi  = (props.aihe && props.aihe.owner) ? props.aihe.owner.name: ''
   const aika      = props.aihe ? props.aihe.createdAt: ''
+
   return (
-      <Grid>
-          <Grid.Column>
+    <Grid>
+      <Grid.Column>
         <Grid.Row>
-            <Segment>
-              <List>
-                <List.Item>
-                  Asia: {otsikko}
-                </List.Item>
-                <List.Item>
-                  Tekijä: {omistajaNimi}
-                </List.Item>
-                <List.Item>
-                  Luontiaika: {finnishDate(aika)}
-                </List.Item>
-              </List>
-            </Segment>
+          <Segment>
+            <List>
+              <List.Item>
+                Asia: {otsikko}
+              </List.Item>
+              <List.Item>
+                Tekijä: {omistajaNimi}
+              </List.Item>
+              <List.Item>
+                Luontiaika: {finnishDate(aika)}
+              </List.Item>
+            </List>
+          </Segment>
         </Grid.Row>
-            <Divider horizontal hidden />
+        <Divider horizontal hidden />
         <Grid.Row>
-            <Segment>
-              <List>
-                <List.Item>
-                  Sisältö: {ehdotus}
-                </List.Item>
-              </List>
-            </Segment>
+          <Segment>
+            <List>
+              <List.Item>
+                Sisältö: {ehdotus}
+              </List.Item>
+            </List>
+          </Segment>
         </Grid.Row>
-          </Grid.Column>
-      </Grid>
+      </Grid.Column>
+    </Grid>
   )
 }
 

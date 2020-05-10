@@ -10,7 +10,7 @@ import {connect} from 'react-redux'
 import {Segment, Grid, Menu, Divider} from 'semantic-ui-react'
 import Keskustelut from './Keskustelut'
 import AiheLomake from './forms/AiheLomake'
-import {isLoggedIn, checkAuth} from '../tools/session'
+import {isLoggedIn, checkAuth} from '../services/local/session'
 import Huomio, {messageTypes, messageTime} from './common/Huomio'
 import {loadAiheet} from '../actions/aiheetAction'
 import {setCurrentAihe} from '../actions/aiheAction'
@@ -45,7 +45,7 @@ const FoorumiRivit = (props) => {
             </Menu>
             <Divider horizontal hidden />
             {isLoggedIn()
-            ? <AiheLomake setMessage={props.setMessage} refresh={props.refresh} handleDelete={props.handleDelete} />
+            ? <AiheLomake aiheId={props.aiheId} setMessage={props.setMessage} refresh={props.refresh} handleDelete={props.handleDelete} />
             : ''}
             </Segment>
           </Grid.Column>
@@ -133,8 +133,7 @@ class Foorumi extends Component {
   }
 
   /// handleDelete
-  handleDelete = (event, {name}) => {
-    event.preventDefault()
+  handleDelete = () => {
     foorumiData.remove(this.props.aihe._id)
       .then(responseData => {
         logger.info('handleDelete', responseData)

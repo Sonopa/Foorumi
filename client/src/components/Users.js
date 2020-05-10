@@ -10,7 +10,7 @@ import UserRivit from './user/UserRivit'
 import User from './user/User'
 import UserLomake from './forms/UserLomake'
 import Huomio, {messageTypes, messageTime} from './common/Huomio'
-import {isLoggedIn, getUser} from '../tools/session'
+import {isLoggedIn, getUser} from '../services/local/session'
 import usersData from '../services/users'
 
 const logger = require('simple-console-logger').getLogger('Users')
