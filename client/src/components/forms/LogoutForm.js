@@ -15,8 +15,10 @@ import usersData from '../../services/users'
 import {ETUSIVU} from '../common/valikko'
 const logger = require('simple-console-logger').getLogger('LogoutForm')
 
+/// Logout Form -komponentti
 class LogoutForm extends Component {
 
+  /// render
   render () {
 
     const handleSave = event => {
@@ -37,7 +39,7 @@ class LogoutForm extends Component {
           this.props.setMessage(exception.message, messageTypes.WARNING)
         })
         .finally(() => {
-          this.props.setCurrentUser('')
+          this.props.setCurrentUser({_id:0})
           setTimeout(() => {
             this.props.setMessage('', messageTypes.CLOSE)
             this.props.history.push(ETUSIVU) // *** REMOVE THIS ***
@@ -53,9 +55,10 @@ class LogoutForm extends Component {
   }
 }
 
+/// Redux store for Logout Form
 const mapStateToProps = state => {
   return {
-    username: state.username
+    user: state.user
   }
 }
 

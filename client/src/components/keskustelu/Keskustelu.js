@@ -12,6 +12,7 @@ import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('Keskustelu')
 
+/// Keskustelu
 class Keskustelu extends Component {
 
   isLive = true
@@ -29,10 +30,12 @@ class Keskustelu extends Component {
     this.handleSave     = this.handleSave.bind(this)
   }
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// componentDidUpdate
   componentDidUpdate(prevProps, prevState) {
     if(this.isLive) {
       if(this.props.aiheId !== prevProps.aiheId) {
@@ -42,16 +45,19 @@ class Keskustelu extends Component {
     }
   }
 
+  /// handleAdd
   handleAdd = (event, {name}) => {
     event.preventDefault()
     this.setState({lisaaTila: true})
   }
 
+  /// handleRestore
   handleRestore = (event, {name}) => {
     event.preventDefault()
     this.setState({otsikko: '', kommentti: '', lisaaTila: false})
   }
 
+  /// handleSave
   handleSave = (event, {name}) => {
     event.preventDefault()
     const newKeskustelu = {
@@ -78,6 +84,7 @@ class Keskustelu extends Component {
     })
   }
 
+  /// render
   render () {
     return (
       <>

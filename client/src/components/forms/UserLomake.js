@@ -10,8 +10,10 @@ import {messageTypes, messageTime} from '../common/Huomio'
 import usersData from '../../services/users'
 const logger = require('simple-console-logger').getLogger('UserLomake')
 
+/// UserLomake
 class UserLomake extends Component {
 
+  /// constructor
   constructor(props) {
     super(props)
     this.state = {
@@ -23,16 +25,19 @@ class UserLomake extends Component {
     }
   }
 
+  /// handleAdd
   handleAdd = (event, {name}) => {
     event.preventDefault()
     this.setState({lisaaTila: true})
   }
 
+  /// handleRestore
   handleRestore = (event, {name}) => {
     event.preventDefault()
     this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
   }
 
+  /// handleSave
   handleSave = (event, {name}) => {
     event.preventDefault()
     const newUser = {
@@ -59,6 +64,7 @@ class UserLomake extends Component {
     })
   }
 
+  /// render
   render() {
       return (
         this.state.lisaaTila  ?

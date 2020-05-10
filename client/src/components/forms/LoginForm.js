@@ -8,7 +8,6 @@ import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Form, Button} from 'semantic-ui-react'
-import {setCurrentUser} from '../../actions/userAction'
 import {messageTypes, messageTime} from '../common/Huomio'
 import usersData from '../../services/users'
 import {FOORUMI} from '../common/valikko'
@@ -16,8 +15,10 @@ import {setActiveUserMWare} from '../../actions/userAction'
 
 const logger = require('simple-console-logger').getLogger('LoginForm')
 
+/// Login Form -komponentti
 class LoginForm extends Component {
 
+  // render
   constructor(props) {
       super(props)
       this.state = {
@@ -26,6 +27,7 @@ class LoginForm extends Component {
       }
   }
 
+  // render
   render () {
     const handleName = event => {
       event.preventDefault()
@@ -49,7 +51,6 @@ class LoginForm extends Component {
       usersData.login(newLogin)
         .then(responseData => {
           logger.info('LoginForm.render.login.responseData', responseData)
-          this.props.setCurrentUser(newLogin.username)
           this.props.setActiveUserMWare()
           this.props.setMessage(`Käyttäjä ${this.state.username} kirjautui Foorumiin.`, messageTypes.INFO)
           this.setState({username: '', password: ''})
@@ -76,8 +77,8 @@ class LoginForm extends Component {
   }
 }
 
+/// Redux storage for Login form
 const mapDispatchToProps = {
-  setCurrentUser,
   setActiveUserMWare
 }
 

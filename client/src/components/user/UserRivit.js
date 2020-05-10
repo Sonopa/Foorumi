@@ -10,6 +10,7 @@ import {connect} from 'react-redux'
 import {Segment, Menu, Label, Container} from 'semantic-ui-react'
 const logger = require('simple-console-logger').getLogger('UserRivit')
 
+/// UserRivit
 const UserRivit = (props) => {
     if(props.users.length > 0) {
       logger.info('users', props)
@@ -31,6 +32,7 @@ const UserRivit = (props) => {
     return <NoUsers />
 }
 
+/// UserRivi
 const NoUsers = (props) => {
   return <Container>
           <Segment>
@@ -39,6 +41,7 @@ const NoUsers = (props) => {
         </Container>
 }
 
+/// UserRivi
 const UserRivi = (props) => {
   return (
     <Menu.Item

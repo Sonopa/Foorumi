@@ -7,6 +7,7 @@
 import React from 'react'
 import {Icon, Menu} from 'semantic-ui-react'
 
+/// iMenuType
 export const iMenuType = {
   LIKE: 'like',
   DIS:  'disl',
@@ -15,6 +16,7 @@ export const iMenuType = {
   EDIT: 'edit'
 }
 
+/// KeskusteluValinta
 const KeskusteluValinta = (props) => {
 
   let menuIcon = 'question'
@@ -55,6 +57,7 @@ const KeskusteluValinta = (props) => {
   )
 }
 
+/// KeskusteluValikko
 const KeskusteluValikko = (props) => {
 
   return (

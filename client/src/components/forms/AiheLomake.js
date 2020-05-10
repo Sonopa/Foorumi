@@ -11,9 +11,10 @@ import {checkAuth, getUserId} from '../../tools/session'
 import foorumiData from '../../services/foorumi'
 const logger = require('simple-console-logger').getLogger('AiheLomake')
 
-/// AiheLomake komponentti
+/// Aihe lomake komponentti
 class AiheLomake extends Component {
 
+  /// constructor
   constructor(props) {
     super(props)
     this.state = {
@@ -23,6 +24,7 @@ class AiheLomake extends Component {
     }
   }
 
+  /// componentDidUpdate
   componentDidUpdate(prevProps, prevState) {
      if(this.props.currentItem !== prevProps.currentItem) {
        logger.trace('componentDidUpdate.props.aihe:', this.props.currentItem)
@@ -32,6 +34,7 @@ class AiheLomake extends Component {
      }
   }
 
+  // render
   render() {
 
     const handleAdd = (event, {name}) => {

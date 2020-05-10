@@ -5,11 +5,11 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import { connect } from 'react-redux'
 import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Segment, List, Grid, Divider} from 'semantic-ui-react'
 import Huomio, {messageTypes} from './common/Huomio'
-import {finnishDate} from '../tools/aika'
+import {finnishDate} from './common/aika'
 import Tilasto from './vaali/Tilasto'
 import usersData from '../services/users'
 
@@ -133,10 +133,10 @@ class Vaali extends Component {
                 <Segment stacked>
                   <h2>Äänestettävä asia</h2>
                 </Segment>
-                <Aihe aihe={this.props.aihe} omistajaNimi={this.state.omistajaNimi}/>
+                <Aihe aihe={this.props.aihe}/>
               </Grid.Column>
               <Grid.Column>
-                <Tilasto aihe={this.props.aihe} omistajaNimi={this.state.omistajaNimi} setMessage={this.setMessage} />
+                <Tilasto aihe={this.props.aihe} setMessage={this.setMessage} />
               </Grid.Column>
           </Grid>
         </Segment>
@@ -144,8 +144,7 @@ class Vaali extends Component {
     )
   }
 }
-
-/// Vaali -komponentti (Äänestys) - Redux Tilankäsittely
+/// Tilasto -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
   return {
     aihe: state.aihe

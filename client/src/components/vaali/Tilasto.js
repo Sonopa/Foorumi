@@ -11,6 +11,7 @@ import {Segment, Statistic, Grid, Button, Icon} from 'semantic-ui-react'
 import {setCurrentAihe} from '../../actions/aiheAction'
 import {updateAiheet} from '../../actions/aiheetAction'
 import {messageTypes, messageTime} from '../common/Huomio'
+import {isLoggedIn} from '../../tools/session'
 import * as cloneDeep from 'lodash/cloneDeep'
 const logger = require('simple-console-logger').getLogger('Tilasto')
 
@@ -28,6 +29,29 @@ const TilastoItem = (props) => {
       <Statistic.Value>{props.arvo}</Statistic.Value>
       <Statistic.Label>{props.otsikko}</Statistic.Label>
     </Statistic>
+  )
+}
+
+/// Äänestä -komponentti
+const VotePainikkeet = (props) => {
+  if(!isLoggedIn()) {
+    return null
+  }
+  return (
+    <Grid.Row>
+      <Grid.Column>
+        <Button basic color='teal' fluid onClick={props.voteFor}>
+          <Icon name='heart'/>
+          PUOLESTA
+        </Button>
+      </Grid.Column>
+      <Grid.Column>
+        <Button basic color='red' fluid onClick={props.voteAgainst}>
+          <Icon name='heartbeat'/>
+          VASTAAN
+        </Button>
+      </Grid.Column>
+    </Grid.Row>
   )
 }
 
@@ -50,20 +74,7 @@ const PuolestaVastaan = (props) => (
         </div>
       </Grid.Column>
     </Grid.Row>
-    <Grid.Row>
-      <Grid.Column>
-        <Button basic color='teal' fluid onClick={props.voteFor}>
-          <Icon name='heart'/>
-          PUOLESTA
-        </Button>
-      </Grid.Column>
-      <Grid.Column>
-        <Button basic color='red' fluid onClick={props.voteAgainst}>
-          <Icon name='heartbeat'/>
-          VASTAAN
-        </Button>
-      </Grid.Column>
-    </Grid.Row>
+    <VotePainikkeet voteFor={props.voteFor} voteAgainst={props.voteAgainst}/>
   </Grid>
 )
 
@@ -79,7 +90,7 @@ class Tilasto extends Component {
     newAihe.votes[VOTES_ARRAY].VOTE_FOR++
     this.props.setCurrentAihe(cloneDeep(newAihe))
     this.props.updateAiheet(newAihe)
-    this.props.setMessage(`${this.props.omistajaNimi} kannatti: ${newAihe.title}`, messageTypes.INFO)
+    this.props.setMessage(`${this.props.user.username} kannatti: ${newAihe.title}`, messageTypes.INFO)
     setTimeout(() => {
         this.props.setMessage('', messageTypes.CLOSE)
     }, messageTime.NORMAL)
@@ -94,7 +105,7 @@ class Tilasto extends Component {
     newAihe.votes[VOTES_ARRAY].VOTE_AGAINST++
     this.props.setCurrentAihe(cloneDeep(newAihe))
     this.props.updateAiheet(newAihe)
-    this.props.setMessage(`${this.props.omistajaNimi} vastusti: ${newAihe.title}`, messageTypes.INFO)
+    this.props.setMessage(`${this.props.user.username} vastusti: ${newAihe.title}`, messageTypes.INFO)
     setTimeout(() => {
         this.props.setMessage('', messageTypes.CLOSE)
     }, messageTime.NORMAL)
@@ -135,8 +146,14 @@ class Tilasto extends Component {
 }
 
 /// Tilasto -komponentti - Redux Tilankäsittely
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  }
+}
+
 const mapDispatchToProps = {
   setCurrentAihe,
   updateAiheet
 }
-export default withRouter(connect(null, mapDispatchToProps)(Tilasto))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Tilasto))

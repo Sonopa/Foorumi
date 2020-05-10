@@ -10,16 +10,18 @@ import {connect} from 'react-redux'
 import {Feed, Icon, Divider} from 'semantic-ui-react'
 import KeskusteluValikko, {iMenuType} from './KeskusteluValikko'
 import {messageTypes, messageTime} from '../common/Huomio'
-import {finnishDate} from '../../tools/aika'
-import {isUserOwner} from '../../tools/session'
+import {finnishDate} from '../common/aika'
+// import {isUserOwner} from '../../tools/session'
 import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
 
+/// KeskusteluRivi
 class KeskusteluRivi extends Component {
 
   isLive = true
 
+  /// constructor
   constructor(props) {
     super(props)
 
@@ -29,28 +31,39 @@ class KeskusteluRivi extends Component {
     this.handleMenu  = this.handleMenu.bind(this)
   }
 
+  /// componentWillUnmount
   componentWillUnmount() {
     this.isLive = false
   }
 
+  /// setMenu
   setMenu = (nowMenu) => {
       if(this.isLive) {
         this.setState((state) => { return {nowMenu: nowMenu}})
       }
   }
 
+  /// menuLike
   menuLike = () => {
     logger.info('menuLike', this.props.id, this.props.aihe, this.props.like)
   }
+
+  /// menuHate
   menuHate = () => {
     logger.info('menuHate', this.props.id, this.props.aihe, this.props.like)
   }
+
+  /// menuEdit
   menuEdit = () => {
     logger.info('menuEdit', this.props.id, this.props.aihe, this.props.like)
   }
+
+  /// menuAdd
   menuAdd  = () => {
     logger.info('menuAdd', this.props.id, this.props.aihe, this.props.like)
   }
+
+  /// menuDel
   menuDel  = () => {
     logger.info('menuDel', this.props.id, this.props.aihe, this.props.like)
     keskusteluData.remove(this.props.id, this.props.aihe)
@@ -60,7 +73,7 @@ class KeskusteluRivi extends Component {
         this.props.refresh()
       })
       .catch(error => {
-        logger.info('usersData.create:', error)
+        logger.info('keskusteluData.create:', error)
         this.props.setMessage(error.message, messageTypes.WARNING)
       })
       .finally(() => {
@@ -68,9 +81,9 @@ class KeskusteluRivi extends Component {
           this.props.setMessage('', messageTypes.CLOSE)
         }, messageTime.NORMAL)
     })
-
   }
 
+  /// handleMenu
   handleMenu = (event, {name}) => {
 
     event.preventDefault()
@@ -93,9 +106,18 @@ class KeskusteluRivi extends Component {
     }
   }
 
+  /// isUserOwner
+  isUserOwner = (omistaja) => {
+      logger.info('isUserOwner', (omistaja === this.props.user._id),
+      typeof omistaja, typeof this.props.user._id,
+      this.props.user._id, this.props)
+      return (omistaja === this.props.user._id)
+  }
+
+  /// render
   render () {
 
-    const isOwner = isUserOwner(this.props.omistaja)
+    const isOwner = this.isUserOwner(this.props.omistaja)
 
     return (
       <Feed>
@@ -110,7 +132,7 @@ class KeskusteluRivi extends Component {
           <Feed.Extra text>{this.props.kommentti}
           </Feed.Extra>
           <Divider horizontal hidden />
-          {this.props.username
+          {this.props.user.username
             ? <KeskusteluValikko  isOwner={isOwner}
                               like={this.props.like} disLike={this.props.disLike}
                               nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />
@@ -124,10 +146,10 @@ class KeskusteluRivi extends Component {
   }
 }
 
+/// mapStateToProps
 const mapStateToProps = state => {
-    logger.info('mapStateToProps.state', state)
   return {
-    username: state.username
+    user: state.user
   }
 }
 export default withRouter(connect(mapStateToProps, null)(KeskusteluRivi))

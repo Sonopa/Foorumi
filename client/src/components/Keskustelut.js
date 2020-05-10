@@ -73,12 +73,12 @@ class Keskustelut extends Component {
   render() {
     const keskusteluRivit = this.state.keskustelut.map(keskustelu => {
       logger.info('keskusteluRivit', keskustelu)
-      return (<KeskusteluRivi key={keskustelu.id}
-                              id={keskustelu.id}
+      return (<KeskusteluRivi key={keskustelu._id}
+                              id={keskustelu._id}
                               aihe={keskustelu.topic}
                               omistaja={keskustelu.owner}
                               otsikko={keskustelu.title}
-                              aika={keskustelu.creationTime}
+                              aika={keskustelu.createdAt}
                               kommentti={keskustelu.text}
                               like={keskustelu.likes}
                               disLike={keskustelu.dislikes}
