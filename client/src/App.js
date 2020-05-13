@@ -14,8 +14,8 @@ import Etusivu from './components/Etusivu'
 import Vaali from './components/Vaali'
 import Users from './components/Users'
 import Login, {Logout} from './components/Login'
-import {loadAiheetMWare} from './actions/aiheetAction'
-import {loadUsersMWare} from './actions/usersAction'
+import {loadAiheetMWare} from './stores/actions/aiheetAction'
+import {loadUsersMWare} from './stores/actions/usersAction'
 
 // const logger = require('simple-console-logger').getLogger('App')
 

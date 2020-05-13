@@ -4,7 +4,7 @@
 /// Paul Kallio 9.5.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
-import {getUser} from '../services/local/session'
+import {getUser} from '../../services/local/session'
 const logger = require('simple-console-logger').getLogger('usersAction')
 
 /// User Action Name

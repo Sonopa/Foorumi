@@ -12,8 +12,8 @@ import Keskustelut from './Keskustelut'
 import AiheLomake from './forms/AiheLomake'
 import {isLoggedIn, checkAuth} from '../services/local/session'
 import Huomio, {messageTypes, messageTime} from './common/Huomio'
-import {loadAiheet} from '../actions/aiheetAction'
-import {setCurrentAihe} from '../actions/aiheAction'
+import {loadAiheet} from '../stores/actions/aiheetAction'
+import {setCurrentAihe} from '../stores/actions/aiheAction'
 import foorumiData from '../services/foorumi'
 const logger = require('simple-console-logger').getLogger('Foorumi')
 
