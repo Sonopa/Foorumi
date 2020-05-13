@@ -7,13 +7,14 @@
 import React from 'react'
 import {Icon, Menu} from 'semantic-ui-react'
 
-/// iMenuType
-export const iMenuType = {
-  LIKE: 'like',
-  DIS:  'disl',
-  ADD:  'addi',
-  DEL:  'dele',
-  EDIT: 'edit'
+/// iTila
+export const iTila = {
+  LIKE:   'like',
+  HATE:   'hate',
+  SELAUS: 'selaus',
+  LISAYS: 'lisays',
+  MUUTOS: 'muutos',
+  POISTO: 'poisto'
 }
 
 /// KeskusteluValinta
@@ -21,22 +22,22 @@ const KeskusteluValinta = (props) => {
 
   let menuIcon = 'question'
   switch(props.menuType) {
-    case iMenuType.LIKE:
+    case iTila.LIKE:
       menuIcon = 'like'
       break
-    case iMenuType.DIS:
+    case iTila.HATE:
       menuIcon = 'thumbs down outline'
       break
-    case iMenuType.EDIT:
+    case iTila.MUUTOS:
       if(!props.isOwner) {
         return ''
       }
       menuIcon = 'pencil alternate'
       break
-    case iMenuType.ADD:
+    case iTila.LISAYS:
       menuIcon = 'plus'
       break
-    case iMenuType.DEL:
+    case iTila.POISTO:
       if(!props.isOwner) {
         return ''
       }
@@ -62,11 +63,11 @@ const KeskusteluValikko = (props) => {
 
   return (
       <Menu compact>
-        <KeskusteluValinta menuType={iMenuType.LIKE} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value={props.like} />
-        <KeskusteluValinta menuType={iMenuType.DIS}  nowMenu={props.nowMenu} handleMenu={props.handleMenu} value={props.disLike} />
-        <KeskusteluValinta menuType={iMenuType.EDIT} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value=''  isOwner={props.isOwner}/>
-        <KeskusteluValinta menuType={iMenuType.ADD} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' />
-        <KeskusteluValinta menuType={iMenuType.DEL} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' isOwner={props.isOwner} />
+        <KeskusteluValinta menuType={iTila.LIKE} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value={props.like} />
+        <KeskusteluValinta menuType={iTila.HATE}  nowMenu={props.nowMenu} handleMenu={props.handleMenu} value={props.disLike} />
+        <KeskusteluValinta menuType={iTila.MUUTOS} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value=''  isOwner={props.isOwner}/>
+        <KeskusteluValinta menuType={iTila.LISAYS} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' />
+        <KeskusteluValinta menuType={iTila.POISTO} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' isOwner={props.isOwner} />
       </Menu>
   )
 }

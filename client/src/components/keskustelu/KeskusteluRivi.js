@@ -7,21 +7,13 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Feed, Icon, Divider} from 'semantic-ui-react'
-import KeskusteluValikko, {iMenuType} from './KeskusteluValikko'
+import {Feed, Icon, Divider, Button, Message} from 'semantic-ui-react'
+import KeskusteluValikko, {iTila} from './KeskusteluValikko'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {finnishDate} from '../common/aika'
 import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
-
-/// Keskustelu Rivi Action
-const tila = {
-  SELAUS: 'selaus',
-  LISAYS: 'lisays',
-  MUUTOS: 'muutos',
-  POISTO: 'poisto'
-}
 
 /// KeskusteluRivi
 class KeskusteluRivi extends Component {
@@ -34,7 +26,7 @@ class KeskusteluRivi extends Component {
 
     this.state = {
       nowMenu: '',
-      tila: tila.SELAUS
+      iTila: iTila.SELAUS
     }
     this.handleMenu  = this.handleMenu.bind(this)
   }
@@ -52,9 +44,9 @@ class KeskusteluRivi extends Component {
   }
 
   /// setTila
-  setTila = (tila) => {
+  setTila = (iTila) => {
       if(this.isLive) {
-        this.setState((tila) => { return {tila: tila}})
+        this.setState({iTila: iTila})
       }
   }
 
@@ -71,31 +63,31 @@ class KeskusteluRivi extends Component {
   /// willEdit
   willEdit  = () => {
     logger.info('willEdit', this.props.id, this.props.aihe, this.props.like)
-    this.setTila(tila.MUUTOS)
+    this.setTila(iTila.MUUTOS)
   }
 
   /// menuEdit
   doEdit = () => {
     logger.info('menuEdit', this.props.id, this.props.aihe, this.props.like)
-    this.setTila(tila.SELAUS)
+    this.setTila(iTila.SELAUS)
   }
 
   /// willAdd
   willAdd  = () => {
     logger.info('willAdd', this.props.id, this.props.aihe, this.props.like)
-    this.setTila(tila.LISAYS)
+    this.setTila(iTila.LISAYS)
   }
 
   /// menuAdd
   doAdd  = () => {
     logger.info('menuAdd', this.props.id, this.props.aihe, this.props.like)
-    this.setTila(tila.SELAUS)
+    this.setTila(iTila.SELAUS)
   }
 
   /// willDel
   willDelete  = () => {
     logger.info('willDel', this.props.id, this.props.aihe, this.props.like)
-    this.setTila(tila.POISTO)
+    this.setTila(iTila.POISTO)
   }
 
   /// menuDel
@@ -106,7 +98,7 @@ class KeskusteluRivi extends Component {
         logger.info('keskusteluData.remove:', responseData)
         this.props.setMessage(`Keskustelu ${this.props.otsikko} on poistettu Foorumilta.`, messageTypes.INFO)
         this.props.refresh()
-        this.setTila(tila.SELAUS)
+        this.setTila(iTila.SELAUS)
       })
       .catch(error => {
         logger.info('keskusteluData.create:', error)
@@ -122,7 +114,7 @@ class KeskusteluRivi extends Component {
   /// clear
   restore  = () => {
     logger.info('restore', this.props.id, this.props.aihe, this.props.like)
-    this.setTila(tila.SELAUS)
+    this.setTila(iTila.SELAUS)
   }
 
   /// handleMenu
@@ -133,15 +125,15 @@ class KeskusteluRivi extends Component {
     this.setMenu(name)
 
     switch(name) {
-      case iMenuType.LIKE:
+      case iTila.LIKE:
         return this.menuLike()
-      case iMenuType.DIS:
+      case iTila.HATE:
         return this.menuHate()
-      case iMenuType.EDIT:
+      case iTila.MUUTOS:
         return this.willEdit()
-      case iMenuType.ADD:
+      case iTila.LISAYS:
         return this.willAdd()
-      case iMenuType.DEL:
+      case iTila.POISTO:
         return this.willDelete()
       default:
         return
@@ -168,11 +160,59 @@ class KeskusteluRivi extends Component {
     return user.username
   }
 
+  keskusteluLomake() {
+
+    logger.info("keskusteluLomake", this.state, iTila.SELAUS, iTila.POISTO)
+    const isOwner = this.isUserOwner(this.props.omistaja)
+    if(this.props.user.username)  {
+
+      switch(this.state.iTila) {
+        case iTila.SELAUS:
+          return (  <KeskusteluValikko  isOwner={isOwner}
+                                        like={this.props.like} disLike={this.props.disLike}
+                                        nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />)
+        case iTila.POISTO:
+          return(
+            <div>
+              <Message warning>
+                <Message.Header>Haluatko varmasti poistaa?</Message.Header>
+              </Message>
+              <Divider horizontal hidden />
+              <Button onClick={this.doDelete} primary>Poista</Button>
+              <Button onClick={this.restore} secondary>Peruuta</Button>
+            </div>
+          )
+        case iTila.MUUTOS:
+          return (
+                <div>
+                  <Message info>
+                    <Message.Header>Muutos tila.</Message.Header>
+                  </Message>
+                  <Divider horizontal hidden />
+                  <Button onClick={this.doEdit} primary>Talenna</Button>
+                  <Button onClick={this.restore} secondary>Peruuta</Button>
+                </div>
+          )
+        case iTila.LISAYS:
+          return (
+              <div>
+                <Message info>
+                  <Message.Header>Lisäys tila.</Message.Header>
+                </Message>
+                <Divider horizontal hidden />
+                <Button onClick={this.doAdd} primary>Lisää</Button>
+                <Button onClick={this.restore} secondary>Peruuta</Button>
+              </div>
+          )
+        default:
+          return null
+      }
+    }
+    return null;
+  }
+
   /// render
   render () {
-
-    const isOwner = this.isUserOwner(this.props.omistaja)
-
     return (
       <Feed>
         <Feed.Label>
@@ -186,12 +226,9 @@ class KeskusteluRivi extends Component {
           <Feed.Extra text>{this.props.kommentti}
           </Feed.Extra>
           <Divider horizontal hidden />
-          {this.props.user.username
-            ? <KeskusteluValikko  isOwner={isOwner}
-                              like={this.props.like} disLike={this.props.disLike}
-                              nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />
-            : ''
-          }
+          <Feed.Extra text>
+            {this.keskusteluLomake()}
+          </Feed.Extra>
         </Feed.Content>
       </Feed>
     )
