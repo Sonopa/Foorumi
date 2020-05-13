@@ -4,7 +4,7 @@
 /// Paul Kallio 7.5.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
-import foorumiData from '../services/foorumi'
+import foorumiData from '../../services/foorumi'
 import {aiheAction} from './aiheAction'
 const logger = require('simple-console-logger').getLogger('aiheetAction')
 

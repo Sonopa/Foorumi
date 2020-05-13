@@ -11,10 +11,17 @@ import {Feed, Icon, Divider} from 'semantic-ui-react'
 import KeskusteluValikko, {iMenuType} from './KeskusteluValikko'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {finnishDate} from '../common/aika'
-// import {isUserOwner} from '../../services/local/session'
 import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
+
+/// Keskustelu Rivi Action
+const tila = {
+  SELAUS: 'selaus',
+  LISAYS: 'lisays',
+  MUUTOS: 'muutos',
+  POISTO: 'poisto'
+}
 
 /// KeskusteluRivi
 class KeskusteluRivi extends Component {
@@ -26,7 +33,8 @@ class KeskusteluRivi extends Component {
     super(props)
 
     this.state = {
-      nowMenu: ''
+      nowMenu: '',
+      tila: tila.SELAUS
     }
     this.handleMenu  = this.handleMenu.bind(this)
   }
@@ -43,6 +51,13 @@ class KeskusteluRivi extends Component {
       }
   }
 
+  /// setTila
+  setTila = (tila) => {
+      if(this.isLive) {
+        this.setState((tila) => { return {tila: tila}})
+      }
+  }
+
   /// menuLike
   menuLike = () => {
     logger.info('menuLike', this.props.id, this.props.aihe, this.props.like)
@@ -53,24 +68,45 @@ class KeskusteluRivi extends Component {
     logger.info('menuHate', this.props.id, this.props.aihe, this.props.like)
   }
 
+  /// willEdit
+  willEdit  = () => {
+    logger.info('willEdit', this.props.id, this.props.aihe, this.props.like)
+    this.setTila(tila.MUUTOS)
+  }
+
   /// menuEdit
-  menuEdit = () => {
+  doEdit = () => {
     logger.info('menuEdit', this.props.id, this.props.aihe, this.props.like)
+    this.setTila(tila.SELAUS)
+  }
+
+  /// willAdd
+  willAdd  = () => {
+    logger.info('willAdd', this.props.id, this.props.aihe, this.props.like)
+    this.setTila(tila.LISAYS)
   }
 
   /// menuAdd
-  menuAdd  = () => {
+  doAdd  = () => {
     logger.info('menuAdd', this.props.id, this.props.aihe, this.props.like)
+    this.setTila(tila.SELAUS)
+  }
+
+  /// willDel
+  willDelete  = () => {
+    logger.info('willDel', this.props.id, this.props.aihe, this.props.like)
+    this.setTila(tila.POISTO)
   }
 
   /// menuDel
-  menuDel  = () => {
+  doDelete  = () => {
     logger.info('menuDel', this.props.id, this.props.aihe, this.props.like)
     keskusteluData.remove(this.props.id, this.props.aihe)
       .then(responseData => {
         logger.info('keskusteluData.remove:', responseData)
         this.props.setMessage(`Keskustelu ${this.props.otsikko} on poistettu Foorumilta.`, messageTypes.INFO)
         this.props.refresh()
+        this.setTila(tila.SELAUS)
       })
       .catch(error => {
         logger.info('keskusteluData.create:', error)
@@ -81,6 +117,12 @@ class KeskusteluRivi extends Component {
           this.props.setMessage('', messageTypes.CLOSE)
         }, messageTime.NORMAL)
     })
+  }
+
+  /// clear
+  restore  = () => {
+    logger.info('restore', this.props.id, this.props.aihe, this.props.like)
+    this.setTila(tila.SELAUS)
   }
 
   /// handleMenu
@@ -96,11 +138,11 @@ class KeskusteluRivi extends Component {
       case iMenuType.DIS:
         return this.menuHate()
       case iMenuType.EDIT:
-        return this.menuEdit()
+        return this.willEdit()
       case iMenuType.ADD:
-        return this.menuAdd()
+        return this.willAdd()
       case iMenuType.DEL:
-        return this.menuDel()
+        return this.willDelete()
       default:
         return
     }
@@ -112,6 +154,18 @@ class KeskusteluRivi extends Component {
       typeof omistaja, typeof this.props.user._id,
       this.props.user._id, this.props)
       return (omistaja === this.props.user._id)
+  }
+
+  getStoredUser = (userId) => {
+    logger.info('getStoredUser.props', this.props, userId)
+    if(!this.props.users) {
+      return userId
+    }
+    const user = this.props.users.find(item => item._id === userId)
+    if(!user) {
+      return userId
+    }
+    return user.username
   }
 
   /// render
@@ -126,7 +180,7 @@ class KeskusteluRivi extends Component {
         </Feed.Label>
         <Feed.Content>
           <Feed.Summary>
-            <Feed.User>{this.props.omistaja}</Feed.User> {this.props.otsikko}
+            <Feed.User>{this.getStoredUser(this.props.omistaja)}</Feed.User> {this.props.otsikko}
             <Feed.Date>{finnishDate(this.props.aika)}</Feed.Date>
           </Feed.Summary>
           <Feed.Extra text>{this.props.kommentti}
@@ -139,8 +193,6 @@ class KeskusteluRivi extends Component {
             : ''
           }
         </Feed.Content>
-        <Feed>
-        </Feed>
       </Feed>
     )
   }
@@ -149,7 +201,8 @@ class KeskusteluRivi extends Component {
 /// mapStateToProps
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.user,
+    users: state.users
   }
 }
 export default withRouter(connect(mapStateToProps, null)(KeskusteluRivi))

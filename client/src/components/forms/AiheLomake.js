@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Button, Form, TextArea, Divider, Segment, Label, Message} from 'semantic-ui-react'
+import {Button, Form, TextArea, Divider, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {checkAuth, getUserId} from '../../services/local/session'
 import foorumiData from '../../services/foorumi'
@@ -94,19 +94,19 @@ class AiheLomake extends Component {
     this.setTila(tila.POISTO)
   }
 
+  /// restore
+  restore = (event, {name}) => {
+    event.preventDefault()
+    this.clearForm()
+    this.setTila(tila.SELAUS)
+  }
+
   /// doDelete
   doDelete = (event, {name}) => {
     event.preventDefault()
     this.clearForm()
     this.setTila(tila.SELAUS)
     this.props.handleDelete()
-  }
-
-  /// restore
-  restore = (event, {name}) => {
-    event.preventDefault()
-    this.clearForm()
-    this.setTila(tila.SELAUS)
   }
 
   /// doAdd

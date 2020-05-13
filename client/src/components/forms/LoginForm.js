@@ -11,7 +11,7 @@ import {Form, Button} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
 import usersData from '../../services/users'
 import {FOORUMI} from '../common/valikko'
-import {setActiveUserMWare} from '../../actions/userAction'
+import {setActiveUserMWare} from '../../stores/actions/userAction'
 
 const logger = require('simple-console-logger').getLogger('LoginForm')
 
