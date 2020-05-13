@@ -33,7 +33,7 @@ app.get("/users", userController.user_list_get);
 app.get("/users/:id", userController.user_get);
 
 // Delete user
-app.delete("/users/:id", userController.user_delete);
+app.delete("/users/:id", middleware.checkToken, userController.user_delete);
 
 app.post("/logout", middleware.checkToken, sessionController.logout_post);
 

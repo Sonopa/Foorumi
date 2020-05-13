@@ -6,6 +6,7 @@ let router = express.Router();
 var topicController = require('../controllers/topicController');
 var discussionController = require('../controllers/discussionController');
 var commentController = require('../controllers/commentController');
+var voteController = require('../controllers/voteController');
 
 // Authentication for modification methods
 router.post("*", middleware.checkToken);
@@ -67,5 +68,16 @@ router.put("/aiheet/:topic_id/keskustelut/:discussion_id/kommentit/:id", comment
 // Poistaa keskustelun discussion_id kommentin id
 router.delete("/aiheet/:topic_id/keskustelut/:discussion_id/kommentit/:id", commentController.comment_delete);
 
+
+// Äänet
+
+// Luo uusi ääni
+router.post("/aiheet/:topic_id/aanestys", voteController.vote_create_post);
+
+// Hae ääni id:n perusteella
+router.get("/aiheet/:topic_id/aanestys/:id", voteController.get_vote);
+
+// Hae tietyn aiheen äänet
+router.get("/aiheet/:topic_id/aanestys", voteController.get_votes_for_topic);
 
 module.exports = router;

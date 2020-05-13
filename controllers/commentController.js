@@ -8,7 +8,8 @@ const validator = require('express-validator');
 exports.comment_list_for_discussion_get = function(req, res) {
     Comment.find({discussion: req.params.discussion_id})
         .exec(function (err, list_comments) {
-            if (err) { return res.status(404).json({message: 'Comments not found'}) }
+            if (err) { return res.status(500).json({message: 'Failed comment search: ' + err }) }
+            if (!list_comments) { return res.status(404).json({ message: 'Comments not found' }) }
             return res.status(200).json({comment_list: list_comments})
         })
 }
@@ -17,7 +18,8 @@ exports.comment_list_for_discussion_get = function(req, res) {
 exports.comment_detail_get = function(req, res) {
     Comment.findById(req.params.id)
         .exec(function(err, comment) {
-            if (err) { return res.status(404).json({message: 'Comment not found'}) }
+            if (err) { return res.status(500).json({message: 'Failed comment search: ' + err }) }
+            if (!comment) { return res.status(404).json({ message: 'Comment not found' }) }
             return res.status(200).json({comment: comment})
         });
 }
