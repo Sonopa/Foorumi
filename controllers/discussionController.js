@@ -8,7 +8,8 @@ const validator = require('express-validator');
 exports.discussion_list_for_topic_get = function(req, res) {
     Discussion.find({topic: req.params.topic_id})
         .exec(function (err, list_discussions) {
-            if (err) { return res.status(404).json({ message: 'Discussions not found' }) }
+            if (err) { return res.status(409).json({ message: 'Failed discussion search: ' + err }) }
+            if (!discussions) { return res.status(404).json({ message: 'Discussions not found' }) }
             return res.status(200).json({discussion_list: list_discussions})
         })
 }
@@ -17,7 +18,8 @@ exports.discussion_list_for_topic_get = function(req, res) {
 exports.discussion_detail_get = function(req, res) {
     Discussion.findById(req.params.id)
         .exec(function(err, discussion) {
-            if (err) { return res.status(404).json({message: 'Discussion not found'}) }
+            if (err) { return res.status(404).json({message: 'Failed discussion search: ' + err }) }
+            if (!discussion) { return res.status(404).json({ message: 'Discussion not found' }) }
             return res.status(200).json({discussion: discussion})
         });
 }

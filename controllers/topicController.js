@@ -12,7 +12,8 @@ exports.topic_list_get = function(req, res) {
         .populate('discussions', '_id title')
         .populate('votes', '_id choice')
         .exec(function (err, list_topics) {
-            if (err) { return res.status(404).json({message: 'Topic not found'}) }
+            if (err) { return res.status(500).json({message: 'Topic search failed: ' + err}) }
+            if (!list_topics) { return res.status(404).json({ message: 'Topic not found' })}
             return res.status(200).json({topic_list: list_topics})
         })
 }
@@ -24,7 +25,8 @@ exports.topic_detail_get = function(req, res) {
         .populate('discussions', '_id title')
         .populate('votes', '_id choice')
         .exec(function(err, topic) {
-            if (err) { return res.status(404).json({message: 'Topic not found'}) }
+            if (err) { return res.status(500).json({message: 'Topic search failed: ' + err}) }
+            if (!topic) { return res.status(404).json({ message: 'Topic not found' })}
             return res.status(200).json({topic_detail: topic})
         });
 }

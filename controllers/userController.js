@@ -108,7 +108,10 @@ exports.user_delete = [
 exports.user_get = function(req, res) {
     User.findById(req.params.id, 'username name', function(err, user) {
         if (err) {
-            return res.status(404).json({message:"User not found" + err})
+            return res.status(500).json({message:"User search failed: " + err})
+        }
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
         } else {
             return res.status(200).json(user)
         }
@@ -118,7 +121,10 @@ exports.user_get = function(req, res) {
 exports.user_list_get = function(req, res) {
     User.find({}, 'username name', function(err, users) {
         if (err) {
-            return res.status(404).json({message: 'Users not found'})
+            return res.status(500).json({message:"User search failed: " + err})
+        } 
+        if (!users) {
+            return res.status(404).json({ message: 'Users not found' })
         } else {
             return res.status(200).json(users);
         }
