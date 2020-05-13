@@ -25,6 +25,13 @@ const create = async (topicId, newObject) => {
   return response.data
 }
 
+/// Update - päivitä keskustelu aiheen alle
+const update = async (topicId, keskustelutId, keskustelu) => {
+  logger.info('axios.update:', `${baseUrl}/${topicId}${addUrl}/${keskustelutId}`, keskustelu)
+  const response = await axios.put(`${baseUrl}/${topicId}${addUrl}/${keskustelutId}`, keskustelu, getAuth())
+  return response.data
+}
+
 /// Remove - poista keskustelu aiheelta
 const remove = async (id, topicId) => {
   logger.info('axios.remove:', `${baseUrl}/${topicId}${addUrl}/${id}`)
@@ -32,4 +39,4 @@ const remove = async (id, topicId) => {
   return response.data
 }
 
-export default {getAll, create, remove}
+export default {getAll, create, update, remove}

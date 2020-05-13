@@ -9,6 +9,7 @@ import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Feed, Icon, Divider, Button, Message} from 'semantic-ui-react'
 import KeskusteluValikko, {iTila} from './KeskusteluValikko'
+import KeskusteluLomake from '../forms/KeskusteluLomake'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {finnishDate} from '../common/aika'
 import keskusteluData from '../../services/keskustelu'
@@ -52,48 +53,49 @@ class KeskusteluRivi extends Component {
 
   /// menuLike
   menuLike = () => {
-    logger.info('menuLike', this.props.id, this.props.aihe, this.props.like)
+    logger.info('menuLike', this.props.keskustelu)
   }
 
   /// menuHate
   menuHate = () => {
-    logger.info('menuHate', this.props.id, this.props.aihe, this.props.like)
+    logger.info('menuHate', this.props.keskustelu)
   }
 
   /// willEdit
   willEdit  = () => {
-    logger.info('willEdit', this.props.id, this.props.aihe, this.props.like)
+    logger.info('willEdit', this.props.keskustelu)
     this.setTila(iTila.MUUTOS)
   }
 
   /// menuEdit
   doEdit = () => {
-    logger.info('menuEdit', this.props.id, this.props.aihe, this.props.like)
+    logger.info('menuEdit', this.props.keskustelu)
     this.setTila(iTila.SELAUS)
+    this.props.refresh()
   }
 
   /// willAdd
   willAdd  = () => {
-    logger.info('willAdd', this.props.id, this.props.aihe, this.props.like)
+    logger.info('willAdd', this.props.keskustelu)
     this.setTila(iTila.LISAYS)
   }
 
   /// menuAdd
   doAdd  = () => {
-    logger.info('menuAdd', this.props.id, this.props.aihe, this.props.like)
+    logger.info('menuAdd', this.props.keskustelu)
     this.setTila(iTila.SELAUS)
   }
 
   /// willDel
   willDelete  = () => {
-    logger.info('willDel', this.props.id, this.props.aihe, this.props.like)
+    logger.info('willDel', this.props.keskustelu)
     this.setTila(iTila.POISTO)
   }
 
   /// menuDel
   doDelete  = () => {
-    logger.info('menuDel', this.props.id, this.props.aihe, this.props.like)
-    keskusteluData.remove(this.props.id, this.props.aihe)
+    logger.info('menuDel', this.props.keskustelu)
+    keskusteluData.remove(this.props.keskustelu._id, this.props.keskustelu.aihe)
       .then(responseData => {
         logger.info('keskusteluData.remove:', responseData)
         this.props.setMessage(`Keskustelu ${this.props.otsikko} on poistettu Foorumilta.`, messageTypes.INFO)
@@ -113,7 +115,7 @@ class KeskusteluRivi extends Component {
 
   /// clear
   restore  = () => {
-    logger.info('restore', this.props.id, this.props.aihe, this.props.like)
+    logger.info('restore', this.props.keskustelu)
     this.setTila(iTila.SELAUS)
   }
 
@@ -142,14 +144,10 @@ class KeskusteluRivi extends Component {
 
   /// isUserOwner
   isUserOwner = (omistaja) => {
-      logger.info('isUserOwner', (omistaja === this.props.user._id),
-      typeof omistaja, typeof this.props.user._id,
-      this.props.user._id, this.props)
       return (omistaja === this.props.user._id)
   }
 
   getStoredUser = (userId) => {
-    logger.info('getStoredUser.props', this.props, userId)
     if(!this.props.users) {
       return userId
     }
@@ -162,7 +160,8 @@ class KeskusteluRivi extends Component {
 
   keskusteluLomake() {
 
-    logger.info("keskusteluLomake", this.state, iTila.SELAUS, iTila.POISTO)
+    logger.info("keskusteluLomake.keskustelu", this.props.keskustelu)
+
     const isOwner = this.isUserOwner(this.props.omistaja)
     if(this.props.user.username)  {
 
@@ -184,14 +183,9 @@ class KeskusteluRivi extends Component {
           )
         case iTila.MUUTOS:
           return (
-                <div>
-                  <Message info>
-                    <Message.Header>Muutos tila.</Message.Header>
-                  </Message>
-                  <Divider horizontal hidden />
-                  <Button onClick={this.doEdit} primary>Talenna</Button>
-                  <Button onClick={this.restore} secondary>Peruuta</Button>
-                </div>
+            <KeskusteluLomake doEdit={this.doEdit} restore={this.restore}
+                              keskustelu={this.props.keskustelu}
+                              setMessage={this.props.setMessage} />
           )
         case iTila.LISAYS:
           return (

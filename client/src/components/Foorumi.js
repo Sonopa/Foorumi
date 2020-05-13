@@ -19,7 +19,6 @@ const logger = require('simple-console-logger').getLogger('Foorumi')
 
 /// Aihe komponentti
 const Aihe = (props) => {
-  logger.info('Aihe', props)
   return (
     <Menu.Item
       name={props.id+''}
@@ -33,7 +32,6 @@ const Aihe = (props) => {
 
 /// FoorumiRivit komponentti
 const FoorumiRivit = (props) => {
-  logger.info('FoorumiRivit', props.aiheId)
   return (
       <Grid columns={2} divided>
         <Grid.Row>
@@ -114,7 +112,6 @@ class Foorumi extends Component {
   /// setMessage
   setMessage = (messu, messuTyyppi) => {
     if(this.isLive) {
-      logger.trace('setMessage:', messu, messuTyyppi)
       this.setState({messu: messu, messuTyyppi: messuTyyppi})
     }
   }
@@ -155,7 +152,6 @@ class Foorumi extends Component {
     if(!this.props.aiheet || this.props.aiheet.length === 0) {
       return null
     }
-    logger.info('aiheRivit', this.props.aiheet)
     return this.props.aiheet.map(ehdotus => {
       return (<Aihe key={ehdotus._id}
                     id={ehdotus._id}

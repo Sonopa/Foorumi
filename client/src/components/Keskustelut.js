@@ -47,7 +47,6 @@ class Keskustelut extends Component {
   /// refresh
   refresh = () => {
     if(this.isLive ) {
-      logger.info('refresh.this.props', this.props)
       if(!this.props.aiheId) {
           this.setState({keskustelut: [], lisaaTila: false})
           return
@@ -72,8 +71,8 @@ class Keskustelut extends Component {
   /// render
   render() {
     const keskusteluRivit = this.state.keskustelut.map(keskustelu => {
-      logger.info('keskusteluRivit', keskustelu)
       return (<KeskusteluRivi key={keskustelu._id}
+                              keskustelu={keskustelu}
                               id={keskustelu._id}
                               aihe={keskustelu.topic}
                               omistaja={keskustelu.owner}
