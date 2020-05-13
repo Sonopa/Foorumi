@@ -1,31 +1,31 @@
 /// ---------------------------------
 /// Foorumi Sovellus: Frontend
-/// KeskusteluLomake -komponentti sisältää Käyttäjien syöttö -lomakkeen
+/// KeskusteluLisaLomake -komponentti sisältää Käyttäjien syöttö -lomakkeen
 /// Paul Kallio 13.5.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
 import {Segment, Form, Button, Divider, TextArea, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
-import keskusteluData from '../../services/keskustelu'
-const logger = require('simple-console-logger').getLogger('KeskusteluLomake')
+import kommenttiData from '../../services/kommentti'
+const logger = require('simple-console-logger').getLogger('KeskusteluLisaLomake')
 
 /// KeskusteluLomake
-class KeskusteluLomake extends Component {
+class KeskusteluLisaLomake extends Component {
 
   /// constructor
   constructor(props) {
     super(props)
     this.state = {
-      otsikko: this.props.keskustelu.title,
-      teksti: this.props.keskustelu.text
+      kommentti: ''
     }
   }
 
   /// handleRestore
   handleRestore = (event, {name}) => {
     event.preventDefault()
-    this.setState({otsikko: '', teksti: ''})
+    logger.info('handleSave.handleRestore', this.props.keskustelu)
+    this.setState({kommentti: ''})
     this.props.restore()
   }
 
@@ -35,19 +35,18 @@ class KeskusteluLomake extends Component {
     logger.info('handleSave.keskustelu', this.props.keskustelu)
     logger.info('handleSave.keskustelu', this.state.otsikko, this.state.teksti)
 
-    const newKeskustelu = {
+    const newKommentti = {
         ...this.props.keskustelu,
-        title:  this.state.otsikko,
-        text:   this.state.teksti
+        kommentti: [...this.props.keskustelu.comments, this.state.kommentti]
     }
-    logger.info('handleSave.newKeskustelu', newKeskustelu)
 
-    keskusteluData.update(this.props.keskustelu.topic, this.props.keskustelu._id, newKeskustelu)
+    logger.info('handleSave.newKeskustelu', newKommentti)
+    kommenttiData.create(this.props.keskustelu.topic, this.props.keskustelu._id, newKommentti)
       .then(responseData => {
-        logger.info('keskusteluData.update:', responseData)
-        this.setState({otsikko: '', teksti: ''})
-        this.props.setMessage(`Keskustelu ${newKeskustelu.title} on päivitetty Foorumille.`, messageTypes.INFO)
-        this.props.doEdit()
+        logger.info('kommenttiData.update:', responseData)
+        this.setState({kommentti: ''})
+        this.props.setMessage(`Keskustelulle ${newKommentti.title} on lisätty kommentti.`, messageTypes.INFO)
+        this.props.doAdd()
       })
       .catch(error => {
         logger.info('keskusteluData.update:', error)
@@ -63,27 +62,25 @@ class KeskusteluLomake extends Component {
   /// render
   render() {
       return (
-       <>
-          <Message info>
-            <Message.Header>Päivitä keskustelu</Message.Header>
-          </Message>
-          <Segment>
+          <>
+            <Message info>
+              <Message.Header>Lisää kommentti</Message.Header>
+            </Message>
+            <Segment>
               <Form>
-                <Form.Input label='Otsikko' name='otsikko' type='input'
-                             onChange={(e) => this.setState({otsikko: e.target.value})} value={this.state.otsikko} />
                 <div className='field'>
                   <label>Kommentti</label>
-                  <TextArea name='Teksti'
-                             onChange={(e) => this.setState({teksti: e.target.value})} value={this.state.teksti} />
+                  <TextArea name='kommentti'
+                             onChange={(e) => this.setState({kommentti: e.target.value})} value={this.state.kommentti} />
                 </div>
                 <Divider horizontal hidden />
                 <Button onClick={this.handleSave} primary>Tallenna</Button>
                 <Button onClick={this.handleRestore} secondary>Peruuta</Button>
               </Form>
-          </Segment>
-       </>
-     )
+            </Segment>
+          </>
+        )
   }
 }
 
-export default KeskusteluLomake
+export default KeskusteluLisaLomake

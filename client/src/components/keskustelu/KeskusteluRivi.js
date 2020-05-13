@@ -10,6 +10,7 @@ import {connect} from 'react-redux'
 import {Feed, Icon, Divider, Button, Message} from 'semantic-ui-react'
 import KeskusteluValikko, {iTila} from './KeskusteluValikko'
 import KeskusteluLomake from '../forms/KeskusteluLomake'
+import KeskusteluLisaLomake from '../forms/KeskusteluLisaLomake'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {finnishDate} from '../common/aika'
 import keskusteluData from '../../services/keskustelu'
@@ -168,13 +169,13 @@ class KeskusteluRivi extends Component {
       switch(this.state.iTila) {
         case iTila.SELAUS:
           return (  <KeskusteluValikko  isOwner={isOwner}
-                                        like={this.props.like} disLike={this.props.disLike}
+                                        like={this.props.like ? this.props.like : 0} disLike={this.props.disLike ? this.props.disLike : 0}
                                         nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />)
         case iTila.POISTO:
           return(
             <div>
               <Message warning>
-                <Message.Header>Haluatko varmasti poistaa?</Message.Header>
+                <Message.Header>Haluatko varmasti poistaa keskustelun?</Message.Header>
               </Message>
               <Divider horizontal hidden />
               <Button onClick={this.doDelete} primary>Poista</Button>
@@ -190,9 +191,9 @@ class KeskusteluRivi extends Component {
         case iTila.LISAYS:
           return (
               <div>
-                <Message info>
-                  <Message.Header>Lisäys tila.</Message.Header>
-                </Message>
+                <KeskusteluLisaLomake doAdd={this.doAdd} restore={this.restore}
+                                      keskustelu={this.props.keskustelu}
+                                      setMessage={this.props.setMessage} />
                 <Divider horizontal hidden />
                 <Button onClick={this.doAdd} primary>Lisää</Button>
                 <Button onClick={this.restore} secondary>Peruuta</Button>

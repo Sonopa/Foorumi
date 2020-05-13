@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Button, Form, TextArea, Divider, Message} from 'semantic-ui-react'
+import {Segment, Button, Form, TextArea, Divider, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {checkAuth, getUserId} from '../../services/local/session'
 import foorumiData from '../../services/foorumi'
@@ -158,24 +158,31 @@ class AiheLomake extends Component {
         )
       case tila.LISAYS:
         return(
-          <Form>
-            <Form.Input label='Aihe' name='aihe' type='input'
-                         onChange={(e) => this.setState({uusiAihe: e.target.value})} value={this.state.uusiAihe} />
-            <div className='field'>
-              <label>Kuvaus</label>
-              <TextArea name='kuvaus'
-                         onChange={(e) => this.setState({kuvaus: e.target.value})} value={this.state.kuvaus} />
-            </div>
-            <Divider horizontal hidden />
-            <Button onClick={this.doAdd} primary>Tallenna</Button>
-            <Button onClick={this.restore} secondary>Peruuta</Button>
-          </Form>
+          <>
+            <Message info>
+              <Message.Header>Lisää aihe</Message.Header>
+            </Message>
+            <Segment>
+              <Form>
+                <Form.Input label='Aihe' name='aihe' type='input'
+                             onChange={(e) => this.setState({uusiAihe: e.target.value})} value={this.state.uusiAihe} />
+                <div className='field'>
+                  <label>Kuvaus</label>
+                  <TextArea name='kuvaus'
+                             onChange={(e) => this.setState({kuvaus: e.target.value})} value={this.state.kuvaus} />
+                </div>
+                <Divider horizontal hidden />
+                <Button onClick={this.doAdd} primary>Tallenna</Button>
+                <Button onClick={this.restore} secondary>Peruuta</Button>
+              </Form>
+            </Segment>
+          </>
         )
       case tila.POISTO:
         return(
           <div>
             <Message warning>
-              <Message.Header>Haluatko varmasti poistaa?</Message.Header>
+              <Message.Header>Haluatko varmasti poistaa aiheen?</Message.Header>
             </Message>
             <Divider horizontal hidden />
             <Button onClick={this.doDelete} primary>Poista</Button>

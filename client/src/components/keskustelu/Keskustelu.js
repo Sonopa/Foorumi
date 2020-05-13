@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Form, TextArea, Button, Segment, Divider} from 'semantic-ui-react'
+import {Form, TextArea, Button, Segment, Divider, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {isLoggedIn, checkAuth, getUser} from '../../services/local/session'
 import keskusteluData from '../../services/keskustelu'
@@ -90,6 +90,10 @@ class Keskustelu extends Component {
       <>
         {isLoggedIn() ?
           this.state.lisaaTila  ?
+          <>
+            <Message info>
+              <Message.Header>Lisää keskustelu</Message.Header>
+            </Message>
             <Segment>
               <Form>
                 <Form.Input label='Otsikko' name='otsikko' type='input'
@@ -103,8 +107,9 @@ class Keskustelu extends Component {
                 <Button onClick={this.handleSave} primary>Tallenna</Button>
                 <Button onClick={this.handleRestore} secondary>Peruuta</Button>
               </Form>
-            </Segment> :
-            <Button onClick={this.handleAdd} primary>Lisää</Button>
+            </Segment>
+          </>
+          : <Button onClick={this.handleAdd} primary>Lisää</Button>
           : ''
         }
       </>
