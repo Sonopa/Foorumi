@@ -74,7 +74,7 @@ class KeskusteluLisaLomake extends Component {
                              onChange={(e) => this.setState({kommentti: e.target.value})} value={this.state.kommentti} />
                 </div>
                 <Divider horizontal hidden />
-                <Button onClick={this.handleSave} primary>Tallenna</Button>
+                <Button onClick={this.handleSave} primary>Lisää</Button>
                 <Button onClick={this.handleRestore} secondary>Peruuta</Button>
               </Form>
             </Segment>

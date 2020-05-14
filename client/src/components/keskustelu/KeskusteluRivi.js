@@ -13,7 +13,7 @@ import KeskusteluLomake from '../forms/KeskusteluLomake'
 import KeskusteluLisaLomake from '../forms/KeskusteluLisaLomake'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {finnishDate} from '../common/aika'
-import {createLike, createHate} from '../common/like'
+import {createLike, createHate, isOpinion} from '../common/like'
 import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
@@ -56,10 +56,17 @@ class KeskusteluRivi extends Component {
   /// menuLike
   menuLike = () => {
     logger.info('menuLike', this.props.keskustelu)
+    if (isOpinion(this.props.user._id, this.props.keskustelu.likes, this.props.keskustelu.dislikes)) {
+        this.props.setMessage(`Olet jo arvioinut keskustelun ${this.props.keskustelu.title}.`, messageTypes.WARNING)
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+      return
+    }
     keskusteluData.like(this.props.keskustelu._id, this.props.keskustelu.aihe, createLike())
       .then(responseData => {
         logger.info('keskusteluData.like:', responseData)
-        this.props.setMessage(`Keskustelu ${this.props.otsikko} on saanut liken.`, messageTypes.INFO)
+        this.props.setMessage(`Keskustelu ${this.props.keskustelu.title} on saanut liken.`, messageTypes.INFO)
         this.props.refresh()
         this.setTila(iTila.SELAUS)
       })
@@ -77,10 +84,17 @@ class KeskusteluRivi extends Component {
   /// menuHate
   menuHate = () => {
     logger.info('menuHate', this.props.keskustelu)
+    if (isOpinion(this.props.user._id, this.props.keskustelu.likes, this.props.keskustelu.dislikes)) {
+        this.props.setMessage(`Olet jo arvioinut keskustelun ${this.props.keskustelu.title}.`, messageTypes.WARNING)
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+      return
+    }
     keskusteluData.like(this.props.keskustelu._id, this.props.keskustelu.aihe, createHate())
       .then(responseData => {
         logger.info('keskusteluData.like:', responseData)
-        this.props.setMessage(`Keskustelu ${this.props.otsikko} on saanut negatiivisen palautteen.`, messageTypes.INFO)
+        this.props.setMessage(`Keskustelu ${this.props.keskustelu.title} on saanut negatiivisen palautteen.`, messageTypes.INFO)
         this.props.refresh()
         this.setTila(iTila.SELAUS)
       })
@@ -209,7 +223,7 @@ class KeskusteluRivi extends Component {
   keskusteluLomake() {
 
     logger.info("keskusteluLomake.keskustelu", this.props.keskustelu)
-    const isOwner = this.isUserOwner(this.props.omistaja)
+    const isOwner = this.isUserOwner(this.props.keskustelu.owner)
     if(this.props.user.username)  {
 
       switch(this.state.iTila) {
@@ -242,8 +256,6 @@ class KeskusteluRivi extends Component {
                                       keskustelu={this.props.keskustelu}
                                       setMessage={this.props.setMessage} />
                 <Divider horizontal hidden />
-                <Button onClick={this.doAdd} primary>Lisää</Button>
-                <Button onClick={this.restore} secondary>Peruuta</Button>
               </div>
           )
         default:
@@ -262,10 +274,10 @@ class KeskusteluRivi extends Component {
         </Feed.Label>
         <Feed.Content>
           <Feed.Summary>
-            <Feed.User>{this.getStoredUser(this.props.omistaja)}</Feed.User> {this.props.otsikko}
-            <Feed.Date>{finnishDate(this.props.aika)}</Feed.Date>
+            <Feed.User>{this.getStoredUser(this.props.keskustelu.owner)}</Feed.User> {this.props.keskustelu.title}
+            <Feed.Date>{finnishDate(this.props.keskustelu.createdAt)}</Feed.Date>
           </Feed.Summary>
-          <Feed.Extra text>{this.props.kommentti}
+          <Feed.Extra text>{this.props.keskustelu.text}
           </Feed.Extra>
           <Divider horizontal hidden />
           <Feed.Extra text>

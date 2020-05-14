@@ -9,6 +9,7 @@ import {Form, TextArea, Button, Segment, Divider, Message} from 'semantic-ui-rea
 import {messageTypes, messageTime} from '../common/Huomio'
 import {isLoggedIn, checkAuth, getUser} from '../../services/local/session'
 import keskusteluData from '../../services/keskustelu'
+import {iTila} from './KeskusteluValikko'
 
 const logger = require('simple-console-logger').getLogger('Keskustelu')
 

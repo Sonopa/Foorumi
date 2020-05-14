@@ -73,14 +73,6 @@ class Keskustelut extends Component {
     const keskusteluRivit = this.state.keskustelut.map(keskustelu => {
       return (<KeskusteluRivi key={keskustelu._id}
                               keskustelu={keskustelu}
-                              id={keskustelu._id}
-                              aihe={keskustelu.topic}
-                              omistaja={keskustelu.owner}
-                              otsikko={keskustelu.title}
-                              aika={keskustelu.createdAt}
-                              kommentti={keskustelu.text}
-                              like={keskustelu.likes}
-                              disLike={keskustelu.dislikes}
                               refresh={this.refresh}
                               setMessage={this.props.setMessage}/>)
     })

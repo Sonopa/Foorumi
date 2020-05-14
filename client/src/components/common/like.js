@@ -25,3 +25,21 @@ export function createLike() {
 export function createHate () {
     return {like: like.HATE}
 }
+
+/// isOpinion - Luo Like/Hate -objecti.
+export function isOpinion(likerId, likes, hates) {
+
+    if(likes && Array.isArray(likes)) {
+      if(likes.findIndex(item => item === likerId) >= 0) {
+        return true
+      }
+    }
+
+    if(hates && Array.isArray(hates)) {
+      if(hates.findIndex(item => item === likerId) >= 0) {
+        return true
+      }
+    }
+
+    return false
+}
