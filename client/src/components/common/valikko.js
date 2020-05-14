@@ -10,3 +10,13 @@ export const VAALI   =  '/vaali'
 export const USERS   =  '/users'
 export const LOGIN   =  '/login'
 export const LOGOUT  =  '/logout'
+
+/// Tila
+export const Tila = {
+  LIKE:   'like',
+  HATE:   'hate',
+  SELAUS: 'selaus',
+  LISAYS: 'lisays',
+  MUUTOS: 'muutos',
+  POISTO: 'poisto'
+}

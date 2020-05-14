@@ -8,7 +8,7 @@ import axios from 'axios'
 import {storeSession, removeSession, getAuth} from '../services/local/session'
 const logger = require('simple-console-logger').getLogger('users')
 
-const userUrl = '/user'
+// const userUrl = '/user'
 const usersUrl = '/users'
 const registerUrl = '/register'
 const loginUrl = '/login'
@@ -33,28 +33,28 @@ const getUser = (id) => {
 /// Create - luo uusi käyttäjä Foorumille
 const create = async (newObject) => {
   const response = await axios.post(`${registerUrl}`, newObject)
-  logger.info('axios.create', `${registerUrl}`, newObject, response)
+  logger.info('axios.create', `${registerUrl}`, response)
   return response.data
 }
 
 /// Update - päivitä käyttäjän tiedot
 const update = async (userId, newObject) => {
-  const response = await axios.put(`${userUrl}/${userId}`, newObject, getAuth())
-  logger.info('axios.update', `${usersUrl}/${userId}`, newObject, response)
+  const response = await axios.put(`${usersUrl}/${userId}`, newObject, getAuth())
+  logger.info('axios.update', `${usersUrl}/${userId}`, newObject.username, response)
   return response.data
 }
 
 /// Remove - poista käyttäjä Foorumilta
-const remove = async (userId) => {
-  const response = await axios.delete(`${usersUrl}/${userId}`, getAuth())
-  logger.info('axios.delete:', `${usersUrl}/${userId}`, response)
+const remove = async (userId, newUser) => {
+  logger.info('axios.delete:', `${usersUrl}/${userId}`, newUser)
+  const response = await axios.delete(`${usersUrl}/${userId}`, newUser, getAuth())
   return response.data
 }
 
 /// Login - kirjaudu sisään
 const login = async (newObject) => {
   const response = await axios.post(`${loginUrl}`, newObject)
-  logger.info('axios.login', `${loginUrl}`, newObject, response)
+  logger.info('axios.login', `${loginUrl}`, response)
   const user = {
     token: response.data.session.token,
     username: response.data.session.username

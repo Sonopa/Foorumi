@@ -19,7 +19,7 @@ const UserRivit = (props) => {
                           id={user._id}
                           nimi={user.name}
                           tunnus={user.username}
-                          email={user.email}
+                          // email={user.email}
                           activeUser={props.activeUser}
                           handleUser={props.handleUser}/>)
       })

@@ -46,11 +46,11 @@ class LoginForm extends Component {
           username: this.state.username,
           password: this.state.password
       }
-      logger.info('LoginForm.render.handleSave.newLogin', newLogin)
+      logger.info('LoginForm.render.handleSave.newLogin', newLogin.username)
 
       usersData.login(newLogin)
         .then(responseData => {
-          logger.info('LoginForm.render.login.responseData', responseData)
+          logger.info(`Käyttäjä ${this.state.username} kirjautui Foorumiin.`)
           this.props.setActiveUserMWare()
           this.props.setMessage(`Käyttäjä ${this.state.username} kirjautui Foorumiin.`, messageTypes.INFO)
           this.setState({username: '', password: ''})
