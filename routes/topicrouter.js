@@ -50,6 +50,9 @@ router.put("/aiheet/:topic_id/keskustelut/:id", discussionController.discussion_
 // Poistaa aiheen topic_id keskustelun id
 router.delete("/aiheet/:topic_id/keskustelut/:id", discussionController.discussion_delete);
 
+// Tykkää tai epätykkää keskustelusta
+router.post("/aiheet/:topic_id/keskustelut/:id/like", discussionController.discussion_like_post);
+
 
 // Kommentit 
 

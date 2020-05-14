@@ -77,8 +77,10 @@ exports.comment_update_put = [
 
         Comment.findById(req.params.id, function (err, comment) {
             if (err) {
-                console.log('Error finding comment to update');
-                return res.status(404).json({ message: 'Comment not found' })
+                return res.status(500).json({ message: 'Failed comment search: ' + err });
+            }
+            if (!comment) {
+                return res.status(404).json({message: 'Comment not found'});
             }
             if (comment.owner._id != req.decoded.id) {
                 return res.status(403).json({ message: 'Forbidden' })
@@ -104,8 +106,10 @@ exports.comment_update_put = [
 exports.comment_delete = function(req, res) {
     Comment.findById(req.params.id, function(err, comment) {
         if (err) {
-            console.log('Error finding comment to delete');
-            return res.status(404).json({ message: 'Comment not found' })
+            return res.status(500).json({ message: 'Failed comment search: ' + err });
+        }
+        if (!comment) {
+            return res.status(404).json({message: 'Comment not found'});
         }
         if (comment.owner._id == req.decoded.id) {
             Comment.deleteOne({'_id': req.params.id}, function(err) {

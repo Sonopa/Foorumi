@@ -83,8 +83,10 @@ exports.topic_update_put = [
 
         Topic.findById(req.params.id, function (err, topic) {
             if (err) {
-                console.log('Error finding topic to update');
-                return res.status(404).json({ message: 'Topic not found' })
+                return res.status(500).json({ message: 'Failed topic search: ' + err });
+            }
+            if (!topic) {
+                return res.status(404).json({message: 'Topic not found'});
             }
             if (topic.owner._id != req.decoded.id) {
                 return res.status(403).json({ message: 'Forbidden' })
@@ -112,8 +114,10 @@ exports.topic_update_put = [
 exports.topic_delete = function(req, res) {
     Topic.findById(req.params.id, function(err, topic) {
         if (err) {
-            console.log('Error finding topic to delete');
-            return res.status(404).json({ message: 'Topic not found' })
+            return res.status(500).json({ message: 'Failed topic search: ' + err });
+        }
+        if (!topic) {
+            return res.status(404).json({message: 'Topic not found'});
         }
         if (topic.owner._id == req.decoded.id) {
             Topic.deleteOne({'_id': req.params.id}, function(err) {

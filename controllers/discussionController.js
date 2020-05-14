@@ -94,8 +94,8 @@ exports.discussion_update_put = [
             } else {
                 discussion.save(function (err) {
                     if (err) { 
-                        console.log('Error updating topic' + err)
-                        return res.status(409).json({ message: 'Not updated' })
+                        console.log('Error updating discussion' + err)
+                        return res.status(500).json({ message: 'Not updated' })
                     }
                     res.status(200).json({ message: 'Discussion updated', discussion: discussion })
                 })
@@ -107,8 +107,10 @@ exports.discussion_update_put = [
 exports.discussion_delete = function(req, res) {
     Discussion.findById(req.params.id, function(err, discussion) {
         if (err) {
-            console.log('Error finding discussion to delete');
-            return res.status(404).json({ message: 'Discussion not found' })
+            return res.status(500).json({ message: 'Failed discussion search: ' + err });
+        }
+        if (!discussion) {
+            return res.status(404).json({message: 'Discussion not found'});
         }
         if (discussion.owner._id == req.decoded.id) {
             Discussion.deleteOne({'_id': req.params.id}, function(err) {
@@ -121,5 +123,42 @@ exports.discussion_delete = function(req, res) {
         } else {
             return res.status(403).json({ message: 'Forbidden' })
         } 
+    })
+}
+
+exports.discussion_like_post = function(req, res) {
+    Discussion.findById(req.params.id, function(err, discussion) {
+        if (err) {
+            return res.status(500).json({ message: 'Discussion search failed' })
+        }
+        if (!discussion) {
+            return res.status(404).json({ message: 'Discussion not found' })
+        }
+        if (discussion.likes.includes(req.decoded.id) || discussion.dislikes.includes(req.decoded.id)) {
+            return res.status(403).json({ message: 'Too many likes' })
+        }
+        if (!req.body) {
+            return res.status(400).json({ message: 'Missing request body' })
+        }
+        if (req.body.like === 'no') {
+            discussion.dislikes.push(req.decoded.id);
+            discussion.save(function (err) {
+                if (err) { 
+                    console.log('Error updating discussion' + err)
+                    return res.status(500).json({ message: 'Not updated' })
+                }
+                return res.status(200).json({ message: 'Discussion disliked' })
+            })
+        }
+        if (req.body.like === 'yes') {
+            discussion.likes.push(req.decoded.id);
+            discussion.save(function (err) {
+                if (err) { 
+                    console.log('Error updating discussion' + err)
+                    return res.status(409).json({ message: 'Not updated' })
+                }
+                return res.status(200).json({ message: 'Discussion liked' })
+            })
+        }
     })
 }

@@ -45,7 +45,7 @@ exports.user_create_post = [
 ]
 
 exports.user_update_put = [
-    validator.body('password', 'Password required').trim().isLength({ min: 1 }),
+    validator.body('password', 'Password required').trim().isLength({ min: 8 }),
     //TODO: Add validators/sanitizers
 
     validator.sanitizeBody('name').escape(),

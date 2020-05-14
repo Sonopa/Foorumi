@@ -7,7 +7,9 @@ var DiscussionSchema = new Schema({
     owner: {type: Schema.Types.ObjectId, ref: 'User', required: true},
     title: {type: String, min: 3, max: 100, required: true},
     text: {type: String, required: true},
-    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}]
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+    likes: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    dislikes: [{type: Schema.Types.ObjectId, ref: 'User'}]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Discussion', DiscussionSchema);
