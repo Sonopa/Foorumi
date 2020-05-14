@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Segment, List, Grid, Divider, Button} from 'semantic-ui-react'
+import {Segment, List, Grid, Divider} from 'semantic-ui-react'
 import Huomio, {messageTypes} from './common/Huomio'
 import {finnishDate} from './common/aika'
 import Tilasto from './vaali/Tilasto'

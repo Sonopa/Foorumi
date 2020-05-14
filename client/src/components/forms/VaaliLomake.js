@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {Segment, Button, Form, TextArea, Divider, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
-import {checkAuth, getUserId} from '../../services/local/session'
+import {checkAuth} from '../../services/local/session'
 import foorumiData from '../../services/foorumi'
 const logger = require('simple-console-logger').getLogger('VaaliLomake')
 
