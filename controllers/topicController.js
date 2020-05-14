@@ -88,7 +88,7 @@ exports.topic_update_put = [
             if (!topic) {
                 return res.status(404).json({message: 'Topic not found'});
             }
-            if (topic.owner._id != req.decoded.id) {
+            if (topic.owner._id != req.decoded.id && req.decoded.role !== 'admin') {
                 return res.status(403).json({ message: 'Forbidden' })
             }
 
@@ -119,7 +119,7 @@ exports.topic_delete = function(req, res) {
         if (!topic) {
             return res.status(404).json({message: 'Topic not found'});
         }
-        if (topic.owner._id == req.decoded.id) {
+        if (topic.owner._id == req.decoded.id || req.decoded.role === 'admin') {
             Topic.deleteOne({'_id': req.params.id}, function(err) {
                 if (err) {
                     return res.status(409).json({message:'Error deleting topic'})

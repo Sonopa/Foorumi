@@ -82,7 +82,7 @@ exports.comment_update_put = [
             if (!comment) {
                 return res.status(404).json({message: 'Comment not found'});
             }
-            if (comment.owner._id != req.decoded.id) {
+            if (comment.owner._id != req.decoded.id && req.decoded.role !== 'admin') {
                 return res.status(403).json({ message: 'Forbidden' })
             }
 
@@ -111,7 +111,7 @@ exports.comment_delete = function(req, res) {
         if (!comment) {
             return res.status(404).json({message: 'Comment not found'});
         }
-        if (comment.owner._id == req.decoded.id) {
+        if (comment.owner._id == req.decoded.id || req.decoded.role === 'admin') {
             Comment.deleteOne({'_id': req.params.id}, function(err) {
                 if (err) {
                     return res.status(409).json({message:'Error deleting comment'})

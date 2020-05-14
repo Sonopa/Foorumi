@@ -28,7 +28,8 @@ exports.user_create_post = [
             let user = new User({
                 username:req.body.username,
                 password:hash,
-                name:req.body.name
+                name:req.body.name,
+                role:'user'
             })
 
             user.save(function(err, user) {
@@ -52,7 +53,7 @@ exports.user_update_put = [
     validator.sanitizeBody('password').escape(),
 
     (req, res) => {
-        if (req.params.id !== req.decoded.id) {
+        if (req.params.id !== req.decoded.id || req.decoded.role === 'admin') {
             return res.status(403).json({message: 'Forbidden'})
         }
         const errors = validator.validationResult(req);
@@ -83,8 +84,8 @@ exports.user_update_put = [
 
 exports.user_delete = [
     validator.body('id').custom((value, { req }) => {
-        if (value !== req.decoded.id) {
-          throw new Error("User id doesn't match");
+        if (value !== req.decoded.id && req.decoded.role !== 'admin') {
+          throw new Error("Forbidden");
         }
         return true;
     }),
