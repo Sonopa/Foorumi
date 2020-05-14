@@ -31,6 +31,13 @@ const create = async (newObject) => {
   return response.data
 }
 
+/// Update - päivittää olemassa olevan keskustelun aiheen
+const update = async (id, aihe) => {
+  logger.info('axios.update:', `${baseUrl}/${id}`, aihe)
+  const response = await axios.put(`${baseUrl}/${id}`, aihe, getAuth())
+  return response.data
+}
+
 /// Remove - poista keskustelun aihe Foorumilta
 const remove = async (id) => {
   logger.info('axios.remove:', `${baseUrl}/${id}`)
@@ -38,4 +45,4 @@ const remove = async (id) => {
   return response.data
 }
 
-export default {getAll, create, remove, getAihe}
+export default {getAll, create, update, remove, getAihe}

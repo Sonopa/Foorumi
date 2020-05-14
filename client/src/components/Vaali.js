@@ -7,11 +7,13 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Segment, List, Grid, Divider} from 'semantic-ui-react'
+import {Segment, List, Grid, Divider, Button} from 'semantic-ui-react'
 import Huomio, {messageTypes} from './common/Huomio'
 import {finnishDate} from './common/aika'
 import Tilasto from './vaali/Tilasto'
+import VaaliLomake from './forms/VaaliLomake'
 import usersData from '../services/users'
+import {isLoggedIn} from '../services/local/session'
 
 const logger = require('simple-console-logger').getLogger('Vaali')
 
@@ -51,6 +53,13 @@ const Aihe = (props) => {
               </List.Item>
             </List>
           </Segment>
+        </Grid.Row>
+        <Grid.Row>
+          <Divider horizontal hidden />
+          {isLoggedIn()
+          ? <VaaliLomake aihe={props.aihe} isUserOwner={props.isUserOwner}
+                        setMessage={props.setMessage} /* refresh={props.refresh} */ />
+          : ''}
         </Grid.Row>
       </Grid.Column>
     </Grid>
@@ -125,6 +134,8 @@ class Vaali extends Component {
 
   /// render
   render() {
+    const isUserOwner = (this.props.user && this.props.aihe.owner ) ?
+                        (this.props.user._id === this.props.aihe.owner._id) : false
     return (
       <>
         <Huomio teksti={this.state.messu} tyyppi={this.state.messuTyyppi} />
@@ -134,7 +145,7 @@ class Vaali extends Component {
                 <Segment stacked>
                   <h2>Äänestettävä asia</h2>
                 </Segment>
-                <Aihe aihe={this.props.aihe}/>
+                <Aihe aihe={this.props.aihe} isUserOwner={isUserOwner} setMessage={this.setMessage}/>
               </Grid.Column>
               <Grid.Column>
                 <Tilasto aihe={this.props.aihe} setMessage={this.setMessage} />
@@ -148,7 +159,8 @@ class Vaali extends Component {
 /// Tilasto -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
   return {
-    aihe: state.aihe
+    aihe: state.aihe,
+    user: state.user
   }
 }
 export default withRouter(connect(mapStateToProps, null)(Vaali))
