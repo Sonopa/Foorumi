@@ -28,7 +28,7 @@ exports.login_post = function(req, res) {
                 }
                 if (result) {
                     // TODO: Check here if a valid token already exists for the user
-                    let token = jwt.sign({id: user.id, username: user.username}, config.secret, {expiresIn: 6000})
+                    let token = jwt.sign({id: user.id, username: user.username, role:user.role}, config.secret, {expiresIn: 6000})
                     let session = new Session ({
                         username: user.username,
                         user_id: user._id,

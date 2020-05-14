@@ -115,12 +115,13 @@ function voteCreate(owner, topic, choice, cb) {
   }  );
 }
 
-function userCreate(username, password, cb) {
+function userCreate(username, password, role, cb) {
     
   var user = new User(
     {
       username: username,
-      password: password
+      password: password,
+      role: role
     }
   );    
   user.save(function (err) {
@@ -142,7 +143,7 @@ function createUsers(cb) {
         if (err) {
             console.log("Failed to hash password. Reason: " + err);
         } else {
-          userCreate('matti', hash, callback);
+          userCreate('matti', hash, 'admin', callback);
         }      
       })
     },
@@ -151,7 +152,7 @@ function createUsers(cb) {
         if (err) {
             console.log("Failed to hash password. Reason: " + err);
         } else {
-          userCreate('trolli131', hash, callback);
+          userCreate('trolli131', hash, 'user', callback);
         }      
       })      
     },
@@ -160,7 +161,7 @@ function createUsers(cb) {
         if (err) {
             console.log("Failed to hash password. Reason: " + err);
         } else {
-          userCreate('jaana', hash, callback);
+          userCreate('jaana', hash, 'user', callback);
         }      
       })      
     }

@@ -82,7 +82,7 @@ exports.discussion_update_put = [
                 console.log('Error finding discussion to update');
                 return res.status(404).json({ message: 'Discussion not found' })
             }
-            if (discussion.owner._id != req.decoded.id) {
+            if (discussion.owner._id != req.decoded.id && req.decoded.role !== 'admin') {
                 return res.status(403).json({ message: 'Forbidden' })
             }
 
@@ -112,7 +112,7 @@ exports.discussion_delete = function(req, res) {
         if (!discussion) {
             return res.status(404).json({message: 'Discussion not found'});
         }
-        if (discussion.owner._id == req.decoded.id) {
+        if (discussion.owner._id == req.decoded.id || req.decoded.role === 'admin') {
             Discussion.deleteOne({'_id': req.params.id}, function(err) {
                 if (err) {
                     return res.status(409).json({message:'Error deleting discussion'})

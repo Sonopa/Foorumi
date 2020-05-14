@@ -11,6 +11,7 @@ var UserSchema = new Schema({
     discussions: [{type: Schema.Types.ObjectId, ref: 'Discussion'}],
     topics: [{type: Schema.Types.ObjectId, ref: 'Topic'}],
     votes: [{type: Schema.Types.ObjectId, ref: 'Vote'}],
+    role: {type: String, enum: ['user', 'admin']}
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);
