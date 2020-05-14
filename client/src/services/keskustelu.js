@@ -48,11 +48,11 @@ const remove = async (id, topicId) => {
   return response.data
 }
 
-/// Remove - poista keskustelu aiheelta
+/// Like - lisää tykkäys keskustelulle.
 const like = async (id, topicId, like) => {
   const url = `${baseUrl}/${topicId}${addUrl}/${id}${likeUrl}`;
-  logger.info('axios.remove:', url)
-  const response = await axios.delete(url, like, getAuth())
+  logger.info('axios.like:', url, like)
+  const response = await axios.post(url, like, getAuth())
   return response.data
 }
 

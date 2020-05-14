@@ -13,7 +13,7 @@ import KeskusteluLomake from '../forms/KeskusteluLomake'
 import KeskusteluLisaLomake from '../forms/KeskusteluLisaLomake'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {finnishDate} from '../common/aika'
-import {createLike} from '../common/like'
+import {createLike, createHate} from '../common/like'
 import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
@@ -77,6 +77,22 @@ class KeskusteluRivi extends Component {
   /// menuHate
   menuHate = () => {
     logger.info('menuHate', this.props.keskustelu)
+    keskusteluData.like(this.props.keskustelu._id, this.props.keskustelu.aihe, createHate())
+      .then(responseData => {
+        logger.info('keskusteluData.like:', responseData)
+        this.props.setMessage(`Keskustelu ${this.props.otsikko} on saanut negatiivisen palautteen.`, messageTypes.INFO)
+        this.props.refresh()
+        this.setTila(iTila.SELAUS)
+      })
+      .catch(error => {
+        logger.info('keskusteluData.like:', error)
+        this.props.setMessage(error.message, messageTypes.WARNING)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+    })
   }
 
   /// willEdit
@@ -165,6 +181,7 @@ class KeskusteluRivi extends Component {
       return (omistaja === this.props.user._id)
   }
 
+  /// getStoredUser
   getStoredUser = (userId) => {
     if(!this.props.users) {
       return userId
@@ -176,17 +193,30 @@ class KeskusteluRivi extends Component {
     return user.username
   }
 
+  /// opinions- helper method generates amount of likes / dislikes from keskustelu.
+  opinions(opinionArr) {
+    logger.info("opinions.opinionArr", opinionArr, this.props.keskustelu)
+    if(!opinionArr) {
+      return 0
+    }
+    if(!Array.isArray(opinionArr)) {
+      return 0
+    }
+    return opinionArr.length
+  }
+
+  /// keskusteluLomake
   keskusteluLomake() {
 
     logger.info("keskusteluLomake.keskustelu", this.props.keskustelu)
-
     const isOwner = this.isUserOwner(this.props.omistaja)
     if(this.props.user.username)  {
 
       switch(this.state.iTila) {
         case iTila.SELAUS:
           return (  <KeskusteluValikko  isOwner={isOwner}
-                                        like={this.props.like ? this.props.like : 0} disLike={this.props.disLike ? this.props.disLike : 0}
+                                        like={this.opinions(this.props.keskustelu.likes)}
+                                        disLike={this.opinions(this.props.keskustelu.dislikes)}
                                         nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />)
         case iTila.POISTO:
           return(
