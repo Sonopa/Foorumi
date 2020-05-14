@@ -13,6 +13,7 @@ import KeskusteluLomake from '../forms/KeskusteluLomake'
 import KeskusteluLisaLomake from '../forms/KeskusteluLisaLomake'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {finnishDate} from '../common/aika'
+import {createLike} from '../common/like'
 import keskusteluData from '../../services/keskustelu'
 
 const logger = require('simple-console-logger').getLogger('KeskusteluRivi')
@@ -55,6 +56,22 @@ class KeskusteluRivi extends Component {
   /// menuLike
   menuLike = () => {
     logger.info('menuLike', this.props.keskustelu)
+    keskusteluData.like(this.props.keskustelu._id, this.props.keskustelu.aihe, createLike())
+      .then(responseData => {
+        logger.info('keskusteluData.like:', responseData)
+        this.props.setMessage(`Keskustelu ${this.props.otsikko} on saanut liken.`, messageTypes.INFO)
+        this.props.refresh()
+        this.setTila(iTila.SELAUS)
+      })
+      .catch(error => {
+        logger.info('keskusteluData.like:', error)
+        this.props.setMessage(error.message, messageTypes.WARNING)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+    })
   }
 
   /// menuHate

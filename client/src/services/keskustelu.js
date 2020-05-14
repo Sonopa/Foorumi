@@ -10,11 +10,20 @@ import {getAuth} from '../services/local/session'
 const logger = require('simple-console-logger').getLogger('keskustelu')
 const baseUrl = '/api/aiheet'
 const addUrl = '/keskustelut'
+const likeUrl = '/like'
+
 
 /// GetAll - Hae aiheen kaikki keskustelut
 const getAll = (id) => {
   logger.info('axios.getAll:', `${baseUrl}/${id}${addUrl}`)
   const request = axios.get(`${baseUrl}/${id}${addUrl}`)
+  return request.then(response => response.data.discussion_list)
+}
+
+/// GetOne - Haetaan yhden keskustelun tiedot
+const get = (id, topicId) => {
+  logger.info('axios.get:', `${baseUrl}/${id}${addUrl}/${id}`)
+  const request = axios.get(`${baseUrl}/${id}${addUrl}/${id}`)
   return request.then(response => response.data.discussion_list)
 }
 
@@ -39,4 +48,12 @@ const remove = async (id, topicId) => {
   return response.data
 }
 
-export default {getAll, create, update, remove}
+/// Remove - poista keskustelu aiheelta
+const like = async (id, topicId, like) => {
+  const url = `${baseUrl}/${topicId}${addUrl}/${id}${likeUrl}`;
+  logger.info('axios.remove:', url)
+  const response = await axios.delete(url, like, getAuth())
+  return response.data
+}
+
+export default {getAll, get, create, update, remove, like}
