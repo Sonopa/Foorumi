@@ -5,7 +5,10 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Segment, Button, Form, TextArea, Divider, Message} from 'semantic-ui-react'
+import {updateActiveAiheMWare} from '../../stores/actions/aiheAction'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {checkAuth} from '../../services/local/session'
 import foorumiData from '../../services/foorumi'
@@ -44,6 +47,9 @@ class VaaliLomake extends Component {
        if(this.inWork()) {
          this.clearForm()
          this.setTila(tila.SELAUS)
+       } else {
+        this.setUusiAihe(this.props.aihe.title)
+        this.setKuvaus(this.props.aihe.description)
        }
      }
   }
@@ -84,6 +90,8 @@ class VaaliLomake extends Component {
   /// willChange
   willChange = (event, {name}) => {
     event.preventDefault()
+    this.setUusiAihe(this.props.aihe.title)
+    this.setKuvaus(this.props.aihe.description)
     this.setTila(tila.MUUTOS)
   }
 
@@ -107,9 +115,9 @@ class VaaliLomake extends Component {
       .then(responseData => {
         logger.info('doChange.update:', responseData)
         this.clearForm()
+        this.props.updateActiveAiheMWare(aihe);
         this.setTila(tila.SELAUS)
         this.props.setMessage(`Aihe ${aihe.title} on päivitetty.`, messageTypes.INFO)
-        // this.props.refresh()
       })
       .catch(error => {
         logger.info('handleSave.catch:', error)
@@ -164,4 +172,9 @@ class VaaliLomake extends Component {
   }
 }
 
-export default VaaliLomake
+/// VaaliLomake -komponentti - Redux Tilankäsittely
+const mapDispatchToProps = {
+  updateActiveAiheMWare
+}
+
+export default withRouter(connect(null, mapDispatchToProps)(VaaliLomake))

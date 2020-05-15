@@ -12,7 +12,7 @@ import {setCurrentAihe} from '../../stores/actions/aiheAction'
 import {updateAiheet} from '../../stores/actions/aiheetAction'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {isLoggedIn} from '../../services/local/session'
-import {createFor, createAgainst, /* hasVoted,*/ choice} from '../common/choice'
+import {createFor, createAgainst, hasVoted, choice} from '../common/choice'
 import foorumiData from '../../services/foorumi'
 
 import * as cloneDeep from 'lodash/cloneDeep'
@@ -80,14 +80,23 @@ class Tilasto extends Component {
   /// voteFor
   voteFor = (event, {name}) => {
     event.preventDefault()
-    logger.info('handleVoteFor:', this.props)
+    logger.info('voteFor:', this.props)
+    if(hasVoted(this.props.user._id, this.props.aihe.voters)) {
+        logger.info('foorumiData.voteFor:', this.props.aihe.votes)
+        this.props.setMessage(`${this.props.user.username} on jo äänestänyt ${this.props.aihe.title}`, messageTypes.WARNING)
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+        return
+    }
     foorumiData.vote(this.props.aihe._id, createFor())
       .then(responseData => {
         logger.info('foorumiData.puolesta', responseData)
         this.props.setMessage(`${this.props.user.username} kannatti: ${this.props.aihe.title}`, messageTypes.INFO)
         const newAihe = cloneDeep(this.props.aihe)
         newAihe.votes.push(createFor())
-        this.props.setCurrentAihe(cloneDeep(newAihe))
+        newAihe.voters.push(this.props.user._id)
+        this.props.setCurrentAihe(newAihe)
         this.props.updateAiheet(newAihe)
       })
       .catch(error => {
@@ -105,12 +114,21 @@ class Tilasto extends Component {
   voteAgainst = (event, {name}) => {
     event.preventDefault()
     logger.info('handleVoteAgainst:', this.props)
+    if(hasVoted(this.props.user._id, this.props.aihe.voters)) {
+        logger.info('foorumiData.voteAgainst:', this.props.aihe.votes)
+        this.props.setMessage(`${this.props.user.username} on jo äänestänyt ${this.props.aihe.title}`, messageTypes.WARNING)
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+        return
+    }
     foorumiData.vote(this.props.aihe._id, createAgainst())
       .then(responseData => {
         logger.info('foorumiData.vastaan', responseData)
         this.props.setMessage(`${this.props.user.username} vastusti: ${this.props.aihe.title}`, messageTypes.INFO)
         const newAihe = cloneDeep(this.props.aihe)
         newAihe.votes.push(createAgainst())
+        newAihe.voters.push(this.props.user._id)
         this.props.setCurrentAihe(cloneDeep(newAihe))
         this.props.updateAiheet(newAihe)
       })
@@ -162,7 +180,8 @@ class Tilasto extends Component {
 /// Tilasto -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.user,
+    aihe: state.aihe
   }
 }
 

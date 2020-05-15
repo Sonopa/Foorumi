@@ -55,7 +55,6 @@ const UserRivi = (props) => {
 }
 /// Valikko -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
-    logger.info('mapStateToProps.state', state)
   return {
     username: state.username
   }

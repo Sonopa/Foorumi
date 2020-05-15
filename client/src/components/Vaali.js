@@ -11,6 +11,7 @@ import {Segment, List, Grid, Divider, Dropdown} from 'semantic-ui-react'
 import Huomio, {messageTypes} from './common/Huomio'
 import {finnishDate} from './common/aika'
 import Tilasto from './vaali/Tilasto'
+import {setCurrentAiheByIdMWare} from '../stores/actions/aiheAction'
 import VaaliLomake from './forms/VaaliLomake'
 import usersData from '../services/users'
 import {isLoggedIn} from '../services/local/session'
@@ -30,7 +31,8 @@ const Aihe = (props) => {
     <Grid>
       <Grid.Column>
         <Grid.Row>
-          <Dropdown placeholder='Valitse aihe' options={props.aiheLista} />
+          <Dropdown placeholder='Valitse aihe' options={props.aiheLista()}
+                    onChange={(e, data) => {props.selectAihe(data.value)}} />
         </Grid.Row>
         <Divider horizontal hidden />
         <Grid.Row>
@@ -138,11 +140,16 @@ class Vaali extends Component {
 
   aiheLista = () => {
     const aiheet = this.props.aiheet.map(function(aihe, idx) {
-      return { key: aihe._id, text: aihe.title, value: aihe.title }
+      return { key: aihe._id, text: aihe.title, value: aihe._id }
     })
 
     logger.info('aiheet', aiheet)
     return aiheet
+  }
+
+  selectAihe = (topicId) => {
+    logger.info('selectAihe.topicId', topicId)
+    this.props.setCurrentAiheByIdMWare(topicId)
   }
 
   /// render
@@ -158,10 +165,12 @@ class Vaali extends Component {
                 <Segment stacked>
                   <h2>Äänestettävä asia</h2>
                 </Segment>
-                <Aihe aihe={this.props.aihe} isUserOwner={isUserOwner} setMessage={this.setMessage} aiheLista={this.aiheLista()} />
+                <Aihe aihe={this.props.aihe} isUserOwner={isUserOwner}
+                            setMessage={this.setMessage} aiheLista={this.aiheLista}
+                            selectAihe={this.selectAihe}/>
               </Grid.Column>
               <Grid.Column>
-                <Tilasto aihe={this.props.aihe} setMessage={this.setMessage} />
+                <Tilasto /* aihe={this.props.aihe} */ setMessage={this.setMessage} />
               </Grid.Column>
           </Grid>
         </Segment>
@@ -169,6 +178,7 @@ class Vaali extends Component {
     )
   }
 }
+
 /// Tilasto -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
   return {
@@ -177,4 +187,9 @@ const mapStateToProps = state => {
     user: state.user
   }
 }
-export default withRouter(connect(mapStateToProps, null)(Vaali))
+
+const mapDispatchToProps = {
+  setCurrentAiheByIdMWare
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Vaali))

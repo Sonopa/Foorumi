@@ -27,16 +27,10 @@ export function createAgainst () {
 }
 
 /// hasVoted - tarkistaa, onko äänestänyt.
-export function hasVoted(voterId, forVote, againstVote) {
+export function hasVoted(voterId, voters) {
 
-    if(forVote && Array.isArray(forVote)) {
-      if(forVote.findIndex(item => item === voterId) >= 0) {
-        return true
-      }
-    }
-
-    if(againstVote && Array.isArray(againstVote)) {
-      if(againstVote.findIndex(item => item === voterId) >= 0) {
+    if(voters && Array.isArray(voters)) {
+      if(voters.findIndex(item => item === voterId) >= 0) {
         return true
       }
     }

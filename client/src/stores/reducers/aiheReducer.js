@@ -13,7 +13,7 @@ const aiheReducer = (state={}, action) => {
   switch(action.type) {
     case aiheAction.CURRENT:
       logger.info(aiheAction.CURRENT, action)
-      return action.data ? action.data : {_id:0}
+      return action.data ? action.data : state
     default:
       return state
   }

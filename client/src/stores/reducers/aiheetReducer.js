@@ -19,7 +19,7 @@ const aiheetReducer = (state=[], action) => {
       return doAdd(state, action.data)
 
     case aAct.aiheetAction.UPDATE:
-      logger.info(aAct.aiheetAction.UPDATE, action, state)
+      logger.info(aAct.aiheetAction.UPDATE, state, action)
       return doUpdate(state, action.data)
 
     case aAct.aiheetAction.DELETE:
@@ -42,8 +42,10 @@ const doAdd = (aiheet, aihe) => {
 
 /// Update reducer -method
 const doUpdate = (aiheet, aihe) => {
+  logger.info('Update reducer ', aiheet, aihe)
   const index = aiheet.findIndex(item => item._id === aihe._id)
-  return  [aiheet.slice(0, index),aihe,aiheet.slice(index+1, aiheet.length)]
+  const newAiheet = [...aiheet.slice(0, index),aihe,...aiheet.slice(index+1, aiheet.length)]
+  return newAiheet
 }
 
 /// Delete reducer -method
