@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.post("/register", userController.user_create_post);
 
 // Update user
-app.put("/user/:id", middleware.checkToken, userController.user_update_put);
+app.put("/users/:id", middleware.checkToken, userController.user_update_put);
 
 app.post("/login", sessionController.login_post);
 
