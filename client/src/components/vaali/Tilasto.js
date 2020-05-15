@@ -15,7 +15,7 @@ import {isLoggedIn} from '../../services/local/session'
 import {createFor, createAgainst, /* hasVoted,*/ choice} from '../common/choice'
 import foorumiData from '../../services/foorumi'
 
-// import * as cloneDeep from 'lodash/cloneDeep'
+import * as cloneDeep from 'lodash/cloneDeep'
 const logger = require('simple-console-logger').getLogger('Tilasto')
 
 /// Tilasto Item komponentti
@@ -85,11 +85,10 @@ class Tilasto extends Component {
       .then(responseData => {
         logger.info('foorumiData.puolesta', responseData)
         this.props.setMessage(`${this.props.user.username} kannatti: ${this.props.aihe.title}`, messageTypes.INFO)
-        // const newAihe = cloneDeep(this.props.aihe)
-        // this.props.setCurrentAihe(cloneDeep(newAihe))
-        // this.props.updateAiheet(newAihe)
-        // this.props.refresh()
-        // this.setTila(iTila.SELAUS)
+        const newAihe = cloneDeep(this.props.aihe)
+        newAihe.votes.push(createFor())
+        this.props.setCurrentAihe(cloneDeep(newAihe))
+        this.props.updateAiheet(newAihe)
       })
       .catch(error => {
         logger.info('foorumiData.puolesta:', error)
@@ -110,11 +109,10 @@ class Tilasto extends Component {
       .then(responseData => {
         logger.info('foorumiData.vastaan', responseData)
         this.props.setMessage(`${this.props.user.username} vastusti: ${this.props.aihe.title}`, messageTypes.INFO)
-        // const newAihe = cloneDeep(this.props.aihe)
-        // this.props.setCurrentAihe(cloneDeep(newAihe))
-        // this.props.updateAiheet(newAihe)
-        // this.props.refresh()
-        // this.setTila(iTila.SELAUS)
+        const newAihe = cloneDeep(this.props.aihe)
+        newAihe.votes.push(createAgainst())
+        this.props.setCurrentAihe(cloneDeep(newAihe))
+        this.props.updateAiheet(newAihe)
       })
       .catch(error => {
         logger.info('foorumiData.vastaan:', error)

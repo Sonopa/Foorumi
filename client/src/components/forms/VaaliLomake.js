@@ -131,7 +131,7 @@ class VaaliLomake extends Component {
           <>
             {
               this.props.isUserOwner ?
-                <Button onClick={this.willChange} primary>Päivitä</Button>
+                <Button onClick={this.willChange} basic color="blue">Päivitä</Button>
                 : null
             }
           </>
@@ -152,8 +152,8 @@ class VaaliLomake extends Component {
                              onChange={(e) => this.setState({kuvaus: e.target.value})} value={this.state.kuvaus} />
                 </div>
                 <Divider horizontal hidden />
-                <Button onClick={this.doChange} primary>Päivitä</Button>
-                <Button onClick={this.restore} secondary>Peruuta</Button>
+                <Button onClick={this.doChange} basic color="blue">Päivitä</Button>
+                <Button onClick={this.restore} basic color="red">Peruuta</Button>
               </Form>
             </Segment>
           </>
