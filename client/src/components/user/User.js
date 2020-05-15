@@ -23,7 +23,7 @@ class User extends Component {
       _id: '',
       username: '',
       password: '',
-      // email: '',
+      email: '',
       name: '',
       tila: Tila.SELAUS
     }
@@ -44,7 +44,8 @@ class User extends Component {
             usersData.getUser(this.props.user)
               .then(responseData => {
                 logger.info('componentDidMount.usersData.then:', responseData)
-                this.setState({_id: responseData._id, username: responseData.username, name: responseData.name})
+                this.setState({_id: responseData._id, username: responseData.username, name: responseData.name,
+                                email: responseData.email ? responseData.email : ''})
               })
               .catch(error => {
                 logger.error('handleSave.catch:', error)
@@ -147,6 +148,7 @@ class User extends Component {
       _id: this.state._id,
       username: this.state.username,
       name: this.state.name,
+      email: this.state.email,
       password: this.state.password
     }
     logger.info('updateUser', newUser.username)
@@ -171,15 +173,13 @@ class User extends Component {
 
   ///
   render() {
-    /*
-        <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
-    */
     const isUser = (typeof this.props.user) !== 'undefined'
     return (
        isUser ?
           <Form>
             <Form.Input label='Tunnus' name='tunnus' type='input' value={this.state.username}/>
             <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({name: e.target.value})} value={this.state.name} />
+            <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
             {isLoggedIn() && isUserOwner(this.state.username) ?
               <>
                 {Tila.SELAUS === this.state.tila ?
@@ -195,12 +195,10 @@ class User extends Component {
                             <Message.Header>Poista käyttäjän tiedot</Message.Header>
                           </Message>
                           <Segment>
-                            <Form>
                               <Form.Input label='Salasana' name='password' type='password'
                                            onChange={(e) => this.setState({password: e.target.value})} value={this.state.password} />
                               <Button onClick={this.deleteUser} primary>Poista</Button>
                               <Button onClick={this.restore} primary>Peruuta</Button>
-                            </Form>
                           </Segment>
                         </> :
                         <>
@@ -208,12 +206,10 @@ class User extends Component {
                             <Message.Header>Päivitä käyttäjän tiedot</Message.Header>
                           </Message>
                           <Segment>
-                            <Form>
                               <Form.Input label='Salasana' name='password' type='password'
                                            onChange={(e) => this.setState({password: e.target.value})} value={this.state.password} />
                               <Button onClick={this.updateUser} primary>Tallenna</Button>
                               <Button onClick={this.restore} primary>Peruuta</Button>
-                            </Form>
                           </Segment>
                         </>
                       }

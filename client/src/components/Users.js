@@ -114,7 +114,7 @@ class Users extends Component {
           </Grid.Column>
           <Grid.Column width={12} stretched>
             <Segment>
-              <User user={this.state.currentUser}  setMessage={this.setMessage} />
+              <User user={this.state.currentUser} setMessage={this.setMessage} refresh={this.refresh}/>
             </Segment>
           </Grid.Column>
         </Grid>

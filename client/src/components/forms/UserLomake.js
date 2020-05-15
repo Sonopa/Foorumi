@@ -19,7 +19,7 @@ class UserLomake extends Component {
     this.state = {
       tunnus:     this.state ? this.state.tunnus : '',
       nimi:       this.state ? this.state.name : '',
-      // eposti:     this.state ? this.state.eposti : '',
+      eposti:     this.state ? this.state.eposti : '',
       salasana:   this.state ? this.state.salasana : '',
       lisaaTila:  this.state ? this.state.lisaaTila : false
     }
@@ -34,7 +34,7 @@ class UserLomake extends Component {
   /// handleRestore
   handleRestore = (event, {name}) => {
     event.preventDefault()
-    this.setState({tunnus: '', nimi: '', /* eposti: '',*/ salasana: '', lisaaTila: false})
+    this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
   }
 
   /// handleSave
@@ -43,13 +43,15 @@ class UserLomake extends Component {
     const newUser = {
         username: this.state.tunnus,
         password: this.state.salasana,
-        name:     this.state.nimi
+        email:    this.state.eposti,
+        name:     this.state.nimi,
+        role:     'user'
     }
 
     usersData.create(newUser)
       .then(responseData => {
         logger.info('usersData.create:', responseData)
-        this.setState({tunnus: '', nimi: '', /*eposti: '',*/ salasana: '', lisaaTila: false})
+        this.setState({tunnus: '', nimi: '', eposti: '', salasana: '', lisaaTila: false})
         this.props.setMessage(`Käyttäjä ${newUser.username} on lisätty Foorumille.`, messageTypes.INFO)
         this.props.refresh()
       })
@@ -63,10 +65,6 @@ class UserLomake extends Component {
         }, messageTime.NORMAL)
     })
   }
-/*
-              <Form.Input label='E-mail' name='eposti' type='input'
-                           onChange={(e) => this.setState({eposti: e.target.value})} value={this.state.eposti} />
-*/
 
   /// render
   render() {
@@ -78,6 +76,8 @@ class UserLomake extends Component {
                            onChange={(e) => this.setState({tunnus: e.target.value})} value={this.state.tunnus} />
               <Form.Input label='Nimi' name='nimi' type='input'
                            onChange={(e) => this.setState({nimi: e.target.value})} value={this.state.nimi} />
+              <Form.Input label='E-mail' name='eposti' type='input'
+                           onChange={(e) => this.setState({eposti: e.target.value})} value={this.state.eposti} />
               <Form.Input label='Salasana' name='salasana' type='password'
                            onChange={(e) => this.setState({salasana: e.target.value})} value={this.state.salasana} />
               <Divider horizontal hidden />

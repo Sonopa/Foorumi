@@ -32,6 +32,7 @@ const getUser = (id) => {
 
 /// Create - luo uusi käyttäjä Foorumille
 const create = async (newObject) => {
+  logger.info('axios.create', `${registerUrl}`, newObject)
   const response = await axios.post(`${registerUrl}`, newObject)
   logger.info('axios.create', `${registerUrl}`, response)
   return response.data
@@ -46,7 +47,6 @@ const update = async (userId, newObject) => {
 
 /// Remove - poista käyttäjä Foorumilta
 const remove = async (userId, newUser) => {
-  const auth = getAuth()
   logger.info('axios.delete:', `${usersUrl}/${userId}`, {headers:getAuth(), data:newUser})
   const response = await axios.delete(`${usersUrl}/${userId}`, {headers:getAuth().headers, data:newUser})
   return response.data

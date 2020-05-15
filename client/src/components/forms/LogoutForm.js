@@ -42,7 +42,6 @@ class LogoutForm extends Component {
           this.props.setCurrentUser({_id:0})
           setTimeout(() => {
             this.props.setMessage('', messageTypes.CLOSE)
-            this.props.history.push(ETUSIVU) // *** REMOVE THIS ***
           }, messageTime.NORMAL)
       })
     }
