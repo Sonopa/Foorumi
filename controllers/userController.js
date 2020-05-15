@@ -83,7 +83,7 @@ exports.user_update_put = [
 ]
 
 exports.user_delete = [
-    validator.params('id').custom((value, { req }) => {
+    validator.param('id').custom((value, { req }) => {
         if (value !== req.decoded.id && req.decoded.role !== 'admin') {
           throw new Error("Forbidden");
         }
