@@ -53,7 +53,7 @@ exports.user_update_put = [
     validator.sanitizeBody('password').escape(),
 
     (req, res) => {
-        if (req.params.id !== req.decoded.id || req.decoded.role === 'admin') {
+        if (req.params.id !== req.decoded.id && req.decoded.role !== 'admin') {
             return res.status(403).json({message: 'Forbidden'})
         }
         const errors = validator.validationResult(req);
@@ -83,7 +83,7 @@ exports.user_update_put = [
 ]
 
 exports.user_delete = [
-    validator.body('id').custom((value, { req }) => {
+    validator.param('id').custom((value, { req }) => {
         if (value !== req.decoded.id && req.decoded.role !== 'admin') {
           throw new Error("Forbidden");
         }
@@ -100,7 +100,7 @@ exports.user_delete = [
             if (err) {
                 return res.status(404).json({message:"User not found" + err})
             } else {
-                return status(200).json({message:"User deleted"})
+                return res.status(200).json({message:"User deleted"})
             }
         })
     }
