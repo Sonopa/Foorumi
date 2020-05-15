@@ -9,6 +9,7 @@ import {getAuth} from '../services/local/session'
 
 const logger = require('simple-console-logger').getLogger('foorumi')
 const baseUrl = '/api/aiheet'
+const aaniUrl = '/aanestys'
 
 /// GetAll - Hae kaikki aiheet
 const getAll = () => {
@@ -45,4 +46,18 @@ const remove = async (id) => {
   return response.data
 }
 
-export default {getAll, create, update, remove, getAihe}
+/// vote - äänestä keskustelun aihetta
+const vote = async (topicId, choice) => {
+  logger.info('axios.vote:', `${baseUrl}/${topicId}${aaniUrl}`)
+  const response = await axios.post(`${baseUrl}/${topicId}${aaniUrl}`, choice, getAuth())
+  return response.data
+}
+
+/// getVote - Hae äänet aiheen tunnisteella
+const getVote = (topicId) => {
+  logger.info('axios.getVote:', `${baseUrl}/${topicId}${aaniUrl}`)
+  const request = axios.get(`${baseUrl}/${topicId}${aaniUrl}`)
+  return request.then(response => response.data)
+}
+
+export default {getAll, create, update, remove, getAihe, vote, getVote}

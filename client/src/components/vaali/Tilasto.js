@@ -12,15 +12,11 @@ import {setCurrentAihe} from '../../stores/actions/aiheAction'
 import {updateAiheet} from '../../stores/actions/aiheetAction'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {isLoggedIn} from '../../services/local/session'
-import * as cloneDeep from 'lodash/cloneDeep'
-const logger = require('simple-console-logger').getLogger('Tilasto')
+import {createFor, createAgainst, /* hasVoted,*/ choice} from '../common/choice'
+import foorumiData from '../../services/foorumi'
 
-const VOTES_ARRAY = 0
-const ckeckArray = (aihe) => {
-    if(aihe.votes.length === 0) {
-      aihe.votes.push({VOTE_FOR:0, VOTE_AGAINST:0})
-    }
-}
+// import * as cloneDeep from 'lodash/cloneDeep'
+const logger = require('simple-console-logger').getLogger('Tilasto')
 
 /// Tilasto Item komponentti
 const TilastoItem = (props) => {
@@ -85,36 +81,56 @@ class Tilasto extends Component {
   voteFor = (event, {name}) => {
     event.preventDefault()
     logger.info('handleVoteFor:', this.props)
-    const newAihe = cloneDeep(this.props.aihe)
-    ckeckArray(newAihe)
-    newAihe.votes[VOTES_ARRAY].VOTE_FOR++
-    this.props.setCurrentAihe(cloneDeep(newAihe))
-    this.props.updateAiheet(newAihe)
-    this.props.setMessage(`${this.props.user.username} kannatti: ${newAihe.title}`, messageTypes.INFO)
-    setTimeout(() => {
-        this.props.setMessage('', messageTypes.CLOSE)
-    }, messageTime.NORMAL)
+    foorumiData.vote(this.props.aihe._id, createFor())
+      .then(responseData => {
+        logger.info('foorumiData.puolesta', responseData)
+        this.props.setMessage(`${this.props.user.username} kannatti: ${this.props.aihe.title}`, messageTypes.INFO)
+        // const newAihe = cloneDeep(this.props.aihe)
+        // this.props.setCurrentAihe(cloneDeep(newAihe))
+        // this.props.updateAiheet(newAihe)
+        // this.props.refresh()
+        // this.setTila(iTila.SELAUS)
+      })
+      .catch(error => {
+        logger.info('foorumiData.puolesta:', error)
+        this.props.setMessage(error.message, messageTypes.WARNING)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+    })
   }
 
   /// voteAgainst
   voteAgainst = (event, {name}) => {
     event.preventDefault()
     logger.info('handleVoteAgainst:', this.props)
-    const newAihe = cloneDeep(this.props.aihe)
-    ckeckArray(newAihe)
-    newAihe.votes[VOTES_ARRAY].VOTE_AGAINST++
-    this.props.setCurrentAihe(cloneDeep(newAihe))
-    this.props.updateAiheet(newAihe)
-    this.props.setMessage(`${this.props.user.username} vastusti: ${newAihe.title}`, messageTypes.INFO)
-    setTimeout(() => {
-        this.props.setMessage('', messageTypes.CLOSE)
-    }, messageTime.NORMAL)
+    foorumiData.vote(this.props.aihe._id, createAgainst())
+      .then(responseData => {
+        logger.info('foorumiData.vastaan', responseData)
+        this.props.setMessage(`${this.props.user.username} vastusti: ${this.props.aihe.title}`, messageTypes.INFO)
+        // const newAihe = cloneDeep(this.props.aihe)
+        // this.props.setCurrentAihe(cloneDeep(newAihe))
+        // this.props.updateAiheet(newAihe)
+        // this.props.refresh()
+        // this.setTila(iTila.SELAUS)
+      })
+      .catch(error => {
+        logger.info('foorumiData.vastaan:', error)
+        this.props.setMessage(error.message, messageTypes.WARNING)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.props.setMessage('', messageTypes.CLOSE)
+        }, messageTime.NORMAL)
+    })
   }
 
   /// getPuolesta
   getPuolesta = (aihe) => {
       if(aihe.votes && aihe.votes.length > 0) {
-        return aihe.votes[VOTES_ARRAY].VOTE_FOR
+        return aihe.votes.filter(item => item.choice === choice.PUOLESTA).length
       }
       return 0
   }
@@ -122,7 +138,7 @@ class Tilasto extends Component {
   /// getVastaan
   getVastaan = (aihe) => {
       if(aihe.votes && aihe.votes.length > 0) {
-        return aihe.votes[VOTES_ARRAY].VOTE_AGAINST
+        return aihe.votes.filter(item => item.choice === choice.VASTAAN).length
       }
       return 0
   }
