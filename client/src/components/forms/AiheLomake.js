@@ -9,6 +9,8 @@ import {Segment, Button, Form, TextArea, Divider, Message} from 'semantic-ui-rea
 import {messageTypes, messageTime} from '../common/Huomio'
 import {checkAuth, getUserId} from '../../services/local/session'
 import foorumiData from '../../services/foorumi'
+import {withRouter} from 'react-router-dom'
+import {VAALI} from '../common/valikko'
 const logger = require('simple-console-logger').getLogger('AiheLomake')
 
 /// aiheetAction
@@ -142,6 +144,12 @@ class AiheLomake extends Component {
     })
   }
 
+  /// Swap to Vote page
+  goVote = (event, {name}) => {
+    event.preventDefault()
+    this.props.history.push(VAALI)
+  }
+
   // render
   render() {
     switch(this.state.tila) {
@@ -154,6 +162,7 @@ class AiheLomake extends Component {
                 <Button onClick={this.willDelete} primary>Poista</Button>
                 : null
             }
+            <Button onClick={this.goVote} primary>Äänestä</Button>
           </>
         )
       case tila.LISAYS:
@@ -195,4 +204,4 @@ class AiheLomake extends Component {
   }
 }
 
-export default AiheLomake
+export default withRouter(AiheLomake)
