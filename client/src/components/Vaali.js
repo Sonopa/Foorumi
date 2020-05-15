@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Segment, List, Grid, Divider} from 'semantic-ui-react'
+import {Segment, List, Grid, Divider, Dropdown} from 'semantic-ui-react'
 import Huomio, {messageTypes} from './common/Huomio'
 import {finnishDate} from './common/aika'
 import Tilasto from './vaali/Tilasto'
@@ -29,6 +29,10 @@ const Aihe = (props) => {
   return (
     <Grid>
       <Grid.Column>
+        <Grid.Row>
+          <Dropdown placeholder='Valitse aihe' options={props.aiheLista} />
+        </Grid.Row>
+        <Divider horizontal hidden />
         <Grid.Row>
           <Segment>
             <List>
@@ -132,6 +136,15 @@ class Vaali extends Component {
     }
   }
 
+  aiheLista = () => {
+    const aiheet = this.props.aiheet.map(function(aihe, idx) {
+      return { key: aihe._id, text: aihe.title, value: aihe.title }
+    })
+
+    logger.info('aiheet', aiheet)
+    return aiheet
+  }
+
   /// render
   render() {
     const isUserOwner = (this.props.user && this.props.aihe.owner ) ?
@@ -145,7 +158,7 @@ class Vaali extends Component {
                 <Segment stacked>
                   <h2>Äänestettävä asia</h2>
                 </Segment>
-                <Aihe aihe={this.props.aihe} isUserOwner={isUserOwner} setMessage={this.setMessage}/>
+                <Aihe aihe={this.props.aihe} isUserOwner={isUserOwner} setMessage={this.setMessage} aiheLista={this.aiheLista()} />
               </Grid.Column>
               <Grid.Column>
                 <Tilasto aihe={this.props.aihe} setMessage={this.setMessage} />
@@ -160,6 +173,7 @@ class Vaali extends Component {
 const mapStateToProps = state => {
   return {
     aihe: state.aihe,
+    aiheet: state.aiheet,
     user: state.user
   }
 }
