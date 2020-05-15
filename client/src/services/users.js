@@ -46,29 +46,29 @@ const update = async (userId, newObject) => {
 
 /// Remove - poista käyttäjä Foorumilta
 const remove = async (userId, newUser) => {
-  logger.info('axios.delete:', `${usersUrl}/${userId}`, newUser)
-  const response = await axios.delete(`${usersUrl}/${userId}`, newUser, getAuth())
+  const auth = getAuth()
+  logger.info('axios.delete:', `${usersUrl}/${userId}`, {headers:getAuth(), data:newUser})
+  const response = await axios.delete(`${usersUrl}/${userId}`, {headers:getAuth().headers, data:newUser})
   return response.data
 }
 
 /// Login - kirjaudu sisään
 const login = async (newObject) => {
+  logger.info('axios.login', `${loginUrl}`, newObject)
   const response = await axios.post(`${loginUrl}`, newObject)
-  logger.info('axios.login', `${loginUrl}`, response)
   const user = {
     token: response.data.session.token,
     username: response.data.session.username
   }
-  logger.info('axios.login.user', user, response.data.session.user_id)
   storeSession(user, response.data.session.user_id)
   return response.data
 }
 
 /// Logout - kirjaudu ulos
 const logout = async (newObject) => {
-  removeSession(newObject)
+  logger.info('axios.logout', `${usersUrl}`, newObject, getAuth())
   const response = await axios.post(`${logoutUrl}`, newObject, getAuth())
-  logger.info('axios.logout.Url:', `${logoutUrl}`, newObject, response)
+  removeSession(newObject)
   return response.data
 }
 

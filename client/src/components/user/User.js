@@ -118,11 +118,9 @@ class User extends Component {
     event.preventDefault()
     logger.info('deleteUser', this.state._id)
     const newUser = {
-      _id: this.state._id,
+//      _id: this.state._id,
       username: this.state.username,
-      name: this.state.name,
-      password: this.state.password,
-      role: 'admin'
+      password: this.state.password
     }
     usersData.remove(this.state._id, newUser)
       .then(responseData => {
