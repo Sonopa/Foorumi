@@ -29,6 +29,7 @@ exports.user_create_post = [
                 username:req.body.username,
                 password:hash,
                 name:req.body.name,
+                email:req.body.email,
                 role:'user'
             })
 
@@ -69,7 +70,8 @@ exports.user_update_put = [
 
             updatedUser = {
                 password: hash,
-                name: req.body.name
+                name: req.body.name,
+                email: req.body.email
             }
 
             User.findOneAndUpdate({'_id': req.params.id}, updatedUser, {new: true}, function(err, user) {
@@ -107,7 +109,7 @@ exports.user_delete = [
 ]
 
 exports.user_get = function(req, res) {
-    User.findById(req.params.id, 'username name', function(err, user) {
+    User.findById(req.params.id, 'username name email', function(err, user) {
         if (err) {
             return res.status(500).json({message:"User search failed: " + err})
         }
@@ -120,7 +122,7 @@ exports.user_get = function(req, res) {
 }
 
 exports.user_list_get = function(req, res) {
-    User.find({}, 'username name', function(err, users) {
+    User.find({}, 'username name email', function(err, users) {
         if (err) {
             return res.status(500).json({message:"User search failed: " + err})
         } 
