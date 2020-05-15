@@ -24,6 +24,7 @@ class User extends Component {
       username: '',
       password: '',
       email: '',
+      role: '',
       name: '',
       tila: Tila.SELAUS
     }
@@ -45,7 +46,8 @@ class User extends Component {
               .then(responseData => {
                 logger.info('componentDidMount.usersData.then:', responseData)
                 this.setState({_id: responseData._id, username: responseData.username, name: responseData.name,
-                                email: responseData.email ? responseData.email : ''})
+                                email: responseData.email ? responseData.email : '',
+                                role: responseData.role ? responseData.role : 'user'})
               })
               .catch(error => {
                 logger.error('handleSave.catch:', error)
@@ -149,6 +151,7 @@ class User extends Component {
       username: this.state.username,
       name: this.state.name,
       email: this.state.email,
+      role: this.state.role,
       password: this.state.password
     }
     logger.info('updateUser', newUser.username)
@@ -178,6 +181,7 @@ class User extends Component {
        isUser ?
           <Form>
             <Form.Input label='Tunnus' name='tunnus' type='input' value={this.state.username}/>
+            <Form.Input label='Rooli' name='role' type='input' value={this.state.role}/>
             <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({name: e.target.value})} value={this.state.name} />
             <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
             {isLoggedIn() && isUserOwner(this.state.username) ?
