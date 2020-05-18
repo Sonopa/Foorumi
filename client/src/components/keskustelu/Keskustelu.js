@@ -109,7 +109,7 @@ class Keskustelu extends Component {
               </Form>
             </Segment>
           </>
-          : <Button onClick={this.handleAdd} primary>Lisää</Button>
+          : <Button onClick={this.handleAdd} primary>Uusi keskustelu</Button>
           : ''
         }
       </>

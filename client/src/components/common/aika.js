@@ -10,7 +10,7 @@
 export const finnishDate = (pvmStr) => {
   if(pvmStr) {
     const pvm = new Date(pvmStr)
-    return pvm.toUTCString()
+    return pvm.toLocaleString('fi-FI')
   }
   return ''
 }

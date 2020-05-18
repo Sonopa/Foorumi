@@ -9,8 +9,9 @@ import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Feed, Icon, Divider, Button, Message} from 'semantic-ui-react'
 import KeskusteluValikko, {iTila} from './KeskusteluValikko'
+import Kommentit from '../kommentti/Kommentit'
 import KeskusteluLomake from '../forms/KeskusteluLomake'
-import KeskusteluLisaLomake from '../forms/KeskusteluLisaLomake'
+import KommenttiLomake from '../forms/KommenttiLomake'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {finnishDate} from '../common/aika'
 import {createLike, createHate, isOpinion} from '../common/like'
@@ -252,9 +253,11 @@ class KeskusteluRivi extends Component {
         case iTila.LISAYS:
           return (
               <div>
-                <KeskusteluLisaLomake doAdd={this.doAdd} restore={this.restore}
-                                      keskustelu={this.props.keskustelu}
-                                      setMessage={this.props.setMessage} />
+                <KommenttiLomake  doAdd={this.doAdd}
+                                  restore={this.restore}
+                                  keskustelu={this.props.keskustelu}
+                                  userId={this.props.user._id}
+                                  setMessage={this.props.setMessage} />
                 <Divider horizontal hidden />
               </div>
           )
@@ -282,6 +285,10 @@ class KeskusteluRivi extends Component {
           <Divider horizontal hidden />
           <Feed.Extra text>
             {this.keskusteluLomake()}
+          </Feed.Extra>
+          <Feed.Extra text>
+            <Kommentit  keskusteluId={this.props.keskustelu._id} topicIdId={this.props.keskustelu.topic}
+                        refresh={this.props.refresh} setMessage={this.props.setMessage}/>
           </Feed.Extra>
         </Feed.Content>
       </Feed>

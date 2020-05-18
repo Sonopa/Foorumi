@@ -1,6 +1,6 @@
 /// ---------------------------------
 /// Foorumi Sovellus: Frontend
-/// KeskusteluLisaLomake -komponentti sisältää Käyttäjien syöttö -lomakkeen
+/// KommenttiLomake -komponentti sisältää Kommenttien syöttö -lomakkeen
 /// Paul Kallio 13.5.2020
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
@@ -8,10 +8,10 @@ import React, {Component} from 'react'
 import {Segment, Form, Button, Divider, TextArea, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
 import kommenttiData from '../../services/kommentti'
-const logger = require('simple-console-logger').getLogger('KeskusteluLisaLomake')
+const logger = require('simple-console-logger').getLogger('KommenttiLomake')
 
-/// KeskusteluLomake
-class KeskusteluLisaLomake extends Component {
+/// KommenttiLomake
+class KommenttiLomake extends Component {
 
   /// constructor
   constructor(props) {
@@ -32,12 +32,11 @@ class KeskusteluLisaLomake extends Component {
   /// handleSave
   handleSave = (event, {name}) => {
     event.preventDefault()
-    logger.info('handleSave.keskustelu', this.props.keskustelu)
-    logger.info('handleSave.keskustelu', this.state.otsikko, this.state.teksti)
+    logger.info('handleSave.keskustelu', this.props.keskustelu, this.state.kommentti)
 
     const newKommentti = {
-        ...this.props.keskustelu,
-        kommentti: [...this.props.keskustelu.comments, this.state.kommentti]
+        owner: this.props.userId,
+        text: this.state.kommentti
     }
 
     logger.info('handleSave.newKeskustelu', newKommentti)
@@ -45,7 +44,7 @@ class KeskusteluLisaLomake extends Component {
       .then(responseData => {
         logger.info('kommenttiData.update:', responseData)
         this.setState({kommentti: ''})
-        this.props.setMessage(`Keskustelulle ${newKommentti.title} on lisätty kommentti.`, messageTypes.INFO)
+        this.props.setMessage(`Keskustelulle ${this.props.keskustelu.title} on lisätty kommentti.`, messageTypes.INFO)
         this.props.doAdd()
       })
       .catch(error => {
@@ -83,4 +82,4 @@ class KeskusteluLisaLomake extends Component {
   }
 }
 
-export default KeskusteluLisaLomake
+export default KommenttiLomake
