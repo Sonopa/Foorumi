@@ -40,7 +40,6 @@ class Kommentti extends Component {
     return (
       <Segment basic>
        <div className='uiDivInner'>
-
         <Comment.Group minimal>
             <Comment.Author as='a'>{this.getStoredUser(this.props.kommentti.owner)}</Comment.Author>
             <Comment.Metadata>

@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {BrowserRouter as Router, Switch, Route, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Segment} from 'semantic-ui-react'
+import {Segment, Grid} from 'semantic-ui-react'
 import Foorumi from './components/Foorumi'
 import Valikko from './components/Valikko'
 import Etusivu from './components/Etusivu'
@@ -16,6 +16,7 @@ import Users from './components/Users'
 import Login, {Logout} from './components/Login'
 import {loadAiheetMWare} from './stores/actions/aiheetAction'
 import {loadUsersMWare} from './stores/actions/usersAction'
+import {DigiKello} from './components/common/aika'
 
 // const logger = require('simple-console-logger').getLogger('App')
 
@@ -42,7 +43,14 @@ class App extends Component  {
     return (
       <>
         <Segment raised>
+          <Grid columns={2}>
+          <Grid.Column>
           <h1>FOORUMI Mielipidesivusto</h1>
+          </Grid.Column>
+          <Grid.Column>
+          <DigiKello />
+          </Grid.Column>
+          </Grid>
         </Segment>
         <Router>
           <Valikko/>

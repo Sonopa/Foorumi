@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Segment, Grid, Menu, Divider} from 'semantic-ui-react'
+import {Segment, Grid, Menu} from 'semantic-ui-react'
 import Keskustelut from './Keskustelut'
 import AiheLomake from './forms/AiheLomake'
 import {isLoggedIn, checkAuth} from '../services/local/session'
@@ -41,10 +41,11 @@ const FoorumiRivit = (props) => {
             <Menu vertical fluid>
               {props.ehdotusSegmentit}
             </Menu>
-            <Divider horizontal hidden />
             {isLoggedIn()
-            ? <AiheLomake aiheId={props.aiheId} isUserOwner={props.isUserOwner}
-                          setMessage={props.setMessage} refresh={props.refresh} handleDelete={props.handleDelete} />
+            ?
+            <div className='uiDiv'>
+              <AiheLomake aiheId={props.aiheId} isUserOwner={props.isUserOwner}
+                          setMessage={props.setMessage} refresh={props.refresh} handleDelete={props.handleDelete} /></div>
             : ''}
             </Segment>
           </Grid.Column>
