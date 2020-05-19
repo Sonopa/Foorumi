@@ -43,7 +43,7 @@ const KommenttiValinta = (props) => {
 const KommenttiValikko = (props) => {
   return (
       <Menu size='mini' compact>
-        <KommenttiValinta menuType={iTila.POISTO} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' isOwner={true /* props.isOwner */} />
+        <KommenttiValinta menuType={iTila.POISTO} nowMenu={props.nowMenu} handleMenu={props.handleMenu} value='' isOwner={props.isOwner} />
       </Menu>
   )
 }

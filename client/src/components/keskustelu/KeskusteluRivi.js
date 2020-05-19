@@ -143,7 +143,7 @@ class KeskusteluRivi extends Component {
 
   /// menuDel
   doDelete  = () => {
-    logger.info('menuDel', this.props.keskustelu)
+    logger.info('doDelete', this.props.keskustelu)
     keskusteluData.remove(this.props.keskustelu._id, this.props.keskustelu.aihe)
       .then(responseData => {
         logger.info('keskusteluData.remove:', responseData)
@@ -152,7 +152,7 @@ class KeskusteluRivi extends Component {
         this.setTila(iTila.SELAUS)
       })
       .catch(error => {
-        logger.info('keskusteluData.create:', error)
+        logger.info('keskusteluData.remove:', error)
         this.props.setMessage(error.message, messageTypes.WARNING)
       })
       .finally(() => {
