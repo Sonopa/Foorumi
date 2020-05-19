@@ -229,13 +229,14 @@ class KeskusteluRivi extends Component {
 
       switch(this.state.iTila) {
         case iTila.SELAUS:
-          return (  <KeskusteluValikko  isOwner={isOwner}
+          return (<div className='uiDiv'>
+                    <KeskusteluValikko  isOwner={isOwner}
                                         like={this.opinions(this.props.keskustelu.likes)}
                                         disLike={this.opinions(this.props.keskustelu.dislikes)}
-                                        nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />)
+                                        nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} /></div>)
         case iTila.POISTO:
           return(
-            <div>
+            <div className='uiDiv'>
               <Message warning>
                 <Message.Header>Haluatko varmasti poistaa keskustelun?</Message.Header>
               </Message>
@@ -246,19 +247,20 @@ class KeskusteluRivi extends Component {
           )
         case iTila.MUUTOS:
           return (
-            <KeskusteluLomake doEdit={this.doEdit} restore={this.restore}
-                              keskustelu={this.props.keskustelu}
-                              setMessage={this.props.setMessage} />
+            <div className='uiDiv'>
+              <KeskusteluLomake doEdit={this.doEdit} restore={this.restore}
+                                keskustelu={this.props.keskustelu}
+                                setMessage={this.props.setMessage} />
+            </div>
           )
         case iTila.LISAYS:
           return (
-              <div>
+              <div className='uiDiv'>
                 <KommenttiLomake  doAdd={this.doAdd}
                                   restore={this.restore}
                                   keskustelu={this.props.keskustelu}
                                   userId={this.props.user._id}
                                   setMessage={this.props.setMessage} />
-                <Divider horizontal hidden />
               </div>
           )
         default:
@@ -282,7 +284,6 @@ class KeskusteluRivi extends Component {
           </Feed.Summary>
           <Feed.Extra text>{this.props.keskustelu.text}
           </Feed.Extra>
-          <Divider horizontal hidden />
           <Feed.Extra text>
             {this.keskusteluLomake()}
           </Feed.Extra>

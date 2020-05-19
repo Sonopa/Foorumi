@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Form, TextArea, Button, Segment, Divider, Message} from 'semantic-ui-react'
+import {Form, TextArea, Button, Segment, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
 import {isLoggedIn, checkAuth, getUser} from '../../services/local/session'
 import keskusteluData from '../../services/keskustelu'
@@ -103,7 +103,6 @@ class Keskustelu extends Component {
                   <TextArea name='kommentti'
                              onChange={(e) => this.setState({kommentti: e.target.value})} value={this.state.kommentti} />
                 </div>
-                <Divider horizontal hidden />
                 <Button onClick={this.handleSave} primary>Tallenna</Button>
                 <Button onClick={this.handleRestore} secondary>Peruuta</Button>
               </Form>

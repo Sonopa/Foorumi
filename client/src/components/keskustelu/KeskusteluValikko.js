@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React from 'react'
-import {Icon, Menu} from 'semantic-ui-react'
+import {Icon, Menu, Popup} from 'semantic-ui-react'
 
 /// iTila
 export const iTila = {
@@ -20,34 +20,42 @@ export const iTila = {
 /// KeskusteluValinta
 const KeskusteluValinta = (props) => {
 
-  let menuIcon = 'question'
+  let menuIcon = ''
+  let popupText = ''
   switch(props.menuType) {
     case iTila.LIKE:
       menuIcon = 'like'
+      popupText = 'Kannatan'
       break
     case iTila.HATE:
       menuIcon = 'thumbs down outline'
+      popupText = 'Olen erimieltä'
       break
     case iTila.MUUTOS:
       if(!props.isOwner) {
         return ''
       }
       menuIcon = 'pencil alternate'
+      popupText = 'Päivitä keskustelu'
       break
     case iTila.LISAYS:
       menuIcon = 'plus'
+      popupText = 'Lisää kommentti'
       break
     case iTila.POISTO:
       if(!props.isOwner) {
         return ''
       }
       menuIcon = 'minus'
+      popupText = 'Poista keskustelu'
       break
     default:
       menuIcon = 'question'
+      popupText = ''
   }
 
   return (
+    <Popup content={popupText} trigger={
     <Menu.Item
       name={props.menuType}
       active={props.nowMenu===props.menuType}
@@ -55,6 +63,7 @@ const KeskusteluValinta = (props) => {
       >
         <Icon name={menuIcon} />{props.value}
     </Menu.Item>
+    } />
   )
 }
 

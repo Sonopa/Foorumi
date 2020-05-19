@@ -5,7 +5,7 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
-import {Segment, Form, Button, Divider, TextArea, Message} from 'semantic-ui-react'
+import {Segment, Form, Button, TextArea, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
 import keskusteluData from '../../services/keskustelu'
 const logger = require('simple-console-logger').getLogger('KeskusteluLomake')
@@ -76,7 +76,6 @@ class KeskusteluLomake extends Component {
                   <TextArea name='Teksti'
                              onChange={(e) => this.setState({teksti: e.target.value})} value={this.state.teksti} />
                 </div>
-                <Divider horizontal hidden />
                 <Button onClick={this.handleSave} primary>Tallenna</Button>
                 <Button onClick={this.handleRestore} secondary>Peruuta</Button>
               </Form>

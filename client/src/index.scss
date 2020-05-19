@@ -14,9 +14,17 @@ body {
 /* UiStatin alla olevat tekstielementit keskittyvät: Puolesta - Vastaan */
 .uiStat .ui.segment {
   text-align: center;
-
 }
+
 /* Tekstielementit keskittyvät kaikilla näytöillä.
 .ui.segment {
   text-align: center;
 }*/
+
+.uiDiv {
+  padding: 10px 0px 5px 0px;
+}
+
+.uiDivInner {
+  padding: 0px 0px 0px 20px;
+}

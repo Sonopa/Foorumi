@@ -8,6 +8,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Segment, Comment} from 'semantic-ui-react'
+import KommenttiValikko from './KommenttiValikko'
 import {finnishDate} from '../common/aika'
 const logger = require('simple-console-logger').getLogger('Kommentti')
 
@@ -38,6 +39,8 @@ class Kommentti extends Component {
     logger.info("render.keskustelu", this.props.keskustelu)
     return (
       <Segment basic>
+       <div className='uiDivInner'>
+
         <Comment.Group minimal>
             <Comment.Author as='a'>{this.getStoredUser(this.props.kommentti.owner)}</Comment.Author>
             <Comment.Metadata>
@@ -46,7 +49,11 @@ class Kommentti extends Component {
             <Comment.Text>
               {this.props.kommentti.text}
             </Comment.Text>
+            <div className='uiDiv'>
+              <KommenttiValikko />
+            </div>
         </Comment.Group>
+        </div>
       </Segment>
     )
   }
