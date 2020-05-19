@@ -51,7 +51,7 @@ const FoorumiRivit = (props) => {
           </Grid.Column>
           <Grid.Column>
             <Segment>
-              <Keskustelut aiheId={props.aiheId} setMessage={props.setMessage} />
+              <Keskustelut aiheId={props.aiheId} setMessage={props.setMessage} refresh={props.refresh} />
             </Segment>
           </Grid.Column>
         </Grid.Row>

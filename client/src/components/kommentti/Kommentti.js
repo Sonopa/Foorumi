@@ -110,7 +110,7 @@ class Kommentti extends Component {
       .then(responseData => {
         logger.info('kommenttiData.remove:', responseData)
         //this.props.setMessage(`Keskustelu ${this.props.otsikko} on poistettu Foorumilta.`, messageTypes.INFO)
-        //this.props.refresh()
+        this.props.refresh()
         this.setTila(iTila.SELAUS)
       })
       .catch(error => {

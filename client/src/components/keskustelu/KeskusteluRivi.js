@@ -133,6 +133,7 @@ class KeskusteluRivi extends Component {
   doAdd  = () => {
     logger.info('menuAdd', this.props.keskustelu)
     this.setTila(iTila.SELAUS)
+    this.props.refresh()
   }
 
   /// willDel

@@ -43,7 +43,7 @@ class Kommentit extends Component {
     }
   }
 
-  /// setCurrentUser
+  /// setKommentit
   setKommentit = (kommentit) => {
     if(this.isLive) {
       this.setState({kommentit: kommentit})
@@ -78,7 +78,7 @@ class Kommentit extends Component {
       return null
     }
     const kommentiLohko =  this.state.kommentit.map(kommentti => {
-        return (<Kommentti key={kommentti._id} kommentti={kommentti}/>)})
+        return (<Kommentti key={kommentti._id} kommentti={kommentti} refresh={this.refresh}/>)})
 
     logger.info("render.keskustelu", kommentiLohko)
 
