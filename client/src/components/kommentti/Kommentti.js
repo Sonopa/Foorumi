@@ -7,7 +7,7 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Segment, Comment, Divider, Button, Message} from 'semantic-ui-react'
+import {Comment, Divider, Button, Message} from 'semantic-ui-react'
 import KommenttiValikko from './KommenttiValikko'
 import {iTila} from '../keskustelu/KeskusteluValikko'
 import kommenttiData from '../../services/kommentti'
@@ -129,7 +129,7 @@ class Kommentti extends Component {
     const isOwner = this.props.kommentti.owner === this.props.user._id
     logger.info("render.keskustelu", this.props.kommentti)
     return (
-      <Segment basic>
+       <div className='uiDiv'>
        <div className='uiDivInner'>
         <Comment.Group minimal>
             <Comment.Author as='a'>{this.getStoredUser(this.props.kommentti.owner)}</Comment.Author>
@@ -153,7 +153,7 @@ class Kommentti extends Component {
                       <Button onClick={this.restore} secondary>Peruuta</Button>
                     </div>
                   :
-                    <div className='uiDiv'>
+                    <div className='uiButtonDiv'>
                       <KommenttiValikko isOwner={isOwner} nowMenu={this.state.nowMenu} handleMenu={this.handleMenu} />
                     </div>
                  }
@@ -161,7 +161,7 @@ class Kommentti extends Component {
             : null}
         </Comment.Group>
         </div>
-      </Segment>
+        </div>
     )
   }
 }

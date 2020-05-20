@@ -222,7 +222,7 @@ class KeskusteluRivi extends Component {
   }
 
   /// keskusteluLomake
-  keskusteluLomake() {
+  keskusteluLomake = () => {
 
     logger.info("keskusteluLomake.keskustelu", this.props.keskustelu)
     const isOwner = this.isUserOwner(this.props.keskustelu.owner)
