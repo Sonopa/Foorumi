@@ -116,6 +116,7 @@ exports.user_get = function(req, res) {
         if (!user) {
             return res.status(404).json({ message: 'User not found' })
         } else {
+            console.log(user)
             return res.status(200).json(user)
         }
     })

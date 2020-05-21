@@ -9,7 +9,8 @@ let app = express();
 let port = process.env.PORT || 3001;
 
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb://localhost:27017/test?readPreference=primary&appname=MongoDB%20Compass&ssl=false';
+//var mongoDB = 'mongodb://localhost:27017/test?readPreference=primary&appname=MongoDB%20Compass&ssl=false';
+var mongoDB = 'mongodb+srv://foorumiadmin:ig00LU@foorumi-rhnp0.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {userNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error: '));

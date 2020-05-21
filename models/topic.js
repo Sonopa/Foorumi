@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var Discussion = require('./discussion');
 
 var Schema = mongoose.Schema;
 
@@ -12,5 +13,24 @@ var TopicSchema = new Schema({
     voteEndTime: {type: Date, required: true}
 }, { timestamps: true });
 
+TopicSchema.pre('deleteOne', function(next) {
+    Discussion.find({topic: this._conditions._id}, function(err, discussions) {
+        if (err) {
+            console.log(err);
+            next(err);
+        }
+
+        for (i = 0; i < discussions.length; i++) {
+            Discussion.deleteOne(discussions[i], function (err, result) {
+                if(err) {
+                    console.log(err)
+                    next(err);
+                }
+                console.log(result)
+            })
+        }
+    })
+    next();
+});
 
 module.exports = mongoose.model('Topic', TopicSchema);
