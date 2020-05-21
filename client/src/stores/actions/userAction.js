@@ -5,6 +5,8 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import {getUser} from '../../services/local/session'
+import usersData from '../../services/users'
+import {usersAction} from './usersAction'
 const logger = require('simple-console-logger').getLogger('usersAction')
 
 /// User Action Name
@@ -14,20 +16,41 @@ export const userAction = {
 
 /// loadUsersMWare
 export function setActiveUserMWare() {
-  return function(dispatch, getState) {
+  return async function(dispatch, getState) {
 
     const username = getUser()
     const users = getState().users
-
+    let user = {_id:0}
     const index = users.findIndex(item => item.username === username)
-    const user = (index > -1) ? users.slice(index, index + 1)[0] : {_id:0}
-    logger.info('setActiveUserMWare.users', username, user)
+    if (index > -1) {
+        user = users.slice(index, index + 1)[0]
+        logger.info('user is found from Redux ', username, user)
+        dispatch({
+          type: userAction.CURRENT,
+          data: user
+        })
+    } else {
+        logger.info('user is in db ', username)
+        const usersDb = await usersData.getAll()
+        logger.info('loadUsersMWare.usersDb', usersDb)
+        let user = {_id:0}
+        if(username) {
+          const index = usersDb.findIndex(item => item.username === username)
+          user = (index > -1) ? usersDb.slice(index, index + 1)[0] : {_id:0}
+          logger.info('loadUsersMWare.username', username)
+        }
 
-    dispatch({
-      type: userAction.CURRENT,
-      data: user
-    })
-  }
+        dispatch({
+          type: usersAction.ADD,
+          data: user
+        })
+
+        dispatch({
+          type: userAction.CURRENT,
+          data: user
+        })
+      }
+    }
 }
 
 /// set Current User Action

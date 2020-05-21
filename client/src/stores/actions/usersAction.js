@@ -27,7 +27,7 @@ export function loadUsersMWare() {
     if(username) {
       const index = users.findIndex(item => item.username === username)
       user = (index > -1) ? users.slice(index, index + 1)[0] : {_id:0}
-      logger.info('setActiveUserMWare.users', username, user)
+      logger.info('loadUsersMWare.username', username)
     }
 
     dispatch({

@@ -35,23 +35,23 @@ const usersReducer = (state=[], action) => {
 
 /// doAdd
 const doAdd = (users, user) => {
-  return users.slice(0, users.length).apply(user)
+  return [...users.slice(0, users.length), user]
 }
 
 /// doUpdate
 const doUpdate = (users, user) => {
   const index = users.findIndex(item => item._id === user._id)
-  return  users.slice(0, index)
-                .apply(user)
-                .concat(users.slice(index+1, users.length))
+  return  [...users.slice(0, index),
+           user,
+           ...users.slice(index+1, users.length)]
 }
 
 /// doDelete
 const doDelete = (users, user) => {
 
   const index = users.findIndex(item => item._id === user._id)
-  return  users.slice(0, index)
-                .concat(users.slice(index+1, users.length))
+  return  [...users.slice(0, index),
+           ...users.slice(index+1, users.length)]
 }
 
 export default usersReducer

@@ -71,7 +71,7 @@ export const Kello = () => {
   const clockOptions = {
       baseColor: '#ffffff',
       borderColor: '#000000',
-      borderWidth: 1,
+      borderWidth: 5,
       centerColor: '#000000',
       handColors: {
           hour: '#000000',
@@ -80,9 +80,8 @@ export const Kello = () => {
       },
       notchColor: '#000000',
       numbersColor: '#000000',
-      showNumbers: false,
-      size: 200
-  }
-
+      showNumbers: true,
+      size: 300
+  } 
   return (<AnalogueClock {...clockOptions} />)
 } */

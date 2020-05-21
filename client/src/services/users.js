@@ -32,7 +32,7 @@ const getUser = (id) => {
 
 /// Create - luo uusi käyttäjä Foorumille
 const create = async (newObject) => {
-  logger.info('axios.create', `${registerUrl}`, newObject)
+  logger.info('axios.create', `${registerUrl}`, newObject.username)
   const response = await axios.post(`${registerUrl}`, newObject)
   logger.info('axios.create', `${registerUrl}`, response)
   return response.data
@@ -54,7 +54,7 @@ const remove = async (userId, newUser) => {
 
 /// Login - kirjaudu sisään
 const login = async (newObject) => {
-  logger.info('axios.login', `${loginUrl}`, newObject)
+  logger.info('axios.login', `${loginUrl}`, newObject.username)
   const response = await axios.post(`${loginUrl}`, newObject)
   const user = {
     token: response.data.session.token,
