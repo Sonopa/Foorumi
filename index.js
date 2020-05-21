@@ -14,6 +14,7 @@ var mongoose = require('mongoose');
 var mongoDB = 'mongodb+srv://foorumiadmin:ig00LU@foorumi-rhnp0.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {userNewUrlParser: true});
 var db = mongoose.connection;
+console.log(db)
 db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
 app.use(bodyParser.json());
