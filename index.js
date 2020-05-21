@@ -17,7 +17,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'client')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // LOGIN API
 
