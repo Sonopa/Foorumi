@@ -37,7 +37,7 @@ class Kommentit extends Component {
 
   /// componentDidUpdate
   componentDidUpdate(prevProps, prevState) {
-    if(this.props.keskusteluId !== prevProps.keskusteluId) {
+    if(this.props.keskusteluId !== prevProps.keskusteluId || this.props.doRefresh) {
       logger.info('componentDidUpdate.keskusteluId', this.props.keskusteluId)
       this.refresh()
     }

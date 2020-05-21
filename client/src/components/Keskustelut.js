@@ -46,6 +46,7 @@ class Keskustelut extends Component {
 
   /// refresh
   refresh = () => {
+    logger.info('refresh', this.keskustelut)
     if(this.isLive ) {
       if(!this.props.aiheId) {
           this.setState({keskustelut: [], lisaaTila: false})

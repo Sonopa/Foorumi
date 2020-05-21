@@ -30,7 +30,8 @@ class KeskusteluRivi extends Component {
 
     this.state = {
       nowMenu: '',
-      iTila: iTila.SELAUS
+      iTila: iTila.SELAUS,
+      refresh: false
     }
     this.handleMenu  = this.handleMenu.bind(this)
   }
@@ -51,6 +52,13 @@ class KeskusteluRivi extends Component {
   setTila = (iTila) => {
       if(this.isLive) {
         this.setState({iTila: iTila})
+      }
+  }
+
+  /// setTila
+  setRefresh = (refresh) => {
+      if(this.isLive) {
+        this.setState({refresh: refresh})
       }
   }
 
@@ -133,7 +141,7 @@ class KeskusteluRivi extends Component {
   doAdd  = () => {
     logger.info('menuAdd', this.props.keskustelu)
     this.setTila(iTila.SELAUS)
-    this.props.refresh()
+    this.setRefresh(true)
   }
 
   /// willDel
@@ -251,6 +259,7 @@ class KeskusteluRivi extends Component {
             <div className='uiDiv'>
               <KeskusteluLomake doEdit={this.doEdit} restore={this.restore}
                                 keskustelu={this.props.keskustelu}
+                                refresh={this.props.refresh}
                                 setMessage={this.props.setMessage} />
             </div>
           )
@@ -273,6 +282,13 @@ class KeskusteluRivi extends Component {
 
   /// render
   render () {
+
+    let doRefresh = false
+    if(this.state.refresh) {
+      doRefresh = true
+      this.setRefresh(false)
+    }
+
     return (
       <Feed>
         <Feed.Label>
@@ -290,7 +306,7 @@ class KeskusteluRivi extends Component {
           </Feed.Extra>
           <Feed.Extra text>
             <Kommentit  keskusteluId={this.props.keskustelu._id} topicIdId={this.props.keskustelu.topic}
-                        refresh={this.props.refresh} setMessage={this.props.setMessage}/>
+                        refresh={this.props.refresh} setMessage={this.props.setMessage} doRefresh={doRefresh} />
           </Feed.Extra>
         </Feed.Content>
       </Feed>
