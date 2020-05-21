@@ -4,6 +4,7 @@ const middleware = require('./middleware');
 const topicrouter = require('./routes/topicrouter');
 const userController = require('./controllers/userController')
 const sessionController = require('./controllers/sessionController')
+const path = require('path');
 
 let app = express();
 let port = process.env.PORT || 3001;
@@ -16,7 +17,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'client')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // LOGIN API
 
@@ -40,5 +41,10 @@ app.delete("/users/:id", middleware.checkToken, userController.user_delete);
 app.post("/logout", middleware.checkToken, sessionController.logout_post);
 
 app.use("/api", topicrouter);
+
+app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
+
 app.listen(port);
 console.log("Running on port " + port);
