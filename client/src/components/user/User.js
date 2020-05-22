@@ -5,9 +5,12 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 import React, {Component} from 'react'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Form, Button, Segment, Message} from 'semantic-ui-react'
 import {messageTypes, messageTime} from '../common/Huomio'
-import {isLoggedIn, isUserOwner, checkAuth} from '../../services/local/session'
+import {isLoggedIn, isUserOwner, checkAuth, removeSession} from '../../services/local/session'
+import {removeCurrentUser} from '../../stores/actions/userAction'
 import usersData from '../../services/users'
 import {Tila} from '../common/valikko'
 const logger = require('simple-console-logger').getLogger('User')
@@ -183,6 +186,9 @@ class User extends Component {
         this.props.setMessage(`Käyttäjän ${this.state.username} tiedot on poistettu Foorumilta.`, messageTypes.INFO)
         this.clearForm()
         this.setTila(Tila.SELAUS)
+        this.props.removeCurrentUser()
+        removeSession()
+        this.props.refresh()
       })
       .catch(error => {
         logger.info('handleSave.catch:', error)
@@ -278,4 +284,9 @@ class User extends Component {
       )
   }
 }
-export default User
+/// User -komponentti - Redux Tilankäsittely
+const mapDispatchToProps = {
+  removeCurrentUser
+}
+
+export default withRouter(connect(null, mapDispatchToProps)(User))

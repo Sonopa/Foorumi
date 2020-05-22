@@ -186,7 +186,7 @@ class Foorumi extends Component {
   }
 }
 
-/// Valikko -komponentti - Redux Tilankäsittely
+/// Foorumi -komponentti - Redux Tilankäsittely
 const mapStateToProps = state => {
   return {
     aiheet: state.aiheet,

@@ -60,3 +60,11 @@ export const setCurrentUser = user => {
     data: user
   }
 }
+
+/// remove Current User Action
+export const removeCurrentUser = () => {
+  return {
+    type: userAction.CURRENT,
+    data: {_id:0}
+  }
+}

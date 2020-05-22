@@ -5,18 +5,28 @@
 /// Opiframe FullStack 2020-1 Espoo
 /// ---------------------------------
 
+========================= FIXED ==================================
+Applikaation nimi headeriin (index.html)  [Erno Hentunen / 22.5.2020]
+- tila korjattu [pmk/22.5.2020]
+
+Applikaatiolle oma ikoni [Erno Hentunen / 22.5.2020]
+- tila korjattu [pmk/22.5.2020]
+
+Unmounted component virhe UserLomakkeella (tekninen) [pmk/21.5.202]
+- tila korjattu [pmk/22.5.2020]
+
+Käyttäjän poisto käyttäjä -listalta ei päivity näytölle [pmk/22.5.2020]
+- tila korjattu [pmk/22.5.2020]
+-- Poistunut käyttäjä jää sisäänkirjautuneeksi.  [pmk/22.5.2020]
+--- tila korjattu [pmk/22.5.2020]
+
+========================= OPEN ==================================
 Administraattori -ominaisuus  [jm/18.5.202]
  - osittain ratkaistu / ratkaisumalli kehitetty
   + rooli -tiedot eivät tule palvelimelta
   +++ ratkaisuehdotus 1) lisätään käyttäjä haku username :lla, palauttaa käyttäjän kaikki tiedot tai
                       2) muutetaan käyttäjän haku _id :llä palauttamaan kaikki tiedot ja lisätään
                          loginiin _id :n palautus (preferred)
-
-Käyttäjän poisto käyttäjä -listalta ei päivity näytölle [pmk/22.5.2020]
-- tila avoin
-
-Unmounted component virhe UserLomakkeella (tekninen) [pmk/21.5.202]
-- tila korjattu [pmk/22.5.2020]
 
 Teemavalinan toteutus [pmk/18.5.2020]
 - tila avoin (vain UI)
@@ -39,12 +49,6 @@ Palvelimen virheilmoitusten muuttaminen selkokieliseksi [pmk/11.5.2020]
 Salasanan kyselyssä fokus salasanakenttään [pmk/22.5.2020]
 - tila avoin (vain UI)
 
-Applikaation nimi headeriin (index.html)  [Erno Hentunen / 22.5.2020]
-- tila korjattu [pmk/22.5.2020]
-
-Applikaatiolle oma ikoni [Erno Hentunen / 22.5.2020]
-- tila korjattu [pmk/22.5.2020]
-
 Lomakkeista yhteiskäyttöinen komponentti (tekninen) [pmk/22.5.2020]
 - tila avoin (vain UI)
 
@@ -65,3 +69,4 @@ Float -ominaisuus Päävalikon tyyliin [pmk/22.5.2020]
 
 Etusivun karuselliin Highorder -funktio kuvien vaihtoon [pmk/1.5.2020]
 - tila avoin (vain UI)
+========================= END ==================================
