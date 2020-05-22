@@ -30,7 +30,7 @@ Kommenttien päivitys ominaisuus kommentille (muutos, poisto) [pmk/22.5.2020]
 Lisää popuppeja käyttöliittymään [pmk/17.5.2020]
 - tila avoin (vain UI)
 
-Cascading poiston varoitus, kun poistettavaa on [pmk/20.5.2020]
+Cascading poiston varoitus, kun poistettavaa on [jm/20.5.2020]
 - tila avoin
 
 Palvelimen virheilmoitusten muuttaminen selkokieliseksi [pmk/11.5.2020]
@@ -43,6 +43,25 @@ Applikaation nimi headeriin (index.html)  [Erno Hentunen / 22.5.2020]
 - tila korjattu [pmk/22.5.2020]
 
 Applikaatiolle oma ikoni [Erno Hentunen / 22.5.2020]
-- tila avoin (vain UI)
+- tila korjattu [pmk/22.5.2020]
 
 Lomakkeista yhteiskäyttöinen komponentti (tekninen) [pmk/22.5.2020]
+- tila avoin (vain UI)
+
+Kuvat käyttäjä -tietoihin [pmk/22.5.2020]
+  - käyttöliittymä
+   + tila avoin
+  - palvelin
+   + tila avoin
+
+Kuvat aiheelle [pmk/22.5.2020]
+  - käyttöliittymä
+   + tila avoin
+  - palvelin
+   + tila avoin
+
+Float -ominaisuus Päävalikon tyyliin [pmk/22.5.2020]
+- tila avoin (vain UI)
+
+Etusivun karuselliin Highorder -funktio kuvien vaihtoon [pmk/1.5.2020]
+- tila avoin (vain UI)
