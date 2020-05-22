@@ -16,7 +16,7 @@ Käyttäjän poisto käyttäjä -listalta ei päivity näytölle [22.5.2020]
 - tila avoin
 
 Unmounted component virhe UserLomakkeella [21.5.202]
-- tila testissä, puuttuu Gitistä
+- tila korjattu [pmk/22.5.2020]
 
 Teemavalinan toteutus [18.5.2020]
 - tila avoin (vain UI)
@@ -40,4 +40,8 @@ Salasanan kyselyssä fokus salasanakenttään [22.5.2020]
 - tila avoin (vain UI)
 
 Applikaation nimi headeriin (index.html)  [Erno Hentunen / 22.5.2020]
+- tila korjattu [pmk/22.5.2020]
+
+
+Applikaatiolle oma ikoni [Erno Hentunen / 22.5.2020]
 - tila avoin (vain UI)

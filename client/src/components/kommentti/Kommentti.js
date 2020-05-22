@@ -126,8 +126,8 @@ class Kommentti extends Component {
 
   /// render
   render () {
-    const isOwner = this.props.kommentti.owner === this.props.user._id
-    logger.info("render.keskustelu", this.props.kommentti)
+    const isOwner = this.props.kommentti.owner === this.props.user._id  || this.props.user.role === 'admin'
+    logger.info("render.kommentti, user", this.props.kommentti, this.props.user)
     return (
        <div className='uiDiv'>
        <div className='uiDivInner'>

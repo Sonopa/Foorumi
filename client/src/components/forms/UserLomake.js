@@ -13,6 +13,8 @@ const logger = require('simple-console-logger').getLogger('UserLomake')
 /// UserLomake
 class UserLomake extends Component {
 
+  isLive = true
+
   /// constructor
   constructor(props) {
     super(props)
@@ -23,6 +25,11 @@ class UserLomake extends Component {
       salasana:   this.state ? this.state.salasana : '',
       lisaaTila:  this.state ? this.state.lisaaTila : false
     }
+  }
+
+  ///
+  componentWillUnmount() {
+    this.isLive = false
   }
 
   /// handleAdd

@@ -26,7 +26,64 @@ class User extends Component {
       email: '',
       role: '',
       name: '',
+      user: {},
       tila: Tila.SELAUS
+    }
+  }
+
+  /// setTila
+  setTila(tila) {
+    if(this.isLive) {
+      this.setState({tila: tila})
+    }
+  }
+
+  /// setTila
+  setUsername(username) {
+    if(this.isLive) {
+      this.setState({username: username})
+    }
+  }
+
+  /// setTila
+  setPassword(password) {
+    if(this.isLive) {
+      this.setState({password: password})
+    }
+  }
+
+  /// setTila
+  setEmail(email) {
+    if(this.isLive) {
+      this.setState({email: email})
+    }
+  }
+
+  /// setTila
+  setRole(role) {
+    if(this.isLive) {
+      this.setState({role: role})
+    }
+  }
+
+  /// setTila
+  setName(name) {
+    if(this.isLive) {
+      this.setState({name: name})
+    }
+  }
+
+  /// setTila
+  setId(id) {
+    if(this.isLive) {
+      this.setState({_id: id})
+    }
+  }
+
+  /// setTila
+  setUser(user) {
+    if(this.isLive) {
+      this.setState({user: user})
     }
   }
 
@@ -45,9 +102,11 @@ class User extends Component {
             usersData.getUser(this.props.user)
               .then(responseData => {
                 logger.info('componentDidMount.usersData.then:', responseData)
-                this.setState({_id: responseData._id, username: responseData.username, name: responseData.name,
-                                email: responseData.email ? responseData.email : '',
-                                role: responseData.role ? responseData.role : 'user'})
+                this.setId(responseData._id)
+                this.setUsername(responseData.username)
+                this.setEmail(responseData.email ? responseData.email : '')
+                this.setRole(responseData.role ? responseData.role : 'user')
+                this.setName(responseData.name)
               })
               .catch(error => {
                 logger.error('handleSave.catch:', error)
@@ -69,7 +128,7 @@ class User extends Component {
       usersData.getUser(this.props.user)
         .then(responseData => {
           logger.info('componentDidMount.usersData.then:', responseData)
-          this.setState({user: responseData})
+          this.setUser(responseData)
         })
         .catch(error => {
           logger.error('handleSave.catch:', error)
@@ -83,17 +142,10 @@ class User extends Component {
     }
   }
 
-  /// setTila
-  setTila(tila) {
-    if(this.isLive) {
-      this.setState({tila: tila})
-    }
-  }
-
   /// clearForm
   clearForm() {
     if(this.isLive) {
-      this.setState({password: ''})
+      this.setPassword('')
     }
   }
 
@@ -182,8 +234,8 @@ class User extends Component {
           <Form>
             <Form.Input label='Tunnus' name='tunnus' type='input' value={this.state.username}/>
             <Form.Input label='Rooli' name='role' type='input' value={this.state.role}/>
-            <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setState({name: e.target.value})} value={this.state.name} />
-            <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} />
+            <Form.Input label='Nimi' name='nimi' type='input' onChange={(e) => this.setName(e.target.value)} value={this.state.name} />
+            <Form.Input label='Sähköposti' name='email' type='input' onChange={(e) => this.setEmail(e.target.value)} value={this.state.email} />
             {isLoggedIn() && isUserOwner(this.state.username) ?
               <>
                 {Tila.SELAUS === this.state.tila ?
@@ -200,7 +252,7 @@ class User extends Component {
                           </Message>
                           <Segment>
                               <Form.Input label='Salasana' name='password' type='password'
-                                           onChange={(e) => this.setState({password: e.target.value})} value={this.state.password} />
+                                           onChange={(e) => this.setPassword(e.target.value)} value={this.state.password} />
                               <Button onClick={this.deleteUser} primary>Poista</Button>
                               <Button onClick={this.restore} primary>Peruuta</Button>
                           </Segment>
@@ -211,7 +263,7 @@ class User extends Component {
                           </Message>
                           <Segment>
                               <Form.Input label='Salasana' name='password' type='password'
-                                           onChange={(e) => this.setState({password: e.target.value})} value={this.state.password} />
+                                           onChange={(e) => this.setPassword(e.target.value)} value={this.state.password} />
                               <Button onClick={this.updateUser} primary>Tallenna</Button>
                               <Button onClick={this.restore} primary>Peruuta</Button>
                           </Segment>
