@@ -1,0 +1,43 @@
+/// ---------------------------------
+/// Foorumi Sovellus: Frontend
+/// FoorumiUI_avoimet - avoimet ongelmat ja kehitys -kohteet
+/// Paul Kallio 22.5.2020
+/// Opiframe FullStack 2020-1 Espoo
+/// ---------------------------------
+
+Administraattori -ominaisuus:
+ - osittain ratkaistu
+  + rooli -tiedot eivät tule palvelimelta
+  +++ ratkaisuehdotus 1) lisätään käyttäjä haku username :lla, palauttaa käyttäjän kaikki tiedot tai
+                      2) lisätään käyttäjä haku _id :llä, palauttaa käyttäjän kaikki tiedot ja lisätään
+                         loginiin _id :n palautus (preferred)
+
+Käyttäjän poisto käyttäjä -listalta ei päivity näytölle [22.5.2020]
+- tila avoin
+
+Unmounted component virhe UserLomakkeella [21.5.202]
+- tila testissä, puuttuu Gitistä
+
+Teemavalinan toteutus [18.5.2020]
+- tila avoin (vain UI)
+
+Käyttäjätietojen haku/rajaus komponentti [22.5.2020]
+- tila avoin (vain UI)
+
+Kommenttien päivitys ominaisuus kommentille (muutos, poisto) [22.5.2020]
+- tila avoin
+
+Lisää popuppeja käyttöliittymään [17.5.2020]
+- tila avoin (vain UI)
+
+Cascading poiston varoitus, kun poistettavaa on [20.5.2020]
+- tila avoin
+
+Palvelimen virheilmoitusten muuttaminen selkokieliseksi [11.5.2020]
+- tila avoin
+
+Salasanan kyselyssä fokus salasanakenttään [22.5.2020]
+- tila avoin (vain UI)
+
+Applikaation nimi headeriin (index.html)  [Erno Hentunen / 22.5.2020]
+- tila avoin (vain UI)
